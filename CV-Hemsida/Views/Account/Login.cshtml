@@ -1,0 +1,25 @@
+﻿
+@model LoginViewModel
+
+@{
+    ViewData["Title"] = "Logga in";
+}
+
+<main role="main" class="container">
+    <div class="row justify-content-md-center mt-5">
+        <div class="col-md-6">
+            <h2>Logga in</h2>
+            <form>
+                <div class="mb-3">
+                    <label for="emailInput" class="form-label">E-postadress</label>
+                    <input type="email" class="form-control" id="emailInput" placeholder="name@example.com">
+                </div>
+                <div class="mb-3">
+                    <label for="passwordInput" class="form-label">Lösenord</label>
+                    <input type="password" class="form-control" id="passwordInput" placeholder="Lösenord">
+                </div>
+                <button type="submit" class="btn btn-primary">Logga in</button>
+            </form>
+        </div>
+    </div>
+</main>
