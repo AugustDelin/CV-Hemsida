@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>CV_Hemsida</RootNamespace>
+    <UserSecretsId>dacac55d-c94e-478c-bc75-e11e360e0399</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
