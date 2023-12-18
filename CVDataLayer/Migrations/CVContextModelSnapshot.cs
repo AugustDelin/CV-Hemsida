@@ -25,7 +25,102 @@ namespace CVDataLayer.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("CVModels.Användare", b =>
+            modelBuilder.Entity("CVModels.CV", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Kompetenser")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProfilbildPath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TidigareErfarenhet")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Utbildningar")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CVs");
+                });
+
+            modelBuilder.Entity("CVModels.Person", b =>
+                {
+                    b.Property<string>("Personnummer")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Adress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AnvändarID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Efternamn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Förnamn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Personnummer");
+
+                    b.HasIndex("AnvändarID");
+
+                    b.ToTable("Personer");
+                });
+
+            modelBuilder.Entity("CVModels.Projekt", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Beskrivning")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CVId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Titel")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CVId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Projekts");
+                });
+
+            modelBuilder.Entity("CVModels.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -87,57 +182,60 @@ namespace CVDataLayer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "c7e33226-0466-4570-97ef-565f889cb06f",
+                            Id = "6e451846-a46e-413b-a300-937371b463ea",
                             AccessFailedCount = 0,
                             Active = false,
-                            ConcurrencyStamp = "4fa6657c-610d-471f-99da-a1bc7452e68b",
+                            ConcurrencyStamp = "b424437b-94f0-4463-b5d2-7796b848606f",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
-                            Password = "Test1",
+                            Password = "granlunda",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "1ee4350c-b3d1-4e1c-a54a-df94db980ee7",
+                            SecurityStamp = "267035dd-31ff-416f-9422-e8f10538303c",
                             TwoFactorEnabled = false,
-                            UserName = "Test"
+                            UserName = "erik.alingsas@gmail.com"
                         });
                 });
 
-            modelBuilder.Entity("CVModels.Person", b =>
+            modelBuilder.Entity("CVModels.CV", b =>
                 {
-                    b.Property<string>("Personnummer")
-                        .HasColumnType("nvarchar(450)");
+                    b.HasOne("CVModels.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<string>("Adress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("AnvändarID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Efternamn")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Förnamn")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Personnummer");
-
-                    b.HasIndex("AnvändarID");
-
-                    b.ToTable("Personer");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CVModels.Person", b =>
                 {
-                    b.HasOne("CVModels.Användare", "Användare")
+                    b.HasOne("CVModels.User", "Användare")
                         .WithMany()
                         .HasForeignKey("AnvändarID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Användare");
+                });
+
+            modelBuilder.Entity("CVModels.Projekt", b =>
+                {
+                    b.HasOne("CVModels.CV", null)
+                        .WithMany("Projekts")
+                        .HasForeignKey("CVId");
+
+                    b.HasOne("CVModels.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("CVModels.CV", b =>
+                {
+                    b.Navigation("Projekts");
                 });
 #pragma warning restore 612, 618
         }

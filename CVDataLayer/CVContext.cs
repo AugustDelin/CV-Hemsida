@@ -21,6 +21,7 @@ namespace CVDataLayer
 
         public DbSet<Person> Personer { get; set; }
         public DbSet<Projekt> Projekts { get; set; }
+        public DbSet<CV> CVs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
