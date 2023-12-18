@@ -20,6 +20,7 @@ namespace CVDataLayer
         public DbSet<User> Users { get; set; }
 
         public DbSet<Person> Personer { get; set; }
+        public DbSet<Projekt> Projekts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
