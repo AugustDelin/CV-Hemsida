@@ -175,14 +175,14 @@ namespace CVDataLayer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "e95907c7-482d-4f65-ba3d-365d15c32e9d",
+                            Id = "7a93bb14-4817-4562-bfef-0a55edd1ec9f",
                             AccessFailedCount = 0,
                             Aktiv = false,
-                            ConcurrencyStamp = "6d2c6fc5-b74c-454f-a9cc-d28822354d43",
+                            ConcurrencyStamp = "4b97650b-5b65-44b2-a195-b1505f7a3850",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "14acceb6-6b91-472a-b37d-7cce9329a1d1",
+                            SecurityStamp = "94154b7d-c777-4bb4-a63b-1ef064f2732f",
                             TwoFactorEnabled = false
                         });
                 });
