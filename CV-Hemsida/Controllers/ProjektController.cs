@@ -6,8 +6,18 @@ namespace CV_Hemsida.Controllers
     {
         public IActionResult ProjectPage()
         {
-            return View();
+
+            // TODO: Implementera databaslogiken
+            // var projekten = // Hämta projektdata från databasen med LINQ
+
+            return View(/*projekten*/); // Temporärt tills databaslogiken är implementerad
+
         }
 
+
+  
     }
+
+
+
 }

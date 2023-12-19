@@ -10,19 +10,29 @@
 
 
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projekt</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    
-</head>
-<body>
 
-  
 
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html>
+
+
+@model IEnumerable<Projekt> // Ersätt Projekt med vår faktiska projektklass
+
+<div class="container">
+    @if (Model != null)
+    {
+        @foreach (var projekt in Model)
+        {
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">@projekt.Titel</h5>
+                    <p class="card-text">@projekt.Beskrivning</p>
+                    <!-- Lägg till mer information om projektet här, använder data från modellen -->
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <p>Inga projekt att visa.</p>
+    }
+</div>
+
