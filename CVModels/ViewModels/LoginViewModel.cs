@@ -17,7 +17,7 @@ namespace CVModels.ViewModel
 
         [Required(ErrorMessage = "Skriv in lösenord")]
         [DataType(DataType.Password)]
-        public string Password { get; set; }
+        public string Lösenord { get; set; }
 
         [Display(Name = "Remember Me")]
         public bool Active { get; set; }

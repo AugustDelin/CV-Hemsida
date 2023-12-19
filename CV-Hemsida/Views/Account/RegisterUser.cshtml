@@ -1,0 +1,23 @@
+﻿@model CVModels.ViewModels.RegisterUserViewModel
+
+@{
+    ViewBag.Titel = "Register new user";
+}
+
+<h1>Registrera en ny användare</h1>
+
+<form asp-controller="Account" asp-action="RegisterUser" method="post">
+    <div>
+        <label asp-for="Email">E-post:</label>
+        <input asp-for="Email" />
+    </div>
+    <div>
+        <label asp-for="Password">Lösenord:</label>
+        <input asp-for="Password" type="password" />
+    </div>
+    <div>
+        <label asp-for="ConfirmPassword">Bekräfta lösenord:</label>
+        <input asp-for="ConfirmPassword" type="password" />
+    </div>
+    <button type="submit">Registrera</button>
+</form>

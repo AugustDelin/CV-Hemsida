@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CVDataLayer.Migrations
 {
     [DbContext(typeof(CVContext))]
-    [Migration("20231219133334_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20231219145606_Migration3")]
+    partial class Migration3
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -126,7 +126,7 @@ namespace CVDataLayer.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<bool>("Active")
+                    b.Property<bool>("Aktiv")
                         .HasColumnType("bit");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -150,10 +150,6 @@ namespace CVDataLayer.Migrations
                     b.Property<string>("NormalizedUserName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
@@ -163,6 +159,9 @@ namespace CVDataLayer.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Profilbild")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -170,7 +169,6 @@ namespace CVDataLayer.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -180,17 +178,15 @@ namespace CVDataLayer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "f64bfb6e-e58a-4edd-b3d0-4ce65e5a383b",
+                            Id = "e95907c7-482d-4f65-ba3d-365d15c32e9d",
                             AccessFailedCount = 0,
-                            Active = false,
-                            ConcurrencyStamp = "556d2d4f-ca3a-460c-ace8-17ba20b5fdf9",
+                            Aktiv = false,
+                            ConcurrencyStamp = "6d2c6fc5-b74c-454f-a9cc-d28822354d43",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
-                            Password = "granlunda",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "7e9a7be6-1788-4d95-bbc0-ea0218ae22fd",
-                            TwoFactorEnabled = false,
-                            UserName = "erik.alingsas@gmail.com"
+                            SecurityStamp = "14acceb6-6b91-472a-b37d-7cce9329a1d1",
+                            TwoFactorEnabled = false
                         });
                 });
 

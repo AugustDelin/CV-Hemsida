@@ -8,9 +8,8 @@ namespace CVModels
 	[Table ("users")]
 	public class User : IdentityUser
     {
-		public string Password { get; set; }
-		public string UserName { get; set; }
-		public bool Active { get; set; }
-		
-	}
+        public string? Profilbild { get; set; }
+        public bool Aktiv { get; set; }
+
+    }
 }

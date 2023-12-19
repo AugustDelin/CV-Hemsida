@@ -29,8 +29,7 @@ namespace CVDataLayer
             modelBuilder.Entity<User>().HasData(
                 new User
                 {
-                    UserName = "erik.alingsas@gmail.com",
-                    Password = "granlunda",
+                   
                     
                 }
 
