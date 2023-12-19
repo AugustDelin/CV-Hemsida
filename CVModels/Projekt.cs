@@ -18,9 +18,9 @@ namespace CVModels
         public string Beskrivning { get; set; }
 
         [Required]
-        public string UserId { get; set; }
+        public string AnvändarId { get; set; }
 
-        [ForeignKey(nameof(UserId))]
-        public virtual User User { get; set; }
+        [ForeignKey(nameof(AnvändarId))]
+        public virtual User Användare { get; set; }
     }
 }

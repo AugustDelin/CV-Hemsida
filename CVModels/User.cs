@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CVModels
 {
+	[Table ("users")]
 	public class User : IdentityUser
     {
 		public string Password { get; set; }

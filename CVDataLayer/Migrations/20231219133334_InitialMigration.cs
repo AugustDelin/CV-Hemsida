@@ -12,7 +12,7 @@ namespace CVDataLayer.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "users",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -35,7 +35,30 @@ namespace CVDataLayer.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.PrimaryKey("PK_users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CVs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Kompetenser = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Utbildningar = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TidigareErfarenhet = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProfilbildPath = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AnvändarId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CVs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CVs_users_AnvändarId",
+                        column: x => x.AnvändarId,
+                        principalTable: "users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -52,32 +75,69 @@ namespace CVDataLayer.Migrations
                 {
                     table.PrimaryKey("PK_Personer", x => x.Personnummer);
                     table.ForeignKey(
-                        name: "FK_Personer_Users_AnvändarID",
+                        name: "FK_Personer_users_AnvändarID",
                         column: x => x.AnvändarID,
-                        principalTable: "Users",
+                        principalTable: "users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Projekts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Titel = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Beskrivning = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AnvändarId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Projekts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Projekts_users_AnvändarId",
+                        column: x => x.AnvändarId,
+                        principalTable: "users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
-                table: "Users",
+                table: "users",
                 columns: new[] { "Id", "AccessFailedCount", "Active", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "Password", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "c7e33226-0466-4570-97ef-565f889cb06f", 0, false, "4fa6657c-610d-471f-99da-a1bc7452e68b", null, false, false, null, null, null, "Test1", null, null, false, "1ee4350c-b3d1-4e1c-a54a-df94db980ee7", false, "Test" });
+                values: new object[] { "f64bfb6e-e58a-4edd-b3d0-4ce65e5a383b", 0, false, "556d2d4f-ca3a-460c-ace8-17ba20b5fdf9", null, false, false, null, null, null, "granlunda", null, null, false, "7e9a7be6-1788-4d95-bbc0-ea0218ae22fd", false, "erik.alingsas@gmail.com" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CVs_AnvändarId",
+                table: "CVs",
+                column: "AnvändarId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Personer_AnvändarID",
                 table: "Personer",
                 column: "AnvändarID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Projekts_AnvändarId",
+                table: "Projekts",
+                column: "AnvändarId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "CVs");
+
+            migrationBuilder.DropTable(
                 name: "Personer");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Projekts");
+
+            migrationBuilder.DropTable(
+                name: "users");
         }
     }
 }
