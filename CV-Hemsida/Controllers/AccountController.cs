@@ -34,6 +34,7 @@ namespace CV_Hemsida.Controllers
         {
             return View();
         }
+        
 
         [HttpPost]
         public async Task<IActionResult> RegisterUser(RegisterUserViewModel model)
