@@ -98,14 +98,14 @@ namespace CVDataLayer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "7b44b3d6-11e7-4973-bfb2-bada9c6d5179",
+                            Id = "8a1b32f0-a029-46b5-b519-f7897adc2839",
                             AccessFailedCount = 0,
                             Aktiv = false,
-                            ConcurrencyStamp = "3cfa005a-fd4a-4ad8-b6ec-3dad305b41fc",
+                            ConcurrencyStamp = "d406313a-dbd6-49db-a0d0-0977e64c8c94",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "15974585-bb15-4c21-a17a-e132a46cf99f",
+                            SecurityStamp = "fc94a56c-ed4c-4455-85c2-445e1f415592",
                             TwoFactorEnabled = false
                         });
                 });
@@ -154,7 +154,12 @@ namespace CVDataLayer.Migrations
                     b.Property<int>("Projekt")
                         .HasColumnType("int");
 
+                    b.Property<string>("AnvändareId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Deltagare", "Projekt");
+
+                    b.HasIndex("AnvändareId");
 
                     b.HasIndex("Projekt");
 
@@ -300,21 +305,6 @@ namespace CVDataLayer.Migrations
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-<<<<<<< Updated upstream
-                    b.HasData(
-                        new
-                        {
-                            Id = "7a93bb14-4817-4562-bfef-0a55edd1ec9f",
-                            AccessFailedCount = 0,
-                            Aktiv = false,
-                            ConcurrencyStamp = "4b97650b-5b65-44b2-a195-b1505f7a3850",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "94154b7d-c777-4bb4-a63b-1ef064f2732f",
-                            TwoFactorEnabled = false
-                        });
-=======
                     b.ToTable("AspNetRoles", (string)null);
                 });
 
@@ -422,7 +412,6 @@ namespace CVDataLayer.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
->>>>>>> Stashed changes
                 });
 
             modelBuilder.Entity("CVModels.CV", b =>
@@ -438,16 +427,20 @@ namespace CVDataLayer.Migrations
 
             modelBuilder.Entity("CVModels.DeltarProjekt", b =>
                 {
-                    b.HasOne("CVModels.Användare", "Anv")
+                    b.HasOne("CVModels.Användare", null)
                         .WithMany("DeltarIProjekt")
+                        .HasForeignKey("AnvändareId");
+
+                    b.HasOne("CVModels.Användare", "Anv")
+                        .WithMany()
                         .HasForeignKey("Deltagare")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("CVModels.Projekt", "Proj")
                         .WithMany()
                         .HasForeignKey("Projekt")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Anv");

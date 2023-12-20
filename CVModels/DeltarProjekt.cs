@@ -9,6 +9,7 @@ namespace CVModels
         public virtual string Deltagare { get; set; }
         public virtual int Projekt { get; set; }
 
+        
         [ForeignKey(nameof(Deltagare))]
         public virtual Användare Anv { get; set; }
 

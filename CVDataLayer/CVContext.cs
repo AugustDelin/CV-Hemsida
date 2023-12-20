@@ -39,13 +39,27 @@ namespace CVDataLayer
             modelBuilder.Entity<Användare>().HasData(
                 new Användare
                 {
-                   
-                    
+
+
                 }
 
                 );
+            modelBuilder.Entity<DeltarProjekt>()
+        .HasKey(dp => new { dp.Deltagare, dp.Projekt });
 
-        
+            modelBuilder.Entity<DeltarProjekt>()
+                .HasOne(dp => dp.Anv)
+                .WithMany()
+                .HasForeignKey(dp => dp.Deltagare)
+                .OnDelete(DeleteBehavior.NoAction); // Specify ON DELETE NO ACTION
+
+            modelBuilder.Entity<DeltarProjekt>()
+                .HasOne(dp => dp.Proj)
+                .WithMany()
+                .HasForeignKey(dp => dp.Projekt)
+                .OnDelete(DeleteBehavior.NoAction);
+
+
 
         }
 
