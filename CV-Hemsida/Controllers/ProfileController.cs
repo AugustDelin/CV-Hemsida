@@ -23,6 +23,13 @@ namespace CV_Hemsida.Controllers
 
         }
 
+        public IActionResult ChangeInformation()
+        {
+            return View();
+        }
+
+
+
 
 
 
