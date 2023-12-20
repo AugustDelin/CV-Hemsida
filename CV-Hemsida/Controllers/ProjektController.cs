@@ -7,6 +7,11 @@ namespace CV_Hemsida.Controllers
     public class ProjektController : Controller
     {
         private CVContext _dbContext;
+
+        public ProjektController(CVContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
         public IActionResult ProjectPage()
         {
             List<Projekt> listAvProjekt = _dbContext.Projekts.ToList();
