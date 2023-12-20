@@ -22,5 +22,7 @@ namespace CVModels
 
         [ForeignKey(nameof(AnvändarId))]
         public virtual Användare User { get; set; }
+
+        public DateTime SkapadDatum { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿@*
+﻿
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
@@ -10,20 +11,22 @@
 
 
 
+@model IEnumerable<ProjektViewModel>
+@using CVModels.ViewModels
 
 
-@model IEnumerable<Projekt> 
+
 
 <div class="container">
     @if (Model != null && Model.Any())
     {
-        @foreach (var projekt in Model)
+        foreach (var projekt in Model)
         {
             <div class="card mb-3">
                 <div class="card-body">
                     <h5 class="card-title">@projekt.Titel</h5>
                     <p class="card-text">@projekt.Beskrivning</p>
-                    <!-- Lägg till mer information om projektet här, använder data från modellen -->
+                    <!-- Ytterligare detaljer om projektet -->
                 </div>
             </div>
         }
@@ -33,4 +36,5 @@
         <p>Inga projekt att visa.</p>
     }
 </div>
+
 
