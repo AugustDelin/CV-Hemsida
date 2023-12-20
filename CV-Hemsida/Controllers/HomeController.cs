@@ -9,8 +9,7 @@ namespace CV_Hemsida.Controllers
         private CVContext _dbContext;
         public IActionResult Index()
         {
-            List<CV> listAvCV = _dbContext.CVs.ToList();
-            return View(listAvCV);
+            return View();
         }
     }
 }
