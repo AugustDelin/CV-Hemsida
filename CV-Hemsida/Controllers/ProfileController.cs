@@ -14,12 +14,12 @@ namespace CV_Hemsida.Controllers
         }
         public IActionResult ProfilePage()
         {
-            List<Användare> listAvProfiler = _dbContext.Users.ToList();
+            List<Person> listAvPersoner = _dbContext.Personer.ToList();
             ViewBag.Meddelande = "Listan med profiler";
             // TODO: Implementera databaslogiken
             // var projekten = // Hämta projektdata från databasen med LINQ
 
-            return View(listAvProfiler); // Temporärt tills databaslogiken är implementerad
+            return View(listAvPersoner); // Temporärt tills databaslogiken är implementerad
 
         }
 

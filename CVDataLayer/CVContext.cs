@@ -36,12 +36,23 @@ namespace CVDataLayer
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<Användare>().HasData(
-                new Användare
+            modelBuilder.Entity<Person>().HasData(
+                new Person
                 {
-
-
-                }
+                    Personnummer = "1234567890",
+                    Förnamn = "John",
+                    Efternamn = "Doe",
+                    Adress = "123 Main St",
+                    AnvändarID = "user1"  // Make sure this user ID corresponds to an existing user
+                },
+        new Person
+        {
+            Personnummer = "9876543210",
+            Förnamn = "Jane",
+            Efternamn = "Smith",
+            Adress = "456 Oak St",
+            AnvändarID = "user2"  // Make sure this user ID corresponds to an existing user
+        }
 
                 );
             modelBuilder.Entity<DeltarProjekt>()

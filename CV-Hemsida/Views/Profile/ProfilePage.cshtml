@@ -11,15 +11,18 @@
         {
             <div class="card mb-3">
                 <div class="card-body">
-                    <h5 class="card-title">@person.Personnummer</h5>
-                    <p class="card-text">@person.</p>
-                    <!-- Lägg till mer information om projektet här, använder data från modellen -->
+                    <h5 class="card-title">@person.FullName()</h5>
+                    <p class="card-text">
+                        <strong>Address:</strong> @person.Adress <br />
+                        <strong>Personal Number:</strong> @person.Personnummer
+                    </p>
+                    <!-- Add more information about the person here -->
                 </div>
             </div>
         }
     }
     else
     {
-        <p>Inga profiler att visa.</p>
+        <p>No profiles to display.</p>
     }
 </div>
