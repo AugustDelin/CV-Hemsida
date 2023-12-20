@@ -4,6 +4,7 @@ using CVDataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CVDataLayer.Migrations
 {
     [DbContext(typeof(CVContext))]
-    partial class CVContextModelSnapshot : ModelSnapshot
+    [Migration("20231220075002_HejMigration")]
+    partial class HejMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -98,14 +101,14 @@ namespace CVDataLayer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "7b44b3d6-11e7-4973-bfb2-bada9c6d5179",
+                            Id = "eea62ae5-64d1-44c3-9c38-d850babbbbee",
                             AccessFailedCount = 0,
                             Aktiv = false,
-                            ConcurrencyStamp = "3cfa005a-fd4a-4ad8-b6ec-3dad305b41fc",
+                            ConcurrencyStamp = "29c06ac7-a5d8-429f-a3ce-861c86cbe086",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "15974585-bb15-4c21-a17a-e132a46cf99f",
+                            SecurityStamp = "0bf675f2-26f0-4bd3-8e81-bf29e011c69a",
                             TwoFactorEnabled = false
                         });
                 });
@@ -300,21 +303,6 @@ namespace CVDataLayer.Migrations
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-<<<<<<< Updated upstream
-                    b.HasData(
-                        new
-                        {
-                            Id = "7a93bb14-4817-4562-bfef-0a55edd1ec9f",
-                            AccessFailedCount = 0,
-                            Aktiv = false,
-                            ConcurrencyStamp = "4b97650b-5b65-44b2-a195-b1505f7a3850",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "94154b7d-c777-4bb4-a63b-1ef064f2732f",
-                            TwoFactorEnabled = false
-                        });
-=======
                     b.ToTable("AspNetRoles", (string)null);
                 });
 
@@ -422,7 +410,6 @@ namespace CVDataLayer.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
->>>>>>> Stashed changes
                 });
 
             modelBuilder.Entity("CVModels.CV", b =>

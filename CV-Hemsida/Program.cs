@@ -14,7 +14,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<CVContext>(Options =>
                         Options.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("CVContext")));
 
-builder.Services.AddIdentity<User, IdentityRole>()
+builder.Services.AddIdentity<Användare, IdentityRole>()
             .AddEntityFrameworkStores<CVContext>()
             .AddDefaultTokenProviders();
 builder.Services.Configure<IdentityOptions>(options =>

@@ -1,5 +1,7 @@
 ﻿using System;
 using CVModels;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -10,30 +12,40 @@ using Microsoft.VisualBasic;
 namespace CVDataLayer
 {
   
-    public class CVContext : DbContext 
+    public class CVContext : IdentityDbContext<Användare>
     {
 
        
         public CVContext(DbContextOptions<CVContext> options) : base(options)
 
         { }
-        public DbSet<User> Users { get; set; }
+        public DbSet<Användare> Users { get; set; }
 
         public DbSet<Person> Personer { get; set; }
         public DbSet<Projekt> Projekts { get; set; }
         public DbSet<CV> CVs { get; set; }
 
+        public DbSet<Projekt> Projekten { get; set; }
+
+        public DbSet<Profile> Profiler { get; set; }
+
+        public DbSet<DeltarProjekt> PersonDeltarProjekt { get; set; }
+
+        public DbSet<Meddelande> Meddelande { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<User>().HasData(
-                new User
+            modelBuilder.Entity<Användare>().HasData(
+                new Användare
                 {
                    
                     
                 }
 
                 );
+
+        
 
         }
 

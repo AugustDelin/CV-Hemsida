@@ -4,6 +4,7 @@ using CVDataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CVDataLayer.Migrations
 {
     [DbContext(typeof(CVContext))]
-    partial class CVContextModelSnapshot : ModelSnapshot
+    [Migration("20231220081341_MigrationJul")]
+    partial class MigrationJul
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -300,21 +303,6 @@ namespace CVDataLayer.Migrations
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-<<<<<<< Updated upstream
-                    b.HasData(
-                        new
-                        {
-                            Id = "7a93bb14-4817-4562-bfef-0a55edd1ec9f",
-                            AccessFailedCount = 0,
-                            Aktiv = false,
-                            ConcurrencyStamp = "4b97650b-5b65-44b2-a195-b1505f7a3850",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "94154b7d-c777-4bb4-a63b-1ef064f2732f",
-                            TwoFactorEnabled = false
-                        });
-=======
                     b.ToTable("AspNetRoles", (string)null);
                 });
 
@@ -422,7 +410,6 @@ namespace CVDataLayer.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
->>>>>>> Stashed changes
                 });
 
             modelBuilder.Entity("CVModels.CV", b =>

@@ -4,10 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using CVDataLayer;
 using CVModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace CV_Hemsida.Repositories
 {
-    public class UserRepository : IRepository<User>
+    public class UserRepository : IRepository<Användare>
     {
         private readonly CVContext _dbContext;
 
@@ -16,27 +17,27 @@ namespace CV_Hemsida.Repositories
             _dbContext = cvcontext ?? throw new ArgumentNullException(nameof(cvcontext));
         }
 
-        public void Delete(User entity)
+        public void Delete(Användare entity)
         {
             _dbContext.Remove(entity);
         }
 
-        public IEnumerable<User> GetAll()
+        public IEnumerable<Användare> GetAll()
         {
             return _dbContext.Users;
         }
 
-        public User GetById(int id)
+        public Användare GetById(int id)
         {
             throw new NotImplementedException();
         }
 
-        public User GetById(string id)
+        public Användare GetById(string id)
         {
             return _dbContext.Users.FirstOrDefault(u => u.Id.Equals(id));
         }
 
-        public void Insert(User entity)
+        public void Insert(Användare entity)
         {
             _dbContext.Add(entity);
         }
@@ -46,7 +47,7 @@ namespace CV_Hemsida.Repositories
             _dbContext.SaveChanges();
         }
 
-        public void Update(User entity)
+        public void Update(Användare entity)
         {
             _dbContext.Update(entity);
             _dbContext.SaveChanges();

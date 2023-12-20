@@ -24,7 +24,7 @@ namespace CVModels
         public virtual string AnvändarID { get; set; }
 
         [ForeignKey(nameof(AnvändarID))]
-        public virtual User Användare { get; set; }
+        public virtual Användare User { get; set; }
 
         public string FullName()
         {
