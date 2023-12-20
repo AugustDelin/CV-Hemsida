@@ -1,0 +1,37 @@
+﻿@model CVModels.CV
+@{
+    Layout = "_Layout";
+}
+
+<h2>CV Page</h2>
+
+<div>
+    <h3>Username: @User.Identity.Name</h3>
+
+    @if (Model != null)
+    {
+        <p>Profile Picture: <img src="@Model.ProfilbildPath" alt="Profile Picture" /></p>
+        <p>Skills: @Model.Kompetenser</p>
+        <p>Education: @Model.Utbildningar</p>
+        <p>Previous Experience: @Model.TidigareErfarenhet</p>
+
+        <h3>Projects:</h3>
+        @if (Model.DeltarIProjekt != null && Model.DeltarIProjekt.Any())
+        {
+            <ul>
+                @foreach (var dp in Model.DeltarIProjekt)
+                {
+                    <li>@dp.Proj.Titel - @dp.Proj.Beskrivning</li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>No projects found for this user.</p>
+        }
+    }
+    else
+    {
+        <p>No CV found for this user.</p>
+    }
+</div>

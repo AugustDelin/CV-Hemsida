@@ -21,7 +21,9 @@ namespace CVModels
 
         public string ProfilbildPath { get; set; }
 
-       
+        public virtual ICollection<DeltarProjekt> DeltarIProjekt { get; set; }
+
+
         [Required]
         public string AnvändarId { get; set; }
 
