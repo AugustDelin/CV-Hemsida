@@ -15,7 +15,7 @@
 @model IEnumerable<Projekt> 
 
 <div class="container">
-    @if (Model != null)
+    @if (Model != null && Model.Any())
     {
         @foreach (var projekt in Model)
         {
@@ -34,3 +34,4 @@
     }
 </div>
 
+// hej
