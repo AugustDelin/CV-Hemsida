@@ -10,25 +10,29 @@
 
     @if (Model != null)
     {
-        <p>Profile Picture: <img src="@Model.ProfilbildPath" alt="Profile Picture" /></p>
-        <p>Skills: @Model.Kompetenser</p>
-        <p>Education: @Model.Utbildningar</p>
-        <p>Previous Experience: @Model.TidigareErfarenhet</p>
+        <div class="card mb-3 border-2 rounded">
+            <div class="card-body">
+                <p class="card-text">Profile Picture: <img src="@Model.ProfilbildPath" alt="Profile Picture" /></p>
+                <p class="card-text">Skills: @Model.Kompetenser</p>
+                <p class="card-text">Education: @Model.Utbildningar</p>
+                <p class="card-text">Previous Experience: @Model.TidigareErfarenhet</p>
 
-        <h3>Projects:</h3>
-        @if (Model.DeltarIProjekt != null && Model.DeltarIProjekt.Any())
-        {
-            <ul>
-                @foreach (var dp in Model.DeltarIProjekt)
+                <h3 class="card-title">Projects:</h3>
+                @if (Model.DeltarIProjekt != null && Model.DeltarIProjekt.Any())
                 {
-                    <li>@dp.Proj.Titel - @dp.Proj.Beskrivning</li>
+                    <ul class="list-group">
+                        @foreach (var dp in Model.DeltarIProjekt)
+                        {
+                            <li class="list-group-item">@dp.Proj.Titel - @dp.Proj.Beskrivning</li>
+                        }
+                    </ul>
                 }
-            </ul>
-        }
-        else
-        {
-            <p>No projects found for this user.</p>
-        }
+                else
+                {
+                    <p class="card-text">No projects found for this user.</p>
+                }
+            </div>
+        </div>
     }
     else
     {
