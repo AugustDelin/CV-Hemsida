@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Identity;
 using CVModels.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using CVModels.ViewModels;
+using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace CV_Hemsida.Controllers
 {
@@ -12,11 +14,13 @@ namespace CV_Hemsida.Controllers
     {
         private readonly UserManager<Användare>? _userManager;
         private readonly SignInManager<Användare>? _signInManager;
+        private readonly CVContext _dbContext;
 
-        public AccountController(UserManager<Användare> userManager, SignInManager<Användare> signInManager)
+        public AccountController(UserManager<Användare> userManager, SignInManager<Användare> signInManager, CVContext dbContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _dbContext = dbContext;
 
         }
 
@@ -90,7 +94,7 @@ namespace CV_Hemsida.Controllers
                 {
                     // Användaren skapades framgångsrikt, vidarebefordra användaren till lämplig vy eller åtgärd
                     // Exempelvis, omdirigera användaren till en bekräftelsesida eller en annan sida efter registreringen
-                    return RedirectToAction("RegisterLyckades");
+                    return RedirectToAction("RegisterPerson");
 
                 }
 
@@ -103,7 +107,46 @@ namespace CV_Hemsida.Controllers
             // Om ModelState inte är giltig eller registreringen misslyckades, returnera vyn med felmeddelanden
             return View(model);
         }
+        [HttpPost]
+        public async Task<IActionResult> RegisterPerson(RegisterPersonViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    // Retrieve the latest identity value for the user
+                    var latestUserId = await _dbContext.Database.ExecuteSqlRawAsync("SELECT SCOPE_IDENTITY()");
 
+                    var person = new Person
+                    {
+                        Personnummer = model.Personnummer,
+                        Förnamn = model.Förnamn,
+                        Efternamn = model.Efternamn,
+                        Adress = model.Adress,
+                        AnvändarID = latestUserId.ToString() // Set AnvändarID to the latest user id
+                    };
+
+                    _dbContext.Personer.Add(person);
+                    await _dbContext.SaveChangesAsync(); // Use async SaveChanges method
+
+                    return RedirectToAction("Login");
+                }
+                catch (Exception ex)
+                {
+                    // Log the exception or handle it as appropriate for your application
+                    ModelState.AddModelError(string.Empty, "An error occurred while saving to the database.");
+                }
+            }
+
+            // If ModelState is not valid, return the view with error messages
+            return View(model);
+        }
+
+
+        public IActionResult RegisterPerson()
+        {
+            return View();
+        }
 
 
 

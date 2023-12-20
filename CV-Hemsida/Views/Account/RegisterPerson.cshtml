@@ -1,0 +1,33 @@
+﻿@model CVModels.ViewModels.RegisterPersonViewModel
+
+@{
+    ViewBag.Title = "Mer info";
+}
+
+<main role="main" class="container">
+    <div class="row justify-content-md-center mt-5">
+        <div class="col-md-6">
+            <h2>Mer info</h2>
+            <form asp-controller="Account" asp-action="RegisterPerson" method="post">
+                <div class="mb-3">
+                    <label asp-for="Personnummer" class="form-label">Personnummer</label>
+                    <input asp-for="Personnummer" class="form-control" placeholder="Personnummer">
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Förnamn" class="form-label">Förnamn</label>
+                    <input asp-for="Förnamn" class="form-control" placeholder="Förnamn">
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Efternamn" class="form-label">Efternamn</label>
+                    <input asp-for="Efternamn" class="form-control" placeholder="Efternamn">
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Adress" class="form-label">Adress</label>
+                    <input asp-for="Adress" class="form-control" placeholder="Adress">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Registrera</button>
+            </form>
+        </div>
+    </div>
+</main>

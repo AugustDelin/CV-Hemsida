@@ -23,6 +23,8 @@ namespace CVModels.ViewModel
         public bool Active { get; set; }
 
         public string? ErrorMessage { get; set; }
+
+       
     }
 }
 
