@@ -1,0 +1,25 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+@model IEnumerable<Person>
+
+<div class="container">
+    @if (Model != null && Model.Any())
+    {
+        @foreach (var person in Model)
+        {
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">@person.Personnummer</h5>
+                    <p class="card-text">@person.</p>
+                    <!-- Lägg till mer information om projektet här, använder data från modellen -->
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <p>Inga profiler att visa.</p>
+    }
+</div>
