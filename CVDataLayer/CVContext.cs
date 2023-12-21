@@ -52,6 +52,10 @@ namespace CVDataLayer
                 .HasForeignKey(dp => dp.Projekt)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            modelBuilder.Entity<Användare>()
+            .HasMany(u => u.SkapadeProjekt)
+            .WithOne(p => p.User)
+            .HasForeignKey(p => p.AnvändarId);
 
 
         }

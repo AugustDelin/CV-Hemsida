@@ -1,21 +1,12 @@
-﻿
-@*
+﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@{
-}
-
 @{
     Layout = "_Layout";
 }
 
-
-
 @model IEnumerable<ProjektViewModel>
 @using CVModels.ViewModels
-
-
-
 
 <div class="container">
     @if (Model != null && Model.Any())
@@ -26,7 +17,7 @@
                 <div class="card-body">
                     <h5 class="card-title">@projekt.Titel</h5>
                     <p class="card-text">@projekt.Beskrivning</p>
-                    <!-- Ytterligare detaljer om projektet -->
+                    <a href="@Url.Action("Details", "Projekt", new { id = projekt.Id })" class="btn btn-primary">Mer detaljer</a>
                 </div>
             </div>
         }
@@ -36,5 +27,3 @@
         <p>Inga projekt att visa.</p>
     }
 </div>
-
-

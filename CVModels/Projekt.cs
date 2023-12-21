@@ -11,6 +11,7 @@ namespace CVModels
     public class Projekt
     {
         [Key]
+        [Column("Id")]
         public int Id { get; set; }
 
         public string Titel { get; set; }
@@ -23,6 +24,10 @@ namespace CVModels
         [ForeignKey(nameof(AnvändarId))]
         public virtual Användare User { get; set; }
 
-     
+
+        // Antagande: en samling av användare som deltar i projektet
+        public virtual ICollection<Användare> DeltagandeAnvändare { get; set; }
+
+
     }
 }

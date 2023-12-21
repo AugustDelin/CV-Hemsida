@@ -1,0 +1,5 @@
+﻿ALTER TABLE Projekt DROP COLUMN SkapadDatum;
+
+ALTER TABLE Projekt DROP CONSTRAINT DF__Projekt__SkapadD__6E01572D;
+
+ALTER TABLE Projekt DROP COLUMN SkapadDatum;

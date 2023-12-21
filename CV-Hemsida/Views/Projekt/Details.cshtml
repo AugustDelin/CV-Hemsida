@@ -1,0 +1,27 @@
+﻿@model CVModels.ViewModels.ProjektViewModel
+
+@{
+    ViewData["Title"] = "Projektdetaljer";
+}
+
+<div class="container">
+    <h2>@Model.Titel</h2>
+    <p>@Model.Beskrivning</p>
+
+    <h3>Deltagande Användare</h3>
+    @if (Model.DeltagandeAnvändare != null && Model.DeltagandeAnvändare.Any())
+    {
+        <ul>
+            @foreach (var användare in Model.DeltagandeAnvändare)
+            {
+                <li>@användare.Namn (eller annan relevant information om användaren)</li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>Inga deltagande användare att visa.</p>
+    }
+
+    <a href="@Url.Action("Index", "Projekt")" class="btn btn-primary">Tillbaka till Projektlistan</a>
+</div>

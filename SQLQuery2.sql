@@ -4,11 +4,15 @@ VALUES
 ('user-id-2', 1, 0, 0, 0, 0, 0),
 ('user-id-3', 1, 0, 0, 0, 0, 0);
 
+
+
 INSERT INTO Projekt (Titel, Beskrivning, AnvändarId)
 VALUES 
-('Projekt 1', 'Podd-projektet', 'user-id-1'),
-('Projekt 2', 'Webbdesign-projektet', 'user-id-2'),
-('Projekt 3', 'UX-design-projektet', 'user-id-3');
+('Projekt 1', 'Beskrivning av Projekt 1', 'user-id-1'),
+('Projekt 2', 'Beskrivning av Projekt 2', 'user-id-2'),
+('Projekt 3', 'Beskrivning av Projekt 3', 'user-id-3');
 
-DELETE FROM Projekt WHERE Titel IN ('Projekt 1', 'Projekt 2', 'Projekt 3');
+
+
+
 
