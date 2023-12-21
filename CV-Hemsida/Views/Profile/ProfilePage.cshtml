@@ -5,6 +5,27 @@
 @model IEnumerable<Person>
 
 <div class="container">
+
+    <!--Hugos sökruta-->
+    <form method="get" action="@Url.Action("Search", "Profile")">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" name="searchTerm" placeholder="Sök efter profiler">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit">Sök</button>
+            </div>
+        </div>
+    </form>
+    <!--slut på sökrutan-->
+
+    <!--Hugos felmeddelande-->
+    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+    {
+        <div class="alert alert-warning" role="alert">
+            @ViewBag.ErrorMessage
+        </div>
+    }
+    <!--slut på felmeddelande-->
+
     @if (Model != null && Model.Any())
     {
         @foreach (var person in Model)

@@ -23,6 +23,25 @@ namespace CV_Hemsida.Controllers
 
         }
 
+        //Hugos sökruta
+        [HttpGet]
+        public IActionResult Search(string searchTerm)
+        {
+            // Implementera söklogiken för profiler här baserat på searchTerm
+            List<Person> sökResultat = _dbContext.Personer
+                .Where(p => p.Förnamn.Contains(searchTerm) || p.Efternamn.Contains(searchTerm)) // Exempel: Sök efter profiler med förnamn eller efternamn som innehåller söktermen
+                .ToList();
+
+            if (sökResultat.Count == 0)
+            {
+                ViewBag.ErrorMessage = "Inga matchningar hittades för din sökning.";
+            }
+
+            return View("ProfilePage", sökResultat); // Visa sökresultaten på samma vyn som ProfilePage
+        }
+        //PS: använder Förnamn och Efternamn här istället för Fullname på kodrad 32
+        //slut på sökrutan
+
         public IActionResult ChangeInformation()
         {
             return View();
