@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CVDataLayer.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class initialmigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -23,33 +23,6 @@ namespace CVDataLayer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetRoles", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUsers",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Profilbild = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Aktiv = table.Column<bool>(type: "bit", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -86,12 +59,6 @@ namespace CVDataLayer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetUserClaims_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -106,12 +73,6 @@ namespace CVDataLayer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserLogins_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -130,12 +91,34 @@ namespace CVDataLayer.Migrations
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Profilbild = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Aktiv = table.Column<bool>(type: "bit", nullable: false),
+                    CvId = table.Column<int>(type: "int", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -165,9 +148,9 @@ namespace CVDataLayer.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Kompetenser = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Utbildningar = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TidigareErfarenhet = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProfilbildPath = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Utbildningar = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TidigareErfarenhet = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProfilbildPath = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AnvändarId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
@@ -272,7 +255,8 @@ namespace CVDataLayer.Migrations
                 {
                     Deltagare = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Projekt = table.Column<int>(type: "int", nullable: false),
-                    AnvändareId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    AnvändareId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CVId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -288,16 +272,16 @@ namespace CVDataLayer.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
+                        name: "FK_PersonDeltarProjekt_CVs_CVId",
+                        column: x => x.CVId,
+                        principalTable: "CVs",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_PersonDeltarProjekt_Projekt_Projekt",
                         column: x => x.Projekt,
                         principalTable: "Projekt",
                         principalColumn: "Id");
                 });
-
-            migrationBuilder.InsertData(
-                table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "Aktiv", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "Profilbild", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "8a1b32f0-a029-46b5-b519-f7897adc2839", 0, false, "d406313a-dbd6-49db-a0d0-0977e64c8c94", null, false, false, null, null, null, null, null, false, null, "fc94a56c-ed4c-4455-85c2-445e1f415592", false, null });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -332,6 +316,11 @@ namespace CVDataLayer.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_CvId",
+                table: "AspNetUsers",
+                column: "CvId");
+
+            migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
@@ -341,8 +330,7 @@ namespace CVDataLayer.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_CVs_AnvändarId",
                 table: "CVs",
-                column: "AnvändarId",
-                unique: true);
+                column: "AnvändarId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Meddelande_Mottagare",
@@ -353,6 +341,11 @@ namespace CVDataLayer.Migrations
                 name: "IX_PersonDeltarProjekt_AnvändareId",
                 table: "PersonDeltarProjekt",
                 column: "AnvändareId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PersonDeltarProjekt_CVId",
+                table: "PersonDeltarProjekt",
+                column: "CVId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PersonDeltarProjekt_Projekt",
@@ -376,11 +369,46 @@ namespace CVDataLayer.Migrations
                 name: "IX_Projekt_AnvändarId",
                 table: "Projekt",
                 column: "AnvändarId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUserClaims_AspNetUsers_UserId",
+                table: "AspNetUserClaims",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUserLogins_AspNetUsers_UserId",
+                table: "AspNetUserLogins",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUserRoles_AspNetUsers_UserId",
+                table: "AspNetUserRoles",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUsers_CVs_CvId",
+                table: "AspNetUsers",
+                column: "CvId",
+                principalTable: "CVs",
+                principalColumn: "Id");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_CVs_AspNetUsers_AnvändarId",
+                table: "CVs");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -395,9 +423,6 @@ namespace CVDataLayer.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
-
-            migrationBuilder.DropTable(
-                name: "CVs");
 
             migrationBuilder.DropTable(
                 name: "Meddelande");
@@ -419,6 +444,9 @@ namespace CVDataLayer.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "CVs");
         }
     }
 }
