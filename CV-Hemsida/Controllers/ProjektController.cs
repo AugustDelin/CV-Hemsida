@@ -17,8 +17,7 @@ namespace CV_Hemsida.Controllers
         public IActionResult ProjectPage()
         {
             var projekten = _dbContext.Projekts
-                .OrderByDescending(p => p.SkapadDatum)
-                .Select(p => new ProjektViewModel
+               .Select(p => new ProjektViewModel
                 {
                     Id = p.Id,
                     Titel = p.Titel,
