@@ -40,6 +40,9 @@ namespace CVDataLayer.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("CvId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -85,6 +88,8 @@ namespace CVDataLayer.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CvId");
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -113,21 +118,17 @@ namespace CVDataLayer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProfilbildPath")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TidigareErfarenhet")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Utbildningar")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AnvändarId")
-                        .IsUnique();
+                    b.HasIndex("AnvändarId");
 
                     b.ToTable("CVs");
                 });
@@ -408,11 +409,20 @@ namespace CVDataLayer.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("CVModels.Användare", b =>
+                {
+                    b.HasOne("CVModels.CV", "Cv")
+                        .WithMany()
+                        .HasForeignKey("CvId");
+
+                    b.Navigation("Cv");
+                });
+
             modelBuilder.Entity("CVModels.CV", b =>
                 {
                     b.HasOne("CVModels.Användare", "User")
-                        .WithOne("Cv")
-                        .HasForeignKey("CVModels.CV", "AnvändarId")
+                        .WithMany("Cvs")
+                        .HasForeignKey("AnvändarId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -541,7 +551,7 @@ namespace CVDataLayer.Migrations
 
             modelBuilder.Entity("CVModels.Användare", b =>
                 {
-                    b.Navigation("Cv");
+                    b.Navigation("Cvs");
 
                     b.Navigation("DeltarIProjekt");
 

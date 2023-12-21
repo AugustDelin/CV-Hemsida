@@ -1,0 +1,28 @@
+﻿@model CVModels.ViewModels.RegisterCVViewModel
+@{
+    Layout = "_Layout";
+}
+
+<form asp-action="RegisterCV" method="post" enctype="multipart/form-data">
+    <div class="form-group mb-3">
+        <label for="Kompetenser" class="form-label">Kompetenser:</label>
+        <input type="text" class="form-control" id="Kompetenser" name="Kompetenser" required>
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="Utbildningar" class="form-label">Utbildningar:</label>
+        <input type="text" class="form-control" id="Utbildningar" name="Utbildningar" required>
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="TidigareErfarenhet" class="form-label">Tidigare Erfarenhet:</label>
+        <input type="text" class="form-control" id="TidigareErfarenhet" name="TidigareErfarenhet" required>
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="ProfilbildPath" class="form-label">Profilbild:</label>
+        <input type="file" class="form-control-file" id="ProfilbildPath" name="ProfilbildPath">
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Lägg till CV</button>
+</form>

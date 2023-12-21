@@ -18,6 +18,9 @@ namespace CVModels
         public virtual IEnumerable<Meddelande>? MottagnaMeddelanden { get; set; }
         public virtual IEnumerable<DeltarProjekt>? DeltarIProjekt { get; set; }
         public virtual IEnumerable<Projekt>? SkapadeProjekt { get; set; }
+        
+        [InverseProperty("User")]
+        public virtual ICollection<CV>? Cvs { get; set; }
 
     }
 }

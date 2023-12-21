@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CVModels;
 using System.Security.Claims;
+using CVModels.ViewModels;
 
 namespace CV_Hemsida.Controllers
 {
@@ -20,23 +21,59 @@ namespace CV_Hemsida.Controllers
             // Hämta den inloggade användarens ID
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            // Hämta CV för den inloggade användaren
-            var userCV = _dbContext.CVs
+            // Hämta alla CVs för den inloggade användaren
+            var userCVs = _dbContext.CVs
                 .Include(cv => cv.User)
                 .Where(cv => cv.User.Id == userId)
-                .FirstOrDefault();
+                .ToList();
 
-            if (userCV != null)
+            if (userCVs != null && userCVs.Any())
             {
-                // Om det finns ett CV, skicka det till vyn
-                return View(userCV);
+                // Om det finns CVs, skicka dem till vyn
+                return View(userCVs);
             }
             else
             {
-                // Om det inte finns ett CV, visa ett meddelande i vyn
-                ViewBag.Meddelande = "Inget CV hittades för användaren.";
+                // Om det inte finns CVs, visa ett meddelande i vyn
+                ViewBag.Meddelande = "Inga CVs hittades för användaren.";
                 return View();
             }
+        }
+
+
+        public IActionResult RegisterCV() 
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult RegisterCV(RegisterCVViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // Get the user ID of the currently logged-in user
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                // Create a new CV instance
+                var newCV = new CV
+                {
+                    Kompetenser = model.Kompetenser,
+                    Utbildningar = model.Utbildningar,
+                    TidigareErfarenhet = model.TidigareErfarenhet,
+                    ProfilbildPath = model.ProfilbildPath,
+                    AnvändarId = userId
+                };
+
+                // Add the new CV to the database
+                _dbContext.CVs.Add(newCV);
+                _dbContext.SaveChanges();
+
+                // Redirect to the CV page
+                return RedirectToAction("CVPage");
+            }
+
+            // If the model is not valid, return to the RegisterCV view with errors
+            return View(model);
         }
 
     }
