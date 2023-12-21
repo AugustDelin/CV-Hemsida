@@ -149,12 +149,64 @@ namespace CV_Hemsida.Controllers
         }
 
 
+        [HttpPost]
+        public async Task<IActionResult> EditPassword(EditPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null)
+                {
+                    return RedirectToAction("Login", "Account");
+                }
+
+                var changePasswordResult = await _userManager.ChangePasswordAsync(user, model.NuvarandeLösenord, model.NyttLösenord);
+
+                if (changePasswordResult.Succeeded)
+                {
+                    // Uppdatering av användare är inte nödvändigt efter ChangePasswordAsync
+                    return RedirectToAction("Edit");
+                }
+                else
+                {
+                    foreach (var error in changePasswordResult.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                    return View(model);
+                }
+            }
+
+            return View(model);
+        }
+
+
+
+        // Om ModelState inte är giltig, returnera vyn med felmeddelanden
 
 
 
 
+
+
+
+
+        public IActionResult EditPassword()
+        {
+            return View();
+        }
     }
 }
+
+
+
+
+
+
+
+
+    
+
 
 
 

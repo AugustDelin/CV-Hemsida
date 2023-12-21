@@ -4,6 +4,7 @@ using CVDataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CVDataLayer.Migrations
 {
     [DbContext(typeof(CVContext))]
-    partial class CVContextModelSnapshot : ModelSnapshot
+    [Migration("20231221102158_TaBortSkapadDatumFrånProjekt")]
+    partial class TaBortSkapadDatumFrånProjekt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,9 +42,6 @@ namespace CVDataLayer.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("CvId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -88,8 +88,6 @@ namespace CVDataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CvId");
-
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -118,17 +116,21 @@ namespace CVDataLayer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProfilbildPath")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TidigareErfarenhet")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Utbildningar")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AnvändarId");
+                    b.HasIndex("AnvändarId")
+                        .IsUnique();
 
                     b.ToTable("CVs");
                 });
@@ -406,20 +408,11 @@ namespace CVDataLayer.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("CVModels.Användare", b =>
-                {
-                    b.HasOne("CVModels.CV", "Cv")
-                        .WithMany()
-                        .HasForeignKey("CvId");
-
-                    b.Navigation("Cv");
-                });
-
             modelBuilder.Entity("CVModels.CV", b =>
                 {
                     b.HasOne("CVModels.Användare", "User")
-                        .WithMany("Cvs")
-                        .HasForeignKey("AnvändarId")
+                        .WithOne("Cv")
+                        .HasForeignKey("CVModels.CV", "AnvändarId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -548,7 +541,7 @@ namespace CVDataLayer.Migrations
 
             modelBuilder.Entity("CVModels.Användare", b =>
                 {
-                    b.Navigation("Cvs");
+                    b.Navigation("Cv");
 
                     b.Navigation("DeltarIProjekt");
 
