@@ -76,5 +76,20 @@ namespace CV_Hemsida.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public IActionResult DeleteCV(int id)
+        {
+            var cvToRemove = _dbContext.CVs.Find(id);
+
+            if (cvToRemove == null)
+            {
+                return NotFound(); // Om CV inte hittas, returnera NotFound
+            }
+
+            _dbContext.CVs.Remove(cvToRemove);
+            _dbContext.SaveChanges();
+
+            return RedirectToAction("CVPage");
+        }
     }
 }

@@ -35,6 +35,30 @@
                         <p class="card-text">Du har inga projekt registrerade.</p>
                     }
 
+                    <!-- Lägg till "Ta bort" knapp och modal här -->
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-@userCV.Id">
+                        Ta bort CV
+                    </button>
+
+                    <!-- Bekräftelsemodal för att ta bort -->
+                    <div class="modal fade" id="confirmDeleteModal-@userCV.Id" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="confirmDeleteModalLabel">Bekräfta borttagning</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Är du säker på att du vill ta bort detta CV?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Avbryt</button>
+                                    <a href="@Url.Action("DeleteCV", "CV", new { id = userCV.Id })" class="btn btn-danger">Ta bort</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         }
