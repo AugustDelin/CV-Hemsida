@@ -3,6 +3,7 @@ using CVModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using CV_SITE.Repositories;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,11 +13,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<CVContext>(Options =>
-                        Options.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("CVContext")));
+    Options.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("CVContext")));
 
 builder.Services.AddIdentity<Användare, IdentityRole>()
-            .AddEntityFrameworkStores<CVContext>()
-            .AddDefaultTokenProviders();
+    .AddEntityFrameworkStores<CVContext>()
+    .AddDefaultTokenProviders();
 builder.Services.Configure<IdentityOptions>(options =>
 {
     // Default Password settings.
@@ -28,6 +29,8 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequiredUniqueChars = 1;
 });
 
+// Register PersonRepository as a scoped service
+builder.Services.AddScoped<PersonRepository>();
 
 var app = builder.Build();
 

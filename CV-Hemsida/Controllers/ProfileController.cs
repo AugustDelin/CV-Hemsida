@@ -1,6 +1,7 @@
 ﻿using CVDataLayer;
 using CVModels;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CV_Hemsida.Controllers
 {
@@ -42,18 +43,65 @@ namespace CV_Hemsida.Controllers
         //PS: använder Förnamn och Efternamn här istället för Fullname på kodrad 32
         //slut på sökrutan
 
+        [HttpGet]
         public IActionResult ChangeInformation()
         {
-            return View();
+            // Retrieve the current user's ID
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Use the user ID to retrieve the corresponding Person from the database
+            Person userPerson = _dbContext.Personer.FirstOrDefault(p => p.AnvändarID == userId);
+
+            if (userPerson == null)
+            {
+                // Handle the case where the user's information is not found
+                return RedirectToAction("ProfilePage");
+            }
+
+            // Map the user's information to the ChangeInformationViewModel
+            var viewModel = new ChangeInformationViewModel
+            {
+                Förnamn = userPerson.Förnamn,
+                Efternamn = userPerson.Efternamn,
+                Adress = userPerson.Adress
+            };
+
+            return View(viewModel);
         }
 
 
+        [HttpPost]
+        public IActionResult SaveInfo(ChangeInformationViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // Retrieve the current user's ID
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+                // Use the user ID to retrieve the corresponding Person from the database
+                Person userPerson = _dbContext.Personer.FirstOrDefault(p => p.AnvändarID == userId);
 
+                if (userPerson == null)
+                {
+                    // Handle the case where the user's information is not found
+                    return RedirectToAction("ChangeInformation", model);
+                }
+
+                // Update the user's information with the values from the form
+                userPerson.Förnamn = model.Förnamn;
+                userPerson.Efternamn = model.Efternamn;
+                userPerson.Adress = model.Adress;
+
+                // Save changes directly to the database
+                _dbContext.SaveChanges();
+
+                return RedirectToAction("ChangeInformation", model); // Redirect to the user's profile page
+            }
+
+            // If ModelState is not valid, return to the ChangeInformation view with validation errors
+            return View("ChangeInformation", model);
+        }
 
 
     }
-
-
-
 }

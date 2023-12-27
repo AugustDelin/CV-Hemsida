@@ -6,21 +6,21 @@
 
 <h2>Change Information</h2>
 
-@using (Html.BeginForm("SaveInfo", "ControllerName", FormMethod.Post))
+@using (Html.BeginForm("SaveInfo", "Profile", FormMethod.Post))
 {
     <div>
         <label asp-for="Förnamn"></label>
-        <input asp-for="Förnamn" />
+        <input asp-for="Förnamn" value="@Model.Förnamn" />
         <span asp-validation-for="Förnamn"></span>
     </div>
     <div>
         <label asp-for="Efternamn"></label>
-        <input asp-for="Efternamn" />
+        <input asp-for="Efternamn" value="@Model.Efternamn" />
         <span asp-validation-for="Efternamn"></span>
     </div>
     <div>
         <label asp-for="Adress"></label>
-        <input asp-for="Adress" />
+        <input asp-for="Adress" value="@Model.Adress" />
         <span asp-validation-for="Adress"></span>
     </div>
 

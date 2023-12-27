@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using CVModels.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System;
+using CV_SITE.Repositories;
 
 namespace CV_Hemsida.Controllers
 {
@@ -21,7 +22,7 @@ namespace CV_Hemsida.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
             _dbContext = dbContext;
-
+            
         }
 
         public IActionResult Login()
@@ -75,16 +76,16 @@ namespace CV_Hemsida.Controllers
         {
             return View();
         }
-        
+
 
         [HttpPost]
         public async Task<IActionResult> RegisterUser(RegisterUserViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = new Användare // Ersätt 'User' med din användarmodell (t.ex. ApplicationUser)
+                var user = new Användare
                 {
-                    UserName = model.Email, // Använd e-posten som användarnamn för enkelhetens skull
+                    UserName = model.Email,
                     Email = model.Email
                 };
 
@@ -92,10 +93,9 @@ namespace CV_Hemsida.Controllers
 
                 if (result.Succeeded)
                 {
-                    // Användaren skapades framgångsrikt, vidarebefordra användaren till lämplig vy eller åtgärd
-                    // Exempelvis, omdirigera användaren till en bekräftelsesida eller en annan sida efter registreringen
-                    return RedirectToAction("RegisteringLyckades");
+                    TempData["UserId"] = user.Id;
 
+                    return RedirectToAction("RegisterPerson", "Account");
                 }
 
                 foreach (var error in result.Errors)
@@ -104,49 +104,51 @@ namespace CV_Hemsida.Controllers
                 }
             }
 
-            // Om ModelState inte är giltig eller registreringen misslyckades, returnera vyn med felmeddelanden
             return View(model);
         }
-        //[HttpPost]
-        //public async Task<IActionResult> RegisterPerson(RegisterPersonViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            // Retrieve the latest identity value for the user
-        //            var latestUserId = await _dbContext.Database.ExecuteSqlRawAsync("SELECT SCOPE_IDENTITY()");
-
-        //            var person = new Person
-        //            {
-        //                Personnummer = model.Personnummer,
-        //                Förnamn = model.Förnamn,
-        //                Efternamn = model.Efternamn,
-        //                Adress = model.Adress,
-        //                AnvändarID = latestUserId.ToString() // Set AnvändarID to the latest user id
-        //            };
-
-        //            _dbContext.Personer.Add(person);
-        //            await _dbContext.SaveChangesAsync(); // Use async SaveChanges method
-
-        //            return RedirectToAction("Login");
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            // Log the exception or handle it as appropriate for your application
-        //            ModelState.AddModelError(string.Empty, "An error occurred while saving to the database.");
-        //        }
-        //    }
-
-        //    // If ModelState is not valid, return the view with error messages
-        //    return View(model);
-        //}
-
 
         public IActionResult RegisterPerson()
         {
             return View();
         }
+
+
+        [HttpPost]
+        public async Task<IActionResult> RegisterPerson(RegisterPersonViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // Retrieve the user ID from TempData
+                string userId = TempData["UserId"]?.ToString();
+
+                if (string.IsNullOrEmpty(userId))
+                {
+                    // Handle the case where UserId is missing or null
+                    return RedirectToAction("RegisterUser");
+                }
+
+                var person = new Person
+                {
+                    Personnummer = model.Personnummer,
+                    Förnamn = model.Förnamn,
+                    Efternamn = model.Efternamn,
+                    Adress = model.Adress,
+                    AnvändarID = userId
+                };
+
+                // Add the new person to the DbContext
+                _dbContext.Personer.Add(person);
+
+                // Save changes directly to the database
+                _dbContext.SaveChanges();
+
+                return RedirectToAction("Index", "Home"); // Redirect to a success page
+            }
+
+            return View(model);
+        }
+
+
 
 
         [HttpPost]
@@ -180,35 +182,9 @@ namespace CV_Hemsida.Controllers
             return View(model);
         }
 
-
-
-        // Om ModelState inte är giltig, returnera vyn med felmeddelanden
-
-
-
-
-
-
-
-
         public IActionResult EditPassword()
         {
             return View();
         }
     }
 }
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
