@@ -24,6 +24,7 @@ namespace CVModels
 
         public virtual ICollection<DeltarProjekt> DeltarIProjekt { get; set; }
 
+        public virtual ICollection<Meddelande> Messages {  get; set; }
 
         [Required]
         public string AnvändarId { get; set; }
