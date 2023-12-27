@@ -19,7 +19,7 @@ namespace CVDataLayer
         public CVContext(DbContextOptions<CVContext> options) : base(options)
 
         { }
-        public DbSet<Användare> Users { get; set; }
+        public new DbSet<Användare> Users { get; set; }
 
         public DbSet<Person> Personer { get; set; }
         public DbSet<Projekt> Projekts { get; set; }

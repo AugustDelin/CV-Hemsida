@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using CVModels;
 using System.Security.Claims;
 using CVModels.ViewModels;
+using Castle.Components.DictionaryAdapter.Xml;
 
 namespace CV_Hemsida.Controllers
 {
@@ -126,5 +127,39 @@ namespace CV_Hemsida.Controllers
 
             return RedirectToAction("CVPage");
         }
+
+        public IActionResult VisaAnvändaresCV(int id)
+        {
+            // Antag att `id` är av typen string, som det ska vara
+            var cv = _dbContext.CVs
+                        .Include(cv => cv.User)
+                        .FirstOrDefault(cv => cv.Id == id);
+            if (cv == null)
+            {
+                // Hantera det fall då CV:t inte hittades
+                // Till exempel, omdirigera till en generisk "Resursen hittades inte" sida eller visa ett felmeddelande
+                return RedirectToAction("ResourceNotFound");
+            }
+            else
+            {
+                // Fortsätt som vanligt om CV:t finns
+                var cvViewModel = new AnvändareCVViewModel { /* ... */ };
+                return View(cvViewModel);
+            }
+        }
+
+        public IActionResult ResourceNotFound()
+        {
+            // Här kan du också skicka ett anpassat felmeddelande till vyn om du vill
+            return View();
+        }
+
+
+
+
+
     }
+
+
+
 }

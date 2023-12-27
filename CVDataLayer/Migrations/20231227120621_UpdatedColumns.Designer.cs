@@ -4,6 +4,7 @@ using CVDataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CVDataLayer.Migrations
 {
     [DbContext(typeof(CVContext))]
-    partial class CVContextModelSnapshot : ModelSnapshot
+    [Migration("20231227120621_UpdatedColumns")]
+    partial class UpdatedColumns
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,10 +43,11 @@ namespace CVDataLayer.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CvId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("CvId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Discriminator")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -54,6 +58,7 @@ namespace CVDataLayer.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Kompetenser")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
@@ -63,6 +68,7 @@ namespace CVDataLayer.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Namn")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
@@ -86,6 +92,7 @@ namespace CVDataLayer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProfilbildUrl")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ProjektId")
@@ -120,15 +127,18 @@ namespace CVDataLayer.Migrations
 
             modelBuilder.Entity("CVModels.CV", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AnvändarId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Kompetenser")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProfilbildPath")
@@ -158,8 +168,8 @@ namespace CVDataLayer.Migrations
                     b.Property<string>("AnvändareId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("CVId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("CVId")
+                        .HasColumnType("int");
 
                     b.HasKey("Deltagare", "Projekt");
 
@@ -174,8 +184,11 @@ namespace CVDataLayer.Migrations
 
             modelBuilder.Entity("CVModels.Meddelande", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Avsändare")
                         .IsRequired()

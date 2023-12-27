@@ -2,6 +2,6 @@
 {
     public class TidigareErfarenhet : Info
     {
-        public string Type { get; set; }
+        public string? Type { get; set; }
     }
 }
