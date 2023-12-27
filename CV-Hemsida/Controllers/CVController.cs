@@ -47,8 +47,11 @@ namespace CV_Hemsida.Controllers
         }
 
         [HttpPost]
-        public IActionResult RegisterCV(RegisterCVViewModel model)
+        public IActionResult RegisterCV(RegisterCVViewModel model, IFormFile ProfilbildPath)
         {
+            // Remove the ModelState error for ProfilbildPath
+            ModelState.Remove("ProfilbildPath");
+
             if (ModelState.IsValid)
             {
                 // Get the user ID of the currently logged-in user
@@ -60,9 +63,36 @@ namespace CV_Hemsida.Controllers
                     Kompetenser = model.Kompetenser,
                     Utbildningar = model.Utbildningar,
                     TidigareErfarenhet = model.TidigareErfarenhet,
-                    ProfilbildPath = model.ProfilbildPath,
                     AnvändarId = userId
                 };
+
+                // Handle file upload if a profile picture is selected
+                if (ProfilbildPath != null && ProfilbildPath.Length > 0)
+                {
+                    // Specify the directory path
+                    var directoryPath = Path.Combine("wwwroot/Bilder");
+
+                    // Create the directory if it doesn't exist
+                    if (!Directory.Exists(directoryPath))
+                    {
+                        Directory.CreateDirectory(directoryPath);
+                    }
+
+                    // Generate a unique file name or use the user's ID as the file name
+                    var fileName = userId + "_" + Guid.NewGuid().ToString() + "_" + Path.GetFileName(ProfilbildPath.FileName);
+
+                    // Specify the path where the file will be saved
+                    var filePath = Path.Combine(directoryPath, fileName);
+
+                    // Save the file to the server
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        ProfilbildPath.CopyTo(fileStream);
+                    }
+
+                    // Set the ProfilbildPath property to the file path
+                    newCV.ProfilbildPath = fileName;
+                }
 
                 // Add the new CV to the database
                 _dbContext.CVs.Add(newCV);
@@ -72,9 +102,14 @@ namespace CV_Hemsida.Controllers
                 return RedirectToAction("CVPage");
             }
 
-            // If the model is not valid, return to the RegisterCV view with errors
+            // If the model is not valid,
+            // return to the RegisterCV view with errors
             return View(model);
         }
+
+
+
+
 
         [HttpGet]
         public IActionResult DeleteCV(int id)

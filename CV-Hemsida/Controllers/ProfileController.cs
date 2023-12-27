@@ -55,7 +55,7 @@ namespace CV_Hemsida.Controllers
             if (userPerson == null)
             {
                 // Handle the case where the user's information is not found
-                return RedirectToAction("ProfilePage");
+                return RedirectToAction("Index", "Home");
             }
 
             // Map the user's information to the ChangeInformationViewModel
