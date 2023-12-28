@@ -14,7 +14,7 @@ namespace CVModels
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        public string? Kompetenser { get; set; }
+        public string Kompetenser { get; set; }
 
         public string? Utbildningar { get; set; }
 
@@ -22,15 +22,15 @@ namespace CVModels
 
         public string? ProfilbildPath { get; set; }
 
-        public virtual ICollection<DeltarProjekt>? DeltarIProjekt { get; set; }
+        public virtual ICollection<DeltarProjekt> DeltarIProjekt { get; set; }
 
         public virtual ICollection<Meddelande> Messages {  get; set; }
 
         [Required]
-        public string? AnvändarId { get; set; }
+        public string AnvändarId { get; set; }
 
         [ForeignKey(nameof(AnvändarId))]
         [InverseProperty("Cvs")]
-        public virtual Användare? User { get; set; } 
+        public virtual Användare User { get; set; } 
     }
 }

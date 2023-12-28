@@ -42,7 +42,7 @@ namespace CV_Hemsida.Controllers
 
             // Hämta en lista av användare som är kopplade till detta projekt på något sätt.
             var deltagandeAnvändare = _dbContext.Users
-                                              .Where(u => u.SkapadeProjekt.Any(p => p.Id == id))
+                                               .Where(u => u.SkapadeProjekt.Any(p => p.Id == id))
                                                .ToList();
 
             // Konvertera till AnvändareViewModel

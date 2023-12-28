@@ -40,11 +40,8 @@ namespace CVDataLayer.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CvId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Discriminator")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("CvId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -53,17 +50,11 @@ namespace CVDataLayer.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Kompetenser")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Namn")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -83,9 +74,6 @@ namespace CVDataLayer.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Profilbild")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProfilbildUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ProjektId")
@@ -120,15 +108,18 @@ namespace CVDataLayer.Migrations
 
             modelBuilder.Entity("CVModels.CV", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AnvändarId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Kompetenser")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProfilbildPath")
@@ -158,8 +149,8 @@ namespace CVDataLayer.Migrations
                     b.Property<string>("AnvändareId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("CVId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("CVId")
+                        .HasColumnType("int");
 
                     b.HasKey("Deltagare", "Projekt");
 
@@ -174,8 +165,11 @@ namespace CVDataLayer.Migrations
 
             modelBuilder.Entity("CVModels.Meddelande", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Avsändare")
                         .IsRequired()

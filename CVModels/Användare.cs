@@ -14,13 +14,7 @@ namespace CVModels
         public virtual CV? Cv { get; set; }
         public virtual Profile? Profil { get; set; }
         [NotMapped]
-
-        public override string? Id { get; set; }
-        public string? Namn { get; set; }
-        public string? ProfilbildUrl { get; set; }
-        public string? Kompetenser { get; set; }
-
-        public string? Discriminator { get; set; }
+        public string Discriminator { get; set; }
         public virtual IEnumerable<Meddelande>? MottagnaMeddelanden { get; set; }
         public virtual IEnumerable<DeltarProjekt>? DeltarIProjekt { get; set; }
         public virtual IEnumerable<Projekt>? SkapadeProjekt { get; set; }

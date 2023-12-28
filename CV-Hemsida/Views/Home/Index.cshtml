@@ -1,5 +1,9 @@
-﻿@using CVModels.ViewModels;
-@model IEnumerable<AnvändareViewModel>
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    
+}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -9,7 +13,9 @@
     <title>Välkommen till startsidan!</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
+        
         body {
+            
             text-align: center;
         }
 
@@ -22,6 +28,7 @@
     </style>
 </head>
 <body>
+
     <div class="container">
         <div class="jumbotron">
             <h1>Välkommen till startsidan!</h1>
@@ -29,39 +36,40 @@
         </div>
 
         <div class="row">
-            @if (Model.Any())
-            {
-                foreach (var användare in Model)
-                {
-                    <div class="col-md-4">
-                        <div class="card">
-                            <!-- Borttagen profilbild -->
-                            <div class="card-body">
-                                <h5 class="card-title">@användare.Namn</h5>
-                                <p class="card-text">@användare.Kompetenser</p>
-                                <!-- Ändrad text på knappen och kontrollera att länken är korrekt -->
-                                <a href="@Url.Action("VisaAnvändaresCV", "CV", new { id = användare.Id })" class="btn btn-primary">Visa Profil med CV</a>
-                            </div>
-                        </div>
-                    </div>
-                }
-            }
-            else
-            {
-                <div class="col-12">
-                    <p>Inga användare att visa.</p>
-                </div>
-            }
+            <div class="col-md-6">
+                <h2>CV 1 - August</h2>
+                <button type="submit" class="btn-profil-knapp">August profil</button>
+            </div>
+            <div class="col-md-6">
+                <h2>CV 2 - Erik</h2>
+               <button type="submit" class="btn-profil-knapp">Eriks profil</button>
+            </div>
+            <div class="col-md-6">
+                <h2>CV 3 - Hugo</h2>
+                <button type="submit" class="btn-profil-knapp">Hugos profil</button>
+            </div>
+            <div class="col-md-6">
+                <h2>CV 4 - Niclas</h2>
+                <button type="submit" class="btn-profil-knapp">Niclas profil</button>
+            </div>
+            <div class="col-md-6">
+                <h2>CV 5 - Victor</h2>
+                <button type="submit" class="btn-profil-knapp">Victors profil</button>
+            </div>
         </div>
 
-        <!-- Det senast upplagda projektet (Denna del kan också behöva uppdateras dynamiskt) -->
         <div>
             <h3>Det senast upplagda projektet</h3>
             <h4>Projekt rubrik</h4>
             <p>Beskrivning på projektet</p>
-            <a href="#" class="btn btn-primary">Länk till projektet</a>
+            <button type="submit" class="btn-profil-knapp">Länk till projektet</button>
         </div>
+
     </div>
+
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
+
+
+
