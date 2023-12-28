@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CVDataLayer.Migrations
 {
     [DbContext(typeof(CVContext))]
-    [Migration("20231221123427_initialmigration")]
-    partial class initialmigration
+    [Migration("20231228141101_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -79,6 +79,9 @@ namespace CVDataLayer.Migrations
                     b.Property<string>("Profilbild")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ProjektId")
+                        .HasColumnType("int");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -100,6 +103,8 @@ namespace CVDataLayer.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("ProjektId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -253,7 +258,8 @@ namespace CVDataLayer.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
@@ -415,6 +421,10 @@ namespace CVDataLayer.Migrations
                         .WithMany()
                         .HasForeignKey("CvId");
 
+                    b.HasOne("CVModels.Projekt", null)
+                        .WithMany("DeltagandeAnvändare")
+                        .HasForeignKey("ProjektId");
+
                     b.Navigation("Cv");
                 });
 
@@ -567,6 +577,11 @@ namespace CVDataLayer.Migrations
             modelBuilder.Entity("CVModels.CV", b =>
                 {
                     b.Navigation("DeltarIProjekt");
+                });
+
+            modelBuilder.Entity("CVModels.Projekt", b =>
+                {
+                    b.Navigation("DeltagandeAnvändare");
                 });
 #pragma warning restore 612, 618
         }

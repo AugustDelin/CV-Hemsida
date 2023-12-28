@@ -5,7 +5,7 @@
 namespace CVDataLayer.Migrations
 {
     /// <inheritdoc />
-    public partial class _1234 : Migration
+    public partial class InitialMigration2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

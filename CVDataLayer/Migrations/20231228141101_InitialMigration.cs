@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CVDataLayer.Migrations
 {
     /// <inheritdoc />
-    public partial class initialmigration : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -101,6 +101,7 @@ namespace CVDataLayer.Migrations
                     Profilbild = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Aktiv = table.Column<bool>(type: "bit", nullable: false),
                     CvId = table.Column<int>(type: "int", nullable: true),
+                    ProjektId = table.Column<int>(type: "int", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -321,6 +322,11 @@ namespace CVDataLayer.Migrations
                 column: "CvId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_ProjektId",
+                table: "AspNetUsers",
+                column: "ProjektId");
+
+            migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
@@ -400,6 +406,13 @@ namespace CVDataLayer.Migrations
                 column: "CvId",
                 principalTable: "CVs",
                 principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUsers_Projekt_ProjektId",
+                table: "AspNetUsers",
+                column: "ProjektId",
+                principalTable: "Projekt",
+                principalColumn: "Id");
         }
 
         /// <inheritdoc />
@@ -408,6 +421,10 @@ namespace CVDataLayer.Migrations
             migrationBuilder.DropForeignKey(
                 name: "FK_CVs_AspNetUsers_AnvändarId",
                 table: "CVs");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Projekt_AspNetUsers_AnvändarId",
+                table: "Projekt");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -440,13 +457,13 @@ namespace CVDataLayer.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Projekt");
-
-            migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "CVs");
+
+            migrationBuilder.DropTable(
+                name: "Projekt");
         }
     }
 }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CVDataLayer.Migrations
 {
     [DbContext(typeof(CVContext))]
-    [Migration("20231221153623_UppdateraProjektPrimärnyckel")]
-    partial class UppdateraProjektPrimärnyckel
+    [Migration("20231228141854_InitialMigration2")]
+    partial class InitialMigration2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
