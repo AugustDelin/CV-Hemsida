@@ -41,7 +41,7 @@ namespace CV_Hemsida.Controllers
         }
 
 
-        public IActionResult RegisterCV() 
+        public IActionResult RegisterCV()
         {
             return View();
         }
@@ -108,9 +108,6 @@ namespace CV_Hemsida.Controllers
         }
 
 
-
-
-
         [HttpGet]
         public IActionResult DeleteCV(int id)
         {
@@ -118,7 +115,18 @@ namespace CV_Hemsida.Controllers
 
             if (cvToRemove == null)
             {
-                return NotFound(); // Om CV inte hittas, returnera NotFound
+                return NotFound(); // If CV is not found, return NotFound
+            }
+
+            // Remove the associated profile picture file
+            if (!string.IsNullOrEmpty(cvToRemove.ProfilbildPath))
+            {
+                var filePath = Path.Combine("wwwroot/Bilder", cvToRemove.ProfilbildPath);
+
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
             }
 
             _dbContext.CVs.Remove(cvToRemove);
