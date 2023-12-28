@@ -8,6 +8,8 @@
 @model IEnumerable<ProjektViewModel>
 @using CVModels.ViewModels
 
+<
+
 <div class="container">
     @if (Model != null && Model.Any())
     {
@@ -15,9 +17,10 @@
         {
             <div class="card mb-3">
                 <div class="card-body">
-                    <h5 class="card-title">@projekt.Titel</h5>
-                    <p class="card-text">@projekt.Beskrivning</p>
+                    <h5 class="card-title">Titel: @projekt.Titel</h5>
+                    <p class="card-text">Beskrivning: @projekt.Beskrivning</p>
                     <a href="@Url.Action("Details", "Projekt", new { id = projekt.Id })" class="btn btn-primary">Mer detaljer</a>
+                    <a href="@Url.Action("ChangeProject", "Projekt", new { id = projekt.Id })" class="btn btn-secondary">Ändra information</a>
                 </div>
             </div>
         }

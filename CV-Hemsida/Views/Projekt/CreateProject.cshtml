@@ -1,0 +1,26 @@
+﻿@model CVModels.ViewModels.CreateProjectViewModel
+
+@{
+    ViewBag.Title = "Create Project";
+}
+
+<h2>Create Project</h2>
+
+@using (Html.BeginForm("CreateProject", "Projekt", FormMethod.Post))
+{
+    <div>
+        <label asp-for="Titel"></label>
+        <input asp-for="Titel" />
+        <span asp-validation-for="Titel"></span>
+    </div>
+    <div>
+        <label asp-for="Beskrivning"></label>
+        <textarea asp-for="Beskrivning"></textarea>
+        <span asp-validation-for="Beskrivning"></span>
+    </div>
+    
+
+    <!-- Andra fält för projekt kan läggas till här -->
+
+    <input type="submit" value="Create" />
+}
