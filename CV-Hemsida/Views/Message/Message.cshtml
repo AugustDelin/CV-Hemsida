@@ -1,0 +1,28 @@
+﻿@model CVModels.ViewModels.SendMessageViewModel
+
+@{
+    ViewBag.Title = "Send Message";
+}
+
+<h2>Send Message</h2>
+
+@using (Html.BeginForm("SendMessage", "Message", FormMethod.Post))
+{
+    <div>
+        <label asp-for="Innehåll"></label>
+        <textarea asp-for="Innehåll"></textarea>
+        <span asp-validation-for="Innehåll"></span>
+    </div>
+    <div>
+        <label asp-for="Avsändare"></label>
+        <input asp-for="Avsändare" />
+        <span asp-validation-for="Avsändare"></span>
+    </div>
+    <div>
+        <label asp-for="Mottagare"></label>
+        <input asp-for="Mottagare" />
+        <span asp-validation-for="Mottagare"></span>
+    </div>
+
+    <input type="submit" value="Send" />
+}
