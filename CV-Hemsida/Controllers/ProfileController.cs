@@ -1,6 +1,8 @@
 ﻿using CVDataLayer;
 using CVModels;
+using CVModels.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace CV_Hemsida.Controllers
@@ -100,6 +102,37 @@ namespace CV_Hemsida.Controllers
 
             // If ModelState is not valid, return to the ChangeInformation view with validation errors
             return View("ChangeInformation", model);
+        }
+
+
+        public IActionResult VisaAnvändaresProfil(string id)
+        {
+            // Här antar vi att `id` är användarens unika identifierare (som användarens e-post eller användarnamn)
+            var user = _dbContext.Users
+                        .Include(u => u.Cv)
+                        .FirstOrDefault(u => u.Email == id);
+
+            if (user == null || user.Cv == null)
+            {
+                // Om användaren inte hittas, visa en lämplig sida
+                return RedirectToAction("ResourceNotFound");
+            }
+            else
+            {
+                var cvViewModel = new AnvändareCVViewModel
+                {
+                    // Fyll i all information från `user` och `user.Cv` här
+                    Namn = user.UserName,
+                    Kompetenser = user.Cv.Kompetenser,
+                    Utbildningar = user.Cv.Utbildningar,
+                    TidigareErfarenhet = user.Cv.TidigareErfarenhet,
+                    ProfilbildPath = user.Cv.ProfilbildPath,
+                    // Lägg till andra relevanta egenskaper här
+                };
+
+                // Skicka denna information till vyn som ska visa användarens profilsida
+                return View("VisaAnvändaresProfil", cvViewModel); // Se till att du har en vy som heter "VisaAnvändaresProfil"
+            }
         }
 
 

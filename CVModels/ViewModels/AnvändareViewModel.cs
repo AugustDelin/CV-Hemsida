@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,15 +9,25 @@ namespace CVModels.ViewModels
 {
     public class AnvändareViewModel
     {
+
+        public string Id { get; set; }
+
+        public string Kompetenser { get; set; }
+
+        public string? ProfilbildPath { get; set; }
+
         public string Namn { get; set; }
-        // Andra relevanta egenskaper för användaren
+        public string? Profilbild { get; set; }
+        public virtual Person? Person { get; set; }
+        public virtual CV? Cv { get; set; }
+        public virtual Profile? Profil { get; set; }
+        [NotMapped]
+        public virtual IEnumerable<Meddelande>? MottagnaMeddelanden { get; set; }
+        public virtual IEnumerable<DeltarProjekt>? DeltarIProjekt { get; set; }
+        public virtual IEnumerable<Projekt>? SkapadeProjekt { get; set; }
 
-     /*   public string Email { get; set; }
-        public string ProfilbildUrl { get; set; }
-        public string Roll { get; set; }
-
-
-        */
+        [InverseProperty("User")]
+        public virtual ICollection<CV>? Cvs { get; set; }
 
     }
 }

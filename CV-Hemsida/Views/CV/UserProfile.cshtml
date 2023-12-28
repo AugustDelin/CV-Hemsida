@@ -1,0 +1,37 @@
+﻿@model CVModels.ViewModels.AnvändareCVViewModel
+@{
+    Layout = "_Layout";
+}
+
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            Profilsida
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">@Model.Namn</h5>
+            <img src="@Model.ProfilbildPath" alt="Profilbild" class="card-img-top mb-3" />
+            <p class="card-text"><strong>Kompetenser:</strong> @Model.Kompetenser</p>
+            <p class="card-text"><strong>Utbildningar:</strong> @Model.Utbildningar</p>
+            <p class="card-text"><strong>Tidigare Erfarenhet:</strong> @Model.TidigareErfarenhet</p>
+
+            <!-- Lägg till logik för att lista projekt här -->
+            <h5 class="card-title">Projekt</h5>
+            @if (Model.DeltarIProjekt != null && Model.DeltarIProjekt.Any())
+            {
+                <ul class="list-group">
+                    @foreach (var projekt in Model.DeltarIProjekt)
+                    {
+                        <li class="list-group-item">@projekt.Titel</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p>Inga registrerade projekt.</p>
+            }
+
+            <!-- Här kan du lägga till ytterligare information som kontaktuppgifter eller meddelanden -->
+        </div>
+    </div>
+</div>

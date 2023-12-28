@@ -134,5 +134,40 @@ namespace CV_Hemsida.Controllers
 
             return RedirectToAction("CVPage");
         }
+
+        public IActionResult VisaAnvändaresCV(string användarId)
+        {
+            var användare = _dbContext.Users
+                              .Include(u => u.Cv)
+                              .FirstOrDefault(u => u.Id == användarId);
+
+            if (användare?.Cv != null)
+            {
+                var cv = användare.Cv;
+                var cvViewModel = new AnvändareCVViewModel
+                {
+                    // Fyll i alla nödvändiga fält från cv och användare
+                };
+                return View(cvViewModel);
+            }
+            else
+            {
+                return RedirectToAction("ResourceNotFound");
+            }
+        }
+
+
+        public ActionResult ResourceNotFound()
+        {
+            return View();
+        }
+
+
+
     }
+
+
+
+
+
 }

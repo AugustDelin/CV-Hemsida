@@ -1,6 +1,9 @@
 ﻿using CVDataLayer;
 using CVModels;
 using Microsoft.AspNetCore.Mvc;
+using CV_Hemsida;
+using CVModels.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace CV_Hemsida.Controllers
 {
@@ -15,7 +18,18 @@ namespace CV_Hemsida.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var användareViewModels = _dbContext.Users
+                .Select(u => new AnvändareViewModel
+                {
+                    Id = u.Id,
+                    Namn = u.UserName, // Använd UserName istället för Email
+                                       // Andra egenskaper som du vill inkludera
+                })
+                .ToList();
+
+            return View(användareViewModels);
         }
+
+
     }
 }

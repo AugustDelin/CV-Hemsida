@@ -1,0 +1,26 @@
+﻿@using CVModels.ViewModels
+@model AnvändareCVViewModel
+
+<h2>@Model.Namn's CV</h2>
+
+<div>
+    <img src="@Model.ProfilbildPath" alt="Profilbild">
+    <p>Kompetenser: @Model.Kompetenser</p>
+    <p>Utbildningar: @Model.Utbildningar</p>
+    <p>Tidigare Erfarenhet: @Model.TidigareErfarenhet</p>
+
+    <h3>Projekt:</h3>
+    @if (Model.DeltarIProjekt != null && Model.DeltarIProjekt.Any())
+    {
+        <ul>
+            @foreach (var projekt in Model.DeltarIProjekt)
+            {
+                <li>@projekt.Titel - @projekt.Beskrivning</li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>Inga projekt registrerade.</p>
+    }
+</div>
