@@ -41,46 +41,6 @@
                         <p class="card-text">Du har inga projekt registrerade.</p>
                     }
 
-                    <!--Hugos meddelanderuta för varje CV börjar här-->
-                    <div class="message-box mt-3">
-                        <h4>Meddelanden</h4>
-                        <div class="messages">
-                            <!-- Tidigare meddelanden synliga med scrollbar -->
-                            <div class="message-history" style="max-height: 150px; overflow-y: auto;">
-                                <!-- Plats för tidigare meddelanden -->
-                                @if (userCV.Messages != null && userCV.Messages.Any())
-                                {
-                                    foreach (var message in userCV.Messages)
-                                    {
-                                        <div class="message">
-                                            <strong>@message.Avsändare</strong>: @message.Innehåll
-                                        </div>
-                                    }
-                                }
-                            </div>
-
-                            <!-- Textarea för att skriva nya meddelanden -->
-                            <div class="new-message mt-3">
-                                <textarea class="form-control" rows="2" placeholder="Skriv ditt meddelande här"></textarea>
-                                @if (User.Identity.IsAuthenticated)
-                                {
-                                    <!-- Om användaren är inloggad -->
-                                    <button type="button" class="btn btn-primary mt-2">Skicka</button>
-                                }
-                                else
-                                {
-                                    <!-- Om användaren inte är inloggad, be om namn för avsändare -->
-                                    <div class="mt-2">
-                                        <input type="text" class="form-control" placeholder="Ange ditt namn">
-                                        <button type="button" class="btn btn-primary mt-2">Skicka</button>
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Slut på Hugos meddelanderuta för varje CV -->
-
-
                     <!-- Lägg till "Ta bort" knapp och modal här -->
                     <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-@userCV.Id">
                         Ta bort CV

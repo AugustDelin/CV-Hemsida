@@ -40,7 +40,7 @@ namespace CV_Hemsida.Controllers
 
             return View("ProfilePage", sökResultat); // Visa sökresultaten på samma vyn som ProfilePage
         }
-        //PS: använder Förnamn och Efternamn här istället för Fullname
+        //PS: använder Förnamn och Efternamn här istället för Fullname på kodrad 32
         //slut på sökrutan
 
         [HttpGet]
