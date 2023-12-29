@@ -103,14 +103,22 @@ namespace CV_Hemsida.Controllers
             return View(model);
         }
 
-        // Action-metod för att visa ändringssidan för ett projekt
-        public IActionResult Change(int id)
+        [HttpGet]
+        public IActionResult ChangeProject(int id)
         {
             var project = _dbContext.Projekts.FirstOrDefault(p => p.Id == id);
 
             if (project == null)
             {
-                return NotFound();
+                return RedirectToAction("Index", "Home");
+            }
+
+            // Kontrollera om den inloggade användaren är den som skapade projektet
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (project.AnvändarId != userId)
+            {
+                // Användaren har inte rättighet att ändra projektet
+                return RedirectToAction("AccessDenied", "Authorization"); // Skapa en passande åtkomstnekat-vy
             }
 
             var viewModel = new ChangeProjectViewModel
@@ -118,37 +126,36 @@ namespace CV_Hemsida.Controllers
                 Id = project.Id,
                 Titel = project.Titel,
                 Beskrivning = project.Beskrivning
-                // Fyll i andra fält om det behövs
             };
 
             return View(viewModel);
         }
 
-        // Action-metod för att spara ändringarna för ett projekt
         [HttpPost]
-        public IActionResult SaveChanges(ChangeProjectViewModel viewModel)
+        public IActionResult SaveChanges(ChangeProjectViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var project = _dbContext.Projekts.FirstOrDefault(p => p.Id == viewModel.Id);
+                var project = _dbContext.Projekts.FirstOrDefault(p => p.Id == model.Id);
 
                 if (project == null)
                 {
-                    return NotFound();
+                    // Handle the case where the project is not found
+                    return RedirectToAction("ChangeProject", new { id = model.Id });
                 }
 
-                // Uppdatera projektet med nya värden från vyn
-                project.Titel = viewModel.Titel;
-                project.Beskrivning = viewModel.Beskrivning;
-                // Uppdatera andra fält vid behov
+                // Update the project's information with the values from the form
+                project.Titel = model.Titel;
+                project.Beskrivning = model.Beskrivning;
 
-                _dbContext.SaveChanges(); // Spara ändringarna till databasen
+                // Save changes directly to the database
+                _dbContext.SaveChanges();
 
-                return RedirectToAction("ProjectPage"); // Eller en annan åtgärd efter att ändringarna har sparats
+                return RedirectToAction("Index", "Home"); // Redirect to an appropriate page after saving changes
             }
 
-            // Om ModelState inte är giltig, returnera vyn med felmeddelanden
-            return View("ChangeProject", viewModel);
+            // If ModelState is not valid, return to the ChangeProject view with validation errors
+            return View("ChangeProject", model);
         }
 
 
