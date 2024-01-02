@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CVDataLayer.Migrations
 {
     [DbContext(typeof(CVContext))]
-    [Migration("20231221153623_UppdateraProjektPrimärnyckel")]
-    partial class UppdateraProjektPrimärnyckel
+    [Migration("20240102142644_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,9 +35,6 @@ namespace CVDataLayer.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
-
-                    b.Property<bool>("Aktiv")
-                        .HasColumnType("bit");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -74,6 +71,9 @@ namespace CVDataLayer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Privat")
                         .HasColumnType("bit");
 
                     b.Property<string>("Profilbild")

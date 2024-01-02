@@ -13,4 +13,6 @@ public class ChangeInformationViewModel
     [Required(ErrorMessage = "Adress är obligatorisk")]
     [StringLength(100, ErrorMessage = "Adressen får inte vara längre än 100 tecken")]
     public string Adress { get; set; }
+
+    public bool ÄrProfilPrivat { get; set; }
 }

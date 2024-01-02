@@ -45,6 +45,8 @@ namespace CV_Hemsida.Controllers
         //PS: använder Förnamn och Efternamn här istället för Fullname på kodrad 32
         //slut på sökrutan
 
+
+
         [HttpGet]
         public IActionResult ChangeInformation()
         {
@@ -72,8 +74,27 @@ namespace CV_Hemsida.Controllers
         }
 
 
-        [HttpPost]
-        public IActionResult SaveInfo(ChangeInformationViewModel model)
+        //[HttpPost]
+        //public IActionResult SetUserPrivate(bool isPrivate)
+        //{
+        //    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        //    var user = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
+
+        //    if (user == null)
+        //    {
+        //        return RedirectToAction("ChangeInformation");
+        //    }
+
+        //    user.Privat = isPrivate;
+        //    _dbContext.SaveChanges();
+
+        //    return RedirectToAction("ChangeInformation");
+        //}
+
+
+        
+[HttpPost]
+public IActionResult SaveInfo(ChangeInformationViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -99,6 +120,8 @@ namespace CV_Hemsida.Controllers
 
                 return RedirectToAction("ChangeInformation", model); // Redirect to the user's profile page
             }
+
+
 
             // If ModelState is not valid, return to the ChangeInformation view with validation errors
             return View("ChangeInformation", model);
