@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CVViewModels
+namespace CVModels.ViewModels
 {
     public class CreateProjectViewModel
     {
