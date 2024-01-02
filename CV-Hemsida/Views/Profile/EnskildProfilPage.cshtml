@@ -1,0 +1,42 @@
+﻿@model CVModels.ViewModels.AnvändareCVViewModel
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="container mt-4">
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2>@Model.Namn's Profil</h2>
+        </div>
+        <div class="card-body">
+            @if (!string.IsNullOrEmpty(Model.ProfilbildPath))
+            {
+                <img src="@Url.Content("~/images/" + Model.ProfilbildPath)" alt="Profilbild" class="rounded-circle" width="150" />
+            }
+            <h3>Kompetenser</h3>
+            <p>@Model.Kompetenser</p>
+
+            <h3>Utbildningar</h3>
+            <p>@Model.Utbildningar</p>
+
+            <h3>Tidigare erfarenheter</h3>
+            <p>@Model.TidigareErfarenhet</p>
+
+            <h3>Projekt</h3>
+            @if (Model.DeltarIProjekt.Any())
+            {
+                <ul>
+                    @foreach (var projekt in Model.DeltarIProjekt)
+                    {
+                        <li>@projekt.Titel - @projekt.Beskrivning</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p>Inga projekt att visa.</p>
+            }
+        </div>
+    </div>
+</div>

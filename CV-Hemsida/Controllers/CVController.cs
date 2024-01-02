@@ -126,5 +126,40 @@ namespace CV_Hemsida.Controllers
 
             return RedirectToAction("CVPage");
         }
+
+
+        public async Task<IActionResult> EnskildProfilePage(string userId)
+        {
+            var userWithCv = await _dbContext.Users
+                .Where(u => u.Id == userId)
+                .Include(u => u.Cv)
+                .ThenInclude(c => c.DeltarIProjekt)
+                .Select(u => new AnvändareCVViewModel
+                {
+                    Id = u.Id,
+                    Namn = u.UserName,
+                    Kompetenser = u.Cv.Kompetenser,
+                    Utbildningar = u.Cv.Utbildningar,
+                    TidigareErfarenhet = u.Cv.TidigareErfarenhet,
+                    ProfilbildPath = u.Cv.ProfilbildPath,
+                    DeltarIProjekt = u.Cv.DeltarIProjekt.Select(dp => new ProjektViewModel
+                    {
+                        Titel = dp.Proj.Titel, // Antag att 'Projekt' är den korrekta navigationsegenskapen i 'DeltarProjekt'
+                        Beskrivning = dp.Proj.Beskrivning
+                    }).ToList()
+                })
+                .FirstOrDefaultAsync();
+
+            if (userWithCv == null)
+            {
+                return RedirectToAction("ResourceNotFound");
+            }
+
+            return View(userWithCv);
+        }
+
+
+
+
     }
 }

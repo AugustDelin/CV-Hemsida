@@ -1,6 +1,8 @@
 ﻿using CVDataLayer;
 using CVModels;
+using CVModels.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace CV_Hemsida.Controllers
@@ -103,5 +105,58 @@ namespace CV_Hemsida.Controllers
         }
 
 
+        public async Task<IActionResult> VisaAnvändaresProfil(string identifier)
+        {
+            // Försök först hitta användaren baserat på ID
+            var användare = await _dbContext.Users
+                .Include(u => u.Cv)
+                .FirstOrDefaultAsync(u => u.Id == identifier);
+
+            // Om ingen användare hittas, försök med e-post
+            if (användare == null)
+            {
+                användare = await _dbContext.Users
+                    .Include(u => u.Cv)
+                    .FirstOrDefaultAsync(u => u.Email == identifier);
+            }
+
+            if (användare == null || användare.Cv == null)
+            {
+                return RedirectToAction("ResourceNotFound");
+            }
+
+          
+
+
+            var cvViewModel = new AnvändareCVViewModel
+            {
+                Namn = användare.UserName,  // Eller något annat relevant fält för namn
+                Kompetenser = användare.Cv.Kompetenser,
+                Utbildningar = användare.Cv.Utbildningar,
+                TidigareErfarenhet = användare.Cv.TidigareErfarenhet,
+                ProfilbildPath = användare.Cv.ProfilbildPath,
+                // Om det finns andra fält i Cv som ska visas, lägg till dem här
+            };
+
+            if (användare.Cv.DeltarIProjekt != null)
+            {
+                cvViewModel.DeltarIProjekt = användare.Cv.DeltarIProjekt.Select(dp => new ProjektViewModel
+                {
+                    Titel = dp.Proj.Titel,
+                    Beskrivning = dp.Proj.Beskrivning
+                    // Lägg till fler fält om nödvändigt
+                }).ToList();
+            }
+
+
+
+            return View("EnskildProfilePage", cvViewModel);
+        }
+
+
+
+
     }
+
+
 }
