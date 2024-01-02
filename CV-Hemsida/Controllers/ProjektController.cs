@@ -1,7 +1,7 @@
 ﻿using CVDataLayer;
 using CVModels;
 using CVModels.ViewModels;
-using CVViewModels;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -147,6 +147,21 @@ namespace CV_Hemsida.Controllers
             };
 
             return View(viewModel);
+        }
+
+        public IActionResult ChangeProject()
+        { 
+            return View();
+        }
+
+        public IActionResult CreateProject()
+        {
+            return View();
+        }
+
+        public IActionResult Save()
+        {
+            return View();
         }
 
 
