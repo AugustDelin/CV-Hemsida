@@ -41,6 +41,11 @@
                         <p class="card-text">Du har inga projekt registrerade.</p>
                     }
 
+                    <div class="d-flex justify-content-end mb-10 me-4">
+                        <a href="@Url.Action("ChangeCV", "CV", new { id = userCV.Id })" class="btn btn-warning">Ändra CV</a>
+                    </div>
+                    
+
                     <!-- Lägg till "Ta bort" knapp och modal här -->
                     <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-@userCV.Id">
                         Ta bort CV
