@@ -9,7 +9,7 @@ namespace CVModels
     public class Användare : IdentityUser
     {
         public string? Profilbild { get; set; }
-        public bool Aktiv { get; set; }
+        public bool Privat { get; set; }
         public virtual Person? Person { get; set; }
         public virtual CV? Cv { get; set; }
         public virtual Profile? Profil { get; set; }
