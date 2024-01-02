@@ -74,58 +74,139 @@ namespace CV_Hemsida.Controllers
         }
 
 
-        //[HttpPost]
-        //public IActionResult SetUserPrivate(bool isPrivate)
-        //{
-        //    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        //    var user = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
+        [HttpPost]
+        public IActionResult SetUserPrivate(bool isPrivate)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
 
-        //    if (user == null)
-        //    {
-        //        return RedirectToAction("ChangeInformation");
-        //    }
+            if (user == null)
+            {
+                return RedirectToAction("ChangeInformation");
+            }
 
-        //    user.Privat = isPrivate;
-        //    _dbContext.SaveChanges();
+            user.Privat = isPrivate;
+            _dbContext.SaveChanges();
 
-        //    return RedirectToAction("ChangeInformation");
-        //}
+            return RedirectToAction("ChangeInformation");
+        }
 
-
-        
-[HttpPost]
-public IActionResult SaveInfo(ChangeInformationViewModel model)
+        [HttpPost]
+        public IActionResult SavePrivateValue(ChangeInformationViewModel model, bool isPrivate)
         {
             if (ModelState.IsValid)
             {
-                // Retrieve the current user's ID
+                // Dina övriga logiker för att spara andra uppgifter från formuläret
+                // ...
+
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var user = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
 
-                // Use the user ID to retrieve the corresponding Person from the database
-                Person userPerson = _dbContext.Personer.FirstOrDefault(p => p.AnvändarID == userId);
-
-                if (userPerson == null)
+                if (user == null)
                 {
-                    // Handle the case where the user's information is not found
+                    return RedirectToAction("ChangeInformation");
+                }
+
+                user.Privat = isPrivate;
+                _dbContext.SaveChanges();
+
+                return RedirectToAction("ChangeInformation");
+            }
+
+            // Om ModelState inte är giltigt, returnera vyn med felmeddelanden
+            return View(model);
+        }
+
+
+
+//        [HttpPost]
+//public IActionResult SaveInfo(ChangeInformationViewModel model)
+//        {
+//            if (ModelState.IsValid)
+//            {
+//                // Retrieve the current user's ID
+//                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+//                // Use the user ID to retrieve the corresponding Person from the database
+//                Person userPerson = _dbContext.Personer.FirstOrDefault(p => p.AnvändarID == userId);
+
+//                if (userPerson == null)
+//                {
+//                    // Handle the case where the user's information is not found
+//                    return RedirectToAction("ChangeInformation", model);
+//                }
+
+//                // Update the user's information with the values from the form
+//                userPerson.Förnamn = model.Förnamn;
+//                userPerson.Efternamn = model.Efternamn;
+//                userPerson.Adress = model.Adress;
+
+//                // Save changes directly to the database
+//                _dbContext.SaveChanges();
+
+//                return RedirectToAction("ChangeInformation", model); // Redirect to the user's profile page
+//            }
+
+
+
+//            // If ModelState is not valid, return to the ChangeInformation view with validation errors
+//            return View("ChangeInformation", model);
+//        }
+
+
+
+
+
+
+        [HttpPost]
+        public IActionResult SaveInformationAndPrivateValue(ChangeInformationViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var user = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
+
+                if (user == null)
+                {
                     return RedirectToAction("ChangeInformation", model);
                 }
 
-                // Update the user's information with the values from the form
-                userPerson.Förnamn = model.Förnamn;
-                userPerson.Efternamn = model.Efternamn;
-                userPerson.Adress = model.Adress;
+                // Hämta användarens Person-information för de saknade värdena
+                var userPerson = _dbContext.Personer.FirstOrDefault(p => p.AnvändarID == userId);
 
-                // Save changes directly to the database
+                if (userPerson == null)
+                {
+                    return RedirectToAction("ChangeInformation", model);
+                }
+
+                // Använd Person-informationen för förnamn, efternamn och adress om de saknas i modellen
+                model.Förnamn ??= userPerson.Förnamn;
+                model.Efternamn ??= userPerson.Efternamn;
+                model.Adress ??= userPerson.Adress;
+
+                // Sätt det booleska värdet för privat
+                user.Privat = model.ÄrProfilPrivat;
+
                 _dbContext.SaveChanges();
 
-                return RedirectToAction("ChangeInformation", model); // Redirect to the user's profile page
+                return RedirectToAction("ChangeInformation", model);
             }
 
-
-
-            // If ModelState is not valid, return to the ChangeInformation view with validation errors
+            // Om ModelState inte är giltigt, returnera vyn med felmeddelanden
             return View("ChangeInformation", model);
         }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         public IActionResult VisaAnvändaresProfil(string id)
