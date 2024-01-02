@@ -1,0 +1,35 @@
+﻿@model CVModels.ViewModels.ChangeCVViewModel
+
+@{
+    Layout = "_Layout";
+}
+
+<h2>Ändra CV</h2>
+
+<form asp-action="ChangeCV" asp-route-id="@Model.Id" method="post" enctype="multipart/form-data">
+    <div class="form-group mb-3">
+        <label for="Kompetenser" class="form-label">Kompetenser:</label>
+        <input type="text" class="form-control" id="Kompetenser" name="Kompetenser" value="@Model.Kompetenser" required>
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="Utbildningar" class="form-label">Utbildningar:</label>
+        <input type="text" class="form-control" id="Utbildningar" name="Utbildningar" value="@Model.Utbildningar">
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="TidigareErfarenhet" class="form-label">Tidigare Erfarenhet:</label>
+        <input type="text" class="form-control" id="TidigareErfarenhet" name="TidigareErfarenhet" value="@Model.TidigareErfarenhet">
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="ProfilbildPath" class="form-label">Profilbild:</label>
+        <input type="file" class="form-control-file" id="ProfilbildPath" name="ProfilbildPath">
+        @if (!string.IsNullOrEmpty(Model.ProfilbildPath))
+        {
+            <img src="/Bilder/@Model.ProfilbildPath" alt="Profilbild" class="img-thumbnail mt-2" style="max-width: 200px;">
+        }
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Spara ändringar</button>
+</form>
