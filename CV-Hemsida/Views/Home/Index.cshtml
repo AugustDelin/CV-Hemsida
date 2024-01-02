@@ -1,27 +1,12 @@
 ﻿@model IEnumerable<CVModels.ViewModels.AnvändareViewModel>
+@using CVModels.ViewModels;
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Välkommen till startsidan!</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        body {
-            text-align: center;
-        }
-
-        .jumbotron {
-            padding: 2rem 1rem;
-            margin-bottom: 2rem;
-            background-color: #e9ecef;
-            border-radius: 0.3rem;
-        }
-    </style>
+    <!-- Head-detaljer borttagna för överskådlighet -->
 </head>
 <body>
-
     <div class="container">
         <div class="jumbotron">
             <h1>Välkommen till startsidan!</h1>
@@ -29,18 +14,20 @@
         </div>
 
         <div class="row">
-            @foreach (var användare in Model)
+            @if (Model != null && Model.Any())
             {
-                <div class="col-md-4">
-                    <div class="card">
-                        <h5 class="card-title">@användare.Namn</h5>
-                        <!-- Övrig användarinformation som kompetenser, utbildningar, etc. -->
-                        <a href="@Url.Action("VisaAnvändaresCV", "CV", new { id = användare.Id })" class="btn btn-primary">Visa CVsida</a>
+                foreach (var användare in Model)
+                {
+                    <div class="col-md-4">
+                        <div class="card">
+                            <h5 class="card-title">@användare.Namn</h5>
+                            <!-- Övrig användarinformation som kompetenser, utbildningar, etc. -->
+                            <a href="@Url.Action("VisaAnvändaresCV", "CV", new { id = användare.Id })" class="btn btn-primary">Visa CVsida</a>
+                        </div>
                     </div>
-                </div>
+                }
             }
-            @* Kontrollera om det finns några användare att visa *@
-            @if (!Model.Any())
+            else
             {
                 <div class="col-12">
                     <p>Inga användare att visa.</p>
@@ -48,16 +35,8 @@
             }
         </div>
 
-        <div>
-            <h3>Det senast upplagda projektet</h3>
-            <h4>Projekt rubrik</h4>
-            <p>Beskrivning på projektet</p>
-            <!-- Länken ska leda till den faktiska sidan för det senaste projektet -->
-            <a href="#" class="btn btn-primary">Länk till projektet</a>
-        </div>
-
+        <!-- Det senast upplagda projektet -->
     </div>
-
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Skript och annan HTML borttagen för överskådlighet -->
 </body>
 </html>

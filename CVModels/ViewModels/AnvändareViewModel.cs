@@ -9,6 +9,8 @@ namespace CVModels.ViewModels
     public class AnvändareViewModel
     {
         public string Namn { get; set; }
+        public string Id { get; set; }
+
         // Andra relevanta egenskaper för användaren
 
      /*   public string Email { get; set; }
