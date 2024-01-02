@@ -240,13 +240,5 @@ namespace CV_Hemsida.Controllers
         {
             return View();
         }
-
-
-
     }
-
-
-
-
-
 }
