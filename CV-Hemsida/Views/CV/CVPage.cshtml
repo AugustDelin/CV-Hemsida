@@ -42,23 +42,19 @@
                     }
 
                     <!-- Dropdown for selecting a project -->
-                    <form method="post" action="@Url.Action("ConnectProjectToCV", "CV")">
+                    <form method="post" action="@Url.Action("ConnectProjectToCV", "CV")" class="d-flex mb-3">
                         <input type="hidden" name="cvId" value="@userCV.Id" />
-                        <select name="projectId" class="form-select mb-3">
+                        <select name="projectId" class="form-select me-2" style="max-width: 150px;">
                             @foreach (var project in ViewBag.AllProjects)
                             {
                                 <option value="@project.Id">@project.Titel</option>
                             }
                         </select>
-                        <button type="submit" class="btn btn-primary">Anslut projekt</button>
+                        <button type="submit" class="btn btn-primary btn-sm">Anslut projekt</button>
                     </form>
-                    <br>
+
                     <div class="d-flex justify-content-between mb-10 me-4">
-                        <a href="@Url.Action("ChangeCV", "CV", new { id = userCV.Id })" class="btn btn-warning">Ändra CV</a>
-                    </div>
-                    <br>
-                    <!-- Lägg till "Ta bort" knapp och modal här -->
-                    <div class="d-flex justify-content-between mb-10 me-4">
+                        <a href="@Url.Action("ChangeCV", "CV", new { id = userCV.Id })" class="btn btn-secondary me-2">Ändra CV</a>
                         <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-@userCV.Id">
                             Ta bort CV
                         </button>
