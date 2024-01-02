@@ -6,30 +6,37 @@
 
 <h2>Ändra CV</h2>
 
-<form asp-action="ChangeCV" asp-route-id="@Model.Id" method="post" enctype="multipart/form-data">
+@using (Html.BeginForm("SaveChanges", "CV", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(model => model.Id)
+
     <div class="form-group mb-3">
-        <label for="Kompetenser" class="form-label">Kompetenser:</label>
-        <input type="text" class="form-control" id="Kompetenser" name="Kompetenser" value="@Model.Kompetenser" required>
+        <label asp-for="Kompetenser" class="form-label"></label>
+        <input asp-for="Kompetenser" class="form-control" required />
+        <span asp-validation-for="Kompetenser" class="text-danger"></span>
     </div>
 
     <div class="form-group mb-3">
-        <label for="Utbildningar" class="form-label">Utbildningar:</label>
-        <input type="text" class="form-control" id="Utbildningar" name="Utbildningar" value="@Model.Utbildningar">
+        <label asp-for="Utbildningar" class="form-label"></label>
+        <input asp-for="Utbildningar" class="form-control" />
+        <span asp-validation-for="Utbildningar" class="text-danger"></span>
     </div>
 
     <div class="form-group mb-3">
-        <label for="TidigareErfarenhet" class="form-label">Tidigare Erfarenhet:</label>
-        <input type="text" class="form-control" id="TidigareErfarenhet" name="TidigareErfarenhet" value="@Model.TidigareErfarenhet">
+        <label asp-for="TidigareErfarenhet" class="form-label"></label>
+        <input asp-for="TidigareErfarenhet" class="form-control" />
+        <span asp-validation-for="TidigareErfarenhet" class="text-danger"></span>
     </div>
 
     <div class="form-group mb-3">
-        <label for="ProfilbildPath" class="form-label">Profilbild:</label>
-        <input type="file" class="form-control-file" id="ProfilbildPath" name="ProfilbildPath">
-        @if (!string.IsNullOrEmpty(Model.ProfilbildPath))
+        <label asp-for="ProfilbildPath" class="form-label"></label>
+        <input type="file" asp-for="ProfilbildPath" class="form-control-file" />
+        @if (!string.IsNullOrEmpty(Model?.ProfilbildPath))
         {
-            <img src="/Bilder/@Model.ProfilbildPath" alt="Profilbild" class="img-thumbnail mt-2" style="max-width: 200px;">
+            <img src="/Bilder/@Model.ProfilbildPath" alt="Profilbild" class="img-thumbnail mt-2" style="max-width: 200px;" />
         }
+        <span asp-validation-for="ProfilbildPath" class="text-danger"></span>
     </div>
 
     <button type="submit" class="btn btn-primary mt-3">Spara ändringar</button>
-</form>
+}

@@ -156,28 +156,8 @@ namespace CV_Hemsida.Controllers
             }
         }
 
-        public IActionResult ChangeCV(int id)
-        {
-            var cvToChange = _dbContext.CVs.Find(id);
-
-            if (cvToChange == null)
-            {
-                return NotFound(); // If CV is not found, return NotFound
-            }
-
-            var changeCVViewModel = new ChangeCVViewModel
-            {
-                Kompetenser = cvToChange.Kompetenser,
-                Utbildningar = cvToChange.Utbildningar,
-                TidigareErfarenhet = cvToChange.TidigareErfarenhet,
-                ProfilbildPath = cvToChange.ProfilbildPath
-            };
-
-            return View(changeCVViewModel);
-        }
-
         [HttpPost]
-        public IActionResult ChangeCV(int id, ChangeCVViewModel model, IFormFile ProfilbildPath)
+        public IActionResult SaveChanges(int id, ChangeCVViewModel model, IFormFile ProfilbildPath)
         {
             // Remove the ModelState error for ProfilbildPath
             ModelState.Remove("ProfilbildPath");
@@ -188,7 +168,8 @@ namespace CV_Hemsida.Controllers
 
                 if (cvToChange == null)
                 {
-                    return NotFound(); // If CV is not found, return NotFound
+                    // Handle the case where the CV is not found
+                    return RedirectToAction("ChangeCV", new { id = model.Id });
                 }
 
                 // Remove the existing profile picture file
@@ -202,20 +183,24 @@ namespace CV_Hemsida.Controllers
                     }
                 }
 
-                // Generate a unique file name or use the user's ID as the file name
-                var fileName = cvToChange.AnvändarId + "_" + Guid.NewGuid().ToString() + "_" + Path.GetFileName(ProfilbildPath.FileName);
-
-                // Specify the path where the file will be saved
-                var filePath = Path.Combine("wwwroot/Bilder", fileName);
-
-                // Save the file to the server
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                // Handle file upload if a new profile picture is selected
+                if (ProfilbildPath != null && ProfilbildPath.Length > 0)
                 {
-                    ProfilbildPath.CopyTo(fileStream);
-                }
+                    // Generate a unique file name or use the user's ID as the file name
+                    var fileName = cvToChange.AnvändarId + "_" + Guid.NewGuid().ToString() + "_" + Path.GetFileName(ProfilbildPath.FileName);
 
-                // Set the ProfilbildPath property to the new file path
-                cvToChange.ProfilbildPath = fileName;
+                    // Specify the path where the file will be saved
+                    var filePath = Path.Combine("wwwroot/Bilder", fileName);
+
+                    // Save the file to the server
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        ProfilbildPath.CopyTo(fileStream);
+                    }
+
+                    // Set the ProfilbildPath property to the new file path
+                    cvToChange.ProfilbildPath = fileName;
+                }
 
                 // Update other CV properties with the new values
                 cvToChange.Kompetenser = model.Kompetenser;
@@ -226,14 +211,50 @@ namespace CV_Hemsida.Controllers
                 _dbContext.CVs.Update(cvToChange);
                 _dbContext.SaveChanges();
 
-                // Redirect to the CV page
+                return RedirectToAction("CVPage"); // Redirect to an appropriate page after saving changes
+            }
+
+            // If ModelState is not valid, return to the ChangeCV view with validation errors
+            return View("ChangeCV", model);
+        }
+
+
+
+        [HttpGet]
+        public IActionResult ChangeCV(int id)
+        {
+            var cvToChange = _dbContext.CVs.Find(id);
+
+            if (cvToChange == null)
+            {
                 return RedirectToAction("CVPage");
             }
 
-            // If the model is not valid,
-            // return to the ChangeCV view with errors
-            return View(model);
+            // Kontrollera om den inloggade användaren är den som skapade CV:t
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (cvToChange.AnvändarId != userId)
+            {
+                // Användaren har inte rättighet att ändra CV:t
+                return RedirectToAction("AccessDenied", "Authorization"); // Skapa en passande åtkomstnekat-vy
+            }
+
+            var viewModel = new ChangeCVViewModel
+            {
+                Id = cvToChange.Id,
+                Kompetenser = cvToChange.Kompetenser,
+                Utbildningar = cvToChange.Utbildningar,
+                TidigareErfarenhet = cvToChange.TidigareErfarenhet,
+                ProfilbildPath = cvToChange.ProfilbildPath
+            };
+
+            return View(viewModel);
         }
+
+        public IActionResult ChangeCV()
+        {
+            return View();
+        }
+
 
 
         public ActionResult ResourceNotFound()

@@ -5,7 +5,7 @@
 
 <style>
     .custom-img {
-        max-width: 200px; 
+        max-width: 200px;
     }
 </style>
 
@@ -41,15 +41,16 @@
                         <p class="card-text">Du har inga projekt registrerade.</p>
                     }
 
-                    <div class="d-flex justify-content-end mb-10 me-4">
+                    <div class="d-flex justify-content-between mb-10 me-4">
                         <a href="@Url.Action("ChangeCV", "CV", new { id = userCV.Id })" class="btn btn-warning">Ändra CV</a>
                     </div>
-                    
-
+                    <br>
                     <!-- Lägg till "Ta bort" knapp och modal här -->
-                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-@userCV.Id">
-                        Ta bort CV
-                    </button>
+                    <div class="d-flex justify-content-between mb-10 me-4">
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-@userCV.Id">
+                            Ta bort CV
+                        </button>
+                    </div>
 
                     <!-- Bekräftelsemodal för att ta bort -->
                     <div class="modal fade" id="confirmDeleteModal-@userCV.Id" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
