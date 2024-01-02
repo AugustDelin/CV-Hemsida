@@ -119,80 +119,37 @@ namespace CV_Hemsida.Controllers
 
 
 
-//        [HttpPost]
-//public IActionResult SaveInfo(ChangeInformationViewModel model)
-//        {
-//            if (ModelState.IsValid)
-//            {
-//                // Retrieve the current user's ID
-//                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-//                // Use the user ID to retrieve the corresponding Person from the database
-//                Person userPerson = _dbContext.Personer.FirstOrDefault(p => p.AnvändarID == userId);
-
-//                if (userPerson == null)
-//                {
-//                    // Handle the case where the user's information is not found
-//                    return RedirectToAction("ChangeInformation", model);
-//                }
-
-//                // Update the user's information with the values from the form
-//                userPerson.Förnamn = model.Förnamn;
-//                userPerson.Efternamn = model.Efternamn;
-//                userPerson.Adress = model.Adress;
-
-//                // Save changes directly to the database
-//                _dbContext.SaveChanges();
-
-//                return RedirectToAction("ChangeInformation", model); // Redirect to the user's profile page
-//            }
-
-
-
-//            // If ModelState is not valid, return to the ChangeInformation view with validation errors
-//            return View("ChangeInformation", model);
-//        }
-
-
-
-
-
-
         [HttpPost]
-        public IActionResult SaveInformationAndPrivateValue(ChangeInformationViewModel model)
+        public IActionResult SaveInfo(ChangeInformationViewModel model)
         {
             if (ModelState.IsValid)
             {
+                // Retrieve the current user's ID
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var user = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
 
-                if (user == null)
-                {
-                    return RedirectToAction("ChangeInformation", model);
-                }
-
-                // Hämta användarens Person-information för de saknade värdena
-                var userPerson = _dbContext.Personer.FirstOrDefault(p => p.AnvändarID == userId);
+                // Use the user ID to retrieve the corresponding Person from the database
+                Person userPerson = _dbContext.Personer.FirstOrDefault(p => p.AnvändarID == userId);
 
                 if (userPerson == null)
                 {
+                    // Handle the case where the user's information is not found
                     return RedirectToAction("ChangeInformation", model);
                 }
 
-                // Använd Person-informationen för förnamn, efternamn och adress om de saknas i modellen
-                model.Förnamn ??= userPerson.Förnamn;
-                model.Efternamn ??= userPerson.Efternamn;
-                model.Adress ??= userPerson.Adress;
+                // Update the user's information with the values from the form
+                userPerson.Förnamn = model.Förnamn;
+                userPerson.Efternamn = model.Efternamn;
+                userPerson.Adress = model.Adress;
 
-                // Sätt det booleska värdet för privat
-                user.Privat = model.ÄrProfilPrivat;
-
+                // Save changes directly to the database
                 _dbContext.SaveChanges();
 
-                return RedirectToAction("ChangeInformation", model);
+                return RedirectToAction("ChangeInformation", model); // Redirect to the user's profile page
             }
 
-            // Om ModelState inte är giltigt, returnera vyn med felmeddelanden
+
+
+            // If ModelState is not valid, return to the ChangeInformation view with validation errors
             return View("ChangeInformation", model);
         }
 
@@ -201,11 +158,7 @@ namespace CV_Hemsida.Controllers
 
 
 
-
-
-
-
-
+   
 
 
 
