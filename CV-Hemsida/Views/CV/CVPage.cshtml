@@ -41,6 +41,18 @@
                         <p class="card-text">Du har inga projekt registrerade.</p>
                     }
 
+                    <!-- Dropdown for selecting a project -->
+                    <form method="post" action="@Url.Action("ConnectProjectToCV", "CV")">
+                        <input type="hidden" name="cvId" value="@userCV.Id" />
+                        <select name="projectId" class="form-select mb-3">
+                            @foreach (var project in ViewBag.AllProjects)
+                            {
+                                <option value="@project.Id">@project.Titel</option>
+                            }
+                        </select>
+                        <button type="submit" class="btn btn-primary">Anslut projekt</button>
+                    </form>
+                    <br>
                     <div class="d-flex justify-content-between mb-10 me-4">
                         <a href="@Url.Action("ChangeCV", "CV", new { id = userCV.Id })" class="btn btn-warning">Ändra CV</a>
                     </div>

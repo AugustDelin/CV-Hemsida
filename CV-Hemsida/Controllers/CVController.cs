@@ -26,6 +26,11 @@ namespace CV_Hemsida.Controllers
                 .Include(cv => cv.User)
                 .Where(cv => cv.User.Id == userId)
                 .ToList();
+            
+            var allProjects = _dbContext.Projekts.ToList();
+
+            // Set the ViewBag for the dropdown in the view
+            ViewBag.AllProjects = allProjects;
 
             if (userCVs != null && userCVs.Any())
             {
@@ -249,6 +254,43 @@ namespace CV_Hemsida.Controllers
 
             return View(viewModel);
         }
+
+        [HttpPost]
+        public IActionResult ConnectProjectToCV(int cvId, int projectId)
+        {
+            var cv = _dbContext.CVs.Include(c => c.User).FirstOrDefault(c => c.Id == cvId);
+            var project = _dbContext.Projekts.FirstOrDefault(p => p.Id == projectId);
+
+            if (cv != null && project != null)
+            {
+                // Check if the connection already exists
+                if (_dbContext.PersonDeltarProjekt.Any(dp => dp.Anv.Id == cv.User.Id && dp.Proj.Id == projectId))
+                {
+                    // Connection already exists, handle accordingly
+                    // For example, you can redirect with a message or show an error
+                    return RedirectToAction("CVPage");
+                }
+
+                // Create a new DeltarProjekt entry to associate the CV with the project
+                var deltarProjekt = new DeltarProjekt
+                {
+                    Anv = cv.User,
+                    Proj = project
+                };
+
+                // Add the DeltarProjekt entry to the database
+                cv.DeltarIProjekt.Add(deltarProjekt);  // Assuming DeltarIProjekt is the navigation property in CV entity
+                _dbContext.SaveChanges();
+
+                return RedirectToAction("CVPage");
+            }
+
+            return RedirectToAction("ResourceNotFound"); // Handle the case where either the CV or project is not found
+        }
+
+
+
+
 
         public IActionResult ChangeCV()
         {
