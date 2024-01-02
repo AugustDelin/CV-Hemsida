@@ -1,0 +1,27 @@
+﻿@model CVModels.ViewModels.ChangeProjectViewModel
+
+@{
+    ViewBag.Title = "Change Project";
+}
+
+<h2>Change Project</h2>
+
+@using (Html.BeginForm("SaveChanges", "Projekt", FormMethod.Post))
+{
+    @Html.HiddenFor(model => model.Id)
+
+    <div>
+        <label asp-for="Titel"></label>
+        <input asp-for="Titel" />
+        <span asp-validation-for="Titel"></span>
+    </div>
+    <div>
+        <label asp-for="Beskrivning"></label>
+        <textarea asp-for="Beskrivning"></textarea>
+        <span asp-validation-for="Beskrivning"></span>
+    </div>
+
+    <!-- Andra fält för redigering av projektet kan läggas till här -->
+
+    <input type="submit" value="Save Changes" />
+}
