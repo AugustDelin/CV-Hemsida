@@ -57,6 +57,9 @@ namespace CVDataLayer
             .WithOne(p => p.User)
             .HasForeignKey(p => p.AnvändarId);
 
+           
+
+
 
         }
 

@@ -123,6 +123,17 @@ namespace CV_Hemsida.Controllers
                 return NotFound(); // If CV is not found, return NotFound
             }
 
+            // Explicitly load related PersonDeltarProjekt entries
+            _dbContext.Entry(cvToRemove)
+                .Collection(c => c.DeltarIProjekt)
+                .Load();
+
+            // Remove the associated PersonDeltarProjekt entries
+            foreach (var entry in cvToRemove.DeltarIProjekt.ToList())
+            {
+                _dbContext.PersonDeltarProjekt.Remove(entry);
+            }
+
             // Remove the associated profile picture file
             if (!string.IsNullOrEmpty(cvToRemove.ProfilbildPath))
             {
@@ -134,11 +145,15 @@ namespace CV_Hemsida.Controllers
                 }
             }
 
+            // Remove the CV
             _dbContext.CVs.Remove(cvToRemove);
             _dbContext.SaveChanges();
 
+
             return RedirectToAction("CVPage");
         }
+
+
 
         public IActionResult VisaAnvändaresCV(string användarId)
         {
