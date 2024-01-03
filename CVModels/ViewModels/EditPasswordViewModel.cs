@@ -5,7 +5,6 @@ namespace CVModels.ViewModels
     public class EditPasswordViewModel
     {
      
-        public string UserName { get; set; }
 
         [Required(ErrorMessage = "Nuvarande lösenord krävs")]
         [DataType(DataType.Password)]

@@ -154,32 +154,46 @@ namespace CV_Hemsida.Controllers
         [HttpPost]
         public async Task<IActionResult> EditPassword(EditPasswordViewModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var user = await _userManager.GetUserAsync(User);
-                if (user == null)
+                if (ModelState.IsValid)
                 {
-                    return RedirectToAction("Login", "Account");
-                }
-
-                var changePasswordResult = await _userManager.ChangePasswordAsync(user, model.NuvarandeLösenord, model.NyttLösenord);
-
-                if (changePasswordResult.Succeeded)
-                {
-                    // Uppdatering av användare är inte nödvändigt efter ChangePasswordAsync
-                    return RedirectToAction("Edit");
-                }
-                else
-                {
-                    foreach (var error in changePasswordResult.Errors)
+                    var user = await _userManager.GetUserAsync(User);
+                    if (user == null)
                     {
-                        ModelState.AddModelError(string.Empty, error.Description);
+                        return RedirectToAction("Login", "Account");
                     }
-                    return View(model);
-                }
-            }
 
-            return View(model);
+                    var changePasswordResult = await _userManager.ChangePasswordAsync(user, model.NuvarandeLösenord, model.NyttLösenord);
+
+                    if (changePasswordResult.Succeeded)
+                    {
+                        // Password change successful!
+                        return View("PasswordConfirmation", "Account");
+                    }
+                    else
+                    {
+                        foreach (var error in changePasswordResult.Errors)
+                        {
+                            ModelState.AddModelError(string.Empty, error.Description);
+                        }
+                        return View(model);
+                    }
+                }
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                // Log any unexpected exception
+                // You may want to log the exception details to a logging system
+                return View(model);
+            }
+        }
+
+        public IActionResult PasswordConfirmation()
+        {
+            return View();
         }
 
         public IActionResult EditPassword()
