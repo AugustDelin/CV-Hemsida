@@ -158,22 +158,22 @@ namespace CV_Hemsida.Controllers
         public IActionResult VisaAnvändaresCV(string användarId)
         {
             var användare = _dbContext.Users
-                              .Include(u => u.Cv)
-                              .FirstOrDefault(u => u.Id == användarId);
+                  .FirstOrDefault(u => u.Id == användarId);
 
-            if (användare?.Cv != null)
+            if (användare != null)
             {
-                var cv = användare.Cv;
-                var cvViewModel = new AnvändareCVViewModel
-                {
-                    // Fyll i alla nödvändiga fält från cv och användare
-                };
-                return View(cvViewModel);
+                // Redirect directly to the "PersonalProfilePage" view
+                return RedirectToAction("PersonalProfilePage");
             }
             else
             {
                 return RedirectToAction("ResourceNotFound");
             }
+        }
+
+        public IActionResult PersonalProfilePage()
+        {
+            return View();
         }
 
         [HttpPost]

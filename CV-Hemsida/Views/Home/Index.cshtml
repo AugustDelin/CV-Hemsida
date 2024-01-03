@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CVModels.ViewModels.AnvändareViewModel>
+﻿@model IEnumerable<CVModels.ViewModels.CVViewModel>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -29,21 +29,23 @@
         </div>
 
         <div class="row">
-            @foreach (var användare in Model)
+            @foreach (var cv in Model)
             {
                 <div class="col-md-4">
                     <div class="card">
-                        <h5 class="card-title">@användare.Namn</h5>
-                        <!-- Övrig användarinformation som kompetenser, utbildningar, etc. -->
-                        <a href="@Url.Action("VisaAnvändaresCV", "CV", new { id = användare.Id })" class="btn btn-primary">Visa Profilsida</a>
+                        <h5 class="card-title">@cv.AnvändarNamn</h5>
+                        <p>@cv.Kompetenser</p>
+                        <p>@cv.Utbildningar</p>
+                        <p>@cv.TidigareErfarenhet</p>
+                        <a href="@Url.Action("VisaAnvändaresCV", "CV", new { användarId = @cv.Id })" class="btn btn-primary">Visa Profilsida</a>
                     </div>
                 </div>
             }
-            @* Kontrollera om det finns några användare att visa *@
+            @* Kontrollera om det finns några CV att visa *@
             @if (!Model.Any())
             {
                 <div class="col-12">
-                    <p>Inga användare att visa.</p>
+                    <p>Inga CV att visa.</p>
                 </div>
             }
         </div>

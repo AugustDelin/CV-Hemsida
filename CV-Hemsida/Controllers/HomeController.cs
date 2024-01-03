@@ -1,9 +1,9 @@
 ﻿using CVDataLayer;
 using CVModels;
 using Microsoft.AspNetCore.Mvc;
-using CV_Hemsida;
 using CVModels.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace CV_Hemsida.Controllers
 {
@@ -18,18 +18,20 @@ namespace CV_Hemsida.Controllers
 
         public IActionResult Index()
         {
-            var användareViewModels = _dbContext.Users
-                .Select(u => new AnvändareViewModel
+            var cvViewModels = _dbContext.CVs
+                .Where(cv => !cv.User.Privat)
+                .Select(cv => new CVViewModel
                 {
-                    Id = u.Id,
-                    Namn = u.UserName, // Använd UserName istället för Email
-                                       // Andra egenskaper som du vill inkludera
+                    Id = cv.Id,
+                    AnvändarId = cv.User.Id,
+                    AnvändarNamn = cv.User.UserName,
+                    Kompetenser = cv.Kompetenser,
+                    Utbildningar = cv.Utbildningar,
+                    TidigareErfarenhet = cv.TidigareErfarenhet
                 })
                 .ToList();
 
-            return View(användareViewModels);
+            return View(cvViewModels);
         }
-
-
     }
 }
