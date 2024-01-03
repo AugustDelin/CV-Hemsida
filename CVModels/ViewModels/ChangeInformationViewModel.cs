@@ -14,5 +14,5 @@ public class ChangeInformationViewModel
     [StringLength(100, ErrorMessage = "Adressen får inte vara längre än 100 tecken")]
     public string Adress { get; set; }
 
-    public bool ÄrProfilPrivat { get; set; }
+    public bool Privat { get; set; }
 }

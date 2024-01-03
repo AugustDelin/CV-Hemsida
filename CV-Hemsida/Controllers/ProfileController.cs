@@ -26,6 +26,35 @@ namespace CV_Hemsida.Controllers
 
         }
 
+
+        [HttpGet]
+        public IActionResult ViewProfile(string userId)
+        {
+            var profileUser = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
+
+            if (profileUser == null)
+            {
+                return NotFound(); // Om profilen inte finns, returnera 404
+            }
+
+            if (profileUser.Privat && !User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account"); // Användaren är inte inloggad, omdirigera till inloggningssidan
+            }
+
+            // Om profilen är privat men användaren är inloggad eller om profilen inte är privat, visa profilen
+            var profile = profileUser.Person;
+
+            if (profile == null)
+            {
+                return NotFound(); // Om profilen inte finns, returnera 404
+            }
+
+            return View(profile);
+        }
+
+
+
         //Hugos sökruta
         [HttpGet]
         public IActionResult Search(string searchTerm)
@@ -74,49 +103,7 @@ namespace CV_Hemsida.Controllers
         }
 
 
-        [HttpPost]
-        public IActionResult SetUserPrivate(bool isPrivate)
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
-
-            if (user == null)
-            {
-                return RedirectToAction("ChangeInformation");
-            }
-
-            user.Privat = isPrivate;
-            _dbContext.SaveChanges();
-
-            return RedirectToAction("ChangeInformation");
-        }
-
-        [HttpPost]
-        public IActionResult SavePrivateValue(ChangeInformationViewModel model, bool isPrivate)
-        {
-            if (ModelState.IsValid)
-            {
-                // Dina övriga logiker för att spara andra uppgifter från formuläret
-                // ...
-
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var user = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
-
-                if (user == null)
-                {
-                    return RedirectToAction("ChangeInformation");
-                }
-
-                user.Privat = isPrivate;
-                _dbContext.SaveChanges();
-
-                return RedirectToAction("ChangeInformation");
-            }
-
-            // Om ModelState inte är giltigt, returnera vyn med felmeddelanden
-            return View(model);
-        }
-
+      
 
 
         [HttpPost]
@@ -157,11 +144,6 @@ namespace CV_Hemsida.Controllers
 
 
 
-
-   
-
-
-
         public IActionResult VisaAnvändaresProfil(string id)
         {
             // Här antar vi att `id` är användarens unika identifierare (som användarens e-post eller användarnamn)
@@ -191,6 +173,56 @@ namespace CV_Hemsida.Controllers
                 return View("VisaAnvändaresProfil", cvViewModel); // Se till att du har en vy som heter "VisaAnvändaresProfil"
             }
         }
+
+
+
+        [HttpGet]
+        public IActionResult PrivatProfil()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
+
+            if (user == null)
+            {
+                return RedirectToAction("ChangeInformation");
+            }
+
+            var viewModel = new SetPrivatViewModel
+            {
+                Privat = user.Privat
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public IActionResult PrivatProfil(SetPrivatViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var user = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
+
+                if (user == null)
+                {
+                    return RedirectToAction("ChangeInformation");
+                }
+
+                user.Privat = model.Privat;
+                _dbContext.SaveChanges();
+
+                return RedirectToAction("Index"); // Redirect to the desired action after saving the settings
+            }
+
+            // If ModelState is not valid, return the view with validation errors
+            return View(model);
+        }
+
+
+     
+
+
+
 
 
     }

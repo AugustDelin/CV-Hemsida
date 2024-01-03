@@ -26,18 +26,13 @@
         <input asp-for="Adress" value="@Model.Adress" />
         <span asp-validation-for="Adress"></span>
     </div>
+    <br>
+    
 
-     <div>
-        <label asp-for="ÄrProfilPrivat"></label>
-        <input asp-for="ÄrProfilPrivat" />
-        <span asp-validation-for="ÄrProfilPrivat"></span>
-    </div> 
-
-   
-
-  
     
     <br>
 
     <input type="submit" value="Spara" />
+
+    <a asp-action="PrivatProfil" asp-controller="Profile">Integritet</a>
 }

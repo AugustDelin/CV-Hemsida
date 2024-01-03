@@ -1,0 +1,18 @@
+﻿@model CVModels.ViewModels.SetPrivatViewModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Privat Profil</title>
+</head>
+<body>
+    <form asp-action="PrivatProfil" asp-controller="Privat" method="post">
+        <div>
+            <label asp-for="Privat">Gör min profil privat</label>
+            <input asp-for="Privat" type="checkbox" />
+        </div>
+        <button type="submit">Spara</button>
+    </form>
+</body>
+</html>
