@@ -240,7 +240,7 @@ namespace CV_Hemsida.Controllers
             if (cvToChange.AnvändarId != userId)
             {
                 // Användaren har inte rättighet att ändra CV:t
-                return RedirectToAction("AccessDenied", "Authorization"); // Skapa en passande åtkomstnekat-vy
+                return RedirectToAction("ResourceNotFound", "CV"); // Skapa en passande åtkomstnekat-vy
             }
 
             var viewModel = new ChangeCVViewModel
@@ -285,7 +285,7 @@ namespace CV_Hemsida.Controllers
                 return RedirectToAction("CVPage");
             }
 
-            return RedirectToAction("ResourceNotFound"); // Handle the case where either the CV or project is not found
+            return RedirectToAction("CVPage"); // Handle the case where either the CV or project is not found
         }
 
 
