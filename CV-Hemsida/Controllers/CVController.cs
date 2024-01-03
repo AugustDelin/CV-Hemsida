@@ -26,6 +26,11 @@ namespace CV_Hemsida.Controllers
                 .Include(cv => cv.User)
                 .Where(cv => cv.User.Id == userId)
                 .ToList();
+            
+            var allProjects = _dbContext.Projekts.ToList();
+
+            // Set the ViewBag for the dropdown in the view
+            ViewBag.AllProjects = allProjects;
 
             if (userCVs != null && userCVs.Any())
             {
@@ -118,6 +123,17 @@ namespace CV_Hemsida.Controllers
                 return NotFound(); // If CV is not found, return NotFound
             }
 
+            // Explicitly load related PersonDeltarProjekt entries
+            _dbContext.Entry(cvToRemove)
+                .Collection(c => c.DeltarIProjekt)
+                .Load();
+
+            // Remove the associated PersonDeltarProjekt entries
+            foreach (var entry in cvToRemove.DeltarIProjekt.ToList())
+            {
+                _dbContext.PersonDeltarProjekt.Remove(entry);
+            }
+
             // Remove the associated profile picture file
             if (!string.IsNullOrEmpty(cvToRemove.ProfilbildPath))
             {
@@ -129,11 +145,15 @@ namespace CV_Hemsida.Controllers
                 }
             }
 
+            // Remove the CV
             _dbContext.CVs.Remove(cvToRemove);
             _dbContext.SaveChanges();
 
+
             return RedirectToAction("CVPage");
         }
+
+
 
         public IActionResult VisaAnvändaresCV(string användarId)
         {
@@ -156,41 +176,140 @@ namespace CV_Hemsida.Controllers
             }
         }
 
-
-        public IActionResult VisaAnvändaresEnskildaCVs(string id)
+        [HttpPost]
+        public IActionResult SaveChanges(int id, ChangeCVViewModel model, IFormFile ProfilbildPath)
         {
-            // Använd ID för att hitta användaren istället för e-postadress
-            var user = _dbContext.Users
-                        .Include(u => u.Cv)
-                        .ThenInclude(c => c.DeltarIProjekt)
-                        .FirstOrDefault(u => u.Id == id);
+            // Remove the ModelState error for ProfilbildPath
+            ModelState.Remove("ProfilbildPath");
 
-            if (user == null || user.Cv == null)
+            if (ModelState.IsValid)
             {
-                // Om användaren inte hittas, visa en lämplig sida
-                return RedirectToAction("ResourceNotFound");
-            }
-            else
-            {
-                var cvViewModel = new AnvändareCVViewModel
+                var cvToChange = _dbContext.CVs.Find(id);
+
+                if (cvToChange == null)
                 {
-                    Id = user.Id,
-                    Namn = user.UserName,
-                    Kompetenser = user.Cv.Kompetenser,
-                    Utbildningar = user.Cv.Utbildningar,
-                    TidigareErfarenhet = user.Cv.TidigareErfarenhet,
-                    ProfilbildPath = user.Cv.ProfilbildPath,
-                    DeltarIProjekt = user.Cv.DeltarIProjekt
-                        .Select(dp => new ProjektViewModel
-                        {
-                            Titel = dp.Proj.Titel,
-                            Beskrivning = dp.Proj.Beskrivning
-                            // ... andra fält om nödvändigt
-                        }).ToList()
+                    // Handle the case where the CV is not found
+                    return RedirectToAction("ChangeCV", new { id = model.Id });
+                }
+
+                // Remove the existing profile picture file
+                if (!string.IsNullOrEmpty(cvToChange.ProfilbildPath))
+                {
+                    var existingFilePath = Path.Combine("wwwroot/Bilder", cvToChange.ProfilbildPath);
+
+                    if (System.IO.File.Exists(existingFilePath))
+                    {
+                        System.IO.File.Delete(existingFilePath);
+                    }
+                }
+
+                // Handle file upload if a new profile picture is selected
+                if (ProfilbildPath != null && ProfilbildPath.Length > 0)
+                {
+                    // Generate a unique file name or use the user's ID as the file name
+                    var fileName = cvToChange.AnvändarId + "_" + Guid.NewGuid().ToString() + "_" + Path.GetFileName(ProfilbildPath.FileName);
+
+                    // Specify the path where the file will be saved
+                    var filePath = Path.Combine("wwwroot/Bilder", fileName);
+
+                    // Save the file to the server
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        ProfilbildPath.CopyTo(fileStream);
+                    }
+
+                    // Set the ProfilbildPath property to the new file path
+                    cvToChange.ProfilbildPath = fileName;
+                }
+
+                // Update other CV properties with the new values
+                cvToChange.Kompetenser = model.Kompetenser;
+                cvToChange.Utbildningar = model.Utbildningar;
+                cvToChange.TidigareErfarenhet = model.TidigareErfarenhet;
+
+                // Update the CV in the database
+                _dbContext.CVs.Update(cvToChange);
+                _dbContext.SaveChanges();
+
+                return RedirectToAction("CVPage"); // Redirect to an appropriate page after saving changes
+            }
+
+            // If ModelState is not valid, return to the ChangeCV view with validation errors
+            return View("ChangeCV", model);
+        }
+
+
+
+        [HttpGet]
+        public IActionResult ChangeCV(int id)
+        {
+            var cvToChange = _dbContext.CVs.Find(id);
+
+            if (cvToChange == null)
+            {
+                return RedirectToAction("CVPage");
+            }
+
+            // Kontrollera om den inloggade användaren är den som skapade CV:t
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (cvToChange.AnvändarId != userId)
+            {
+                // Användaren har inte rättighet att ändra CV:t
+                return RedirectToAction("ResourceNotFound", "CV"); // Skapa en passande åtkomstnekat-vy
+            }
+
+            var viewModel = new ChangeCVViewModel
+            {
+                Id = cvToChange.Id,
+                Kompetenser = cvToChange.Kompetenser,
+                Utbildningar = cvToChange.Utbildningar,
+                TidigareErfarenhet = cvToChange.TidigareErfarenhet,
+                ProfilbildPath = cvToChange.ProfilbildPath
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public IActionResult ConnectProjectToCV(int cvId, int projectId)
+        {
+            var cv = _dbContext.CVs.Include(c => c.User).FirstOrDefault(c => c.Id == cvId);
+            var project = _dbContext.Projekts.FirstOrDefault(p => p.Id == projectId);
+
+            if (cv != null && project != null)
+            {
+                // Check if the connection already exists
+                if (_dbContext.PersonDeltarProjekt.Any(dp => dp.Anv.Id == cv.User.Id && dp.Proj.Id == projectId))
+                {
+                    // Connection already exists, handle accordingly
+                    // For example, you can redirect with a message or show an error
+                    return RedirectToAction("CVPage");
+                }
+
+                // Create a new DeltarProjekt entry to associate the CV with the project
+                var deltarProjekt = new DeltarProjekt
+                {
+                    Anv = cv.User,
+                    Proj = project
                 };
 
-                return View("VisaAnvändaresEnskildaCVs", cvViewModel); // Använd vyfilen "VisaAnvändaresEnskildaCVs"
+                // Add the DeltarProjekt entry to the database
+                cv.DeltarIProjekt.Add(deltarProjekt);  // Assuming DeltarIProjekt is the navigation property in CV entity
+                _dbContext.SaveChanges();
+
+                return RedirectToAction("CVPage");
             }
+
+            return RedirectToAction("CVPage"); // Handle the case where either the CV or project is not found
+        }
+
+
+
+
+
+        public IActionResult ChangeCV()
+        {
+            return View();
         }
 
 
@@ -199,13 +318,5 @@ namespace CV_Hemsida.Controllers
         {
             return View();
         }
-
-
-
     }
-
-
-
-
-
 }
