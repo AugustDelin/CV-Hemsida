@@ -17,13 +17,14 @@ namespace CV_Hemsida.Controllers
         }
         public IActionResult ProfilePage()
         {
-            List<Person> listAvPersoner = _dbContext.Personer.ToList();
+            var nonPrivateProfiles = _dbContext.Personer
+                .Include(p => p.User) // Assuming Användare is the related user entity
+                .Where(p => !p.User.Privat)
+                .ToList();
+
             ViewBag.Meddelande = "Listan med profiler";
-            // TODO: Implementera databaslogiken
-            // var projekten = // Hämta projektdata från databasen med LINQ
 
-            return View(listAvPersoner); // Temporärt tills databaslogiken är implementerad
-
+            return View(nonPrivateProfiles);
         }
 
 
@@ -59,20 +60,18 @@ namespace CV_Hemsida.Controllers
         [HttpGet]
         public IActionResult Search(string searchTerm)
         {
-            // Implementera söklogiken för profiler här baserat på searchTerm
-            List<Person> sökResultat = _dbContext.Personer
-                .Where(p => p.Förnamn.Contains(searchTerm) || p.Efternamn.Contains(searchTerm)) // Exempel: Sök efter profiler med förnamn eller efternamn som innehåller söktermen
+            // Implement search logic for profiles based on searchTerm
+            List<Person> searchResults = _dbContext.Personer
+                .Where(p => !p.User.Privat && (p.Förnamn.Contains(searchTerm) || p.Efternamn.Contains(searchTerm)))
                 .ToList();
 
-            if (sökResultat.Count == 0)
+            if (searchResults.Count == 0)
             {
                 ViewBag.ErrorMessage = "Inga matchningar hittades för din sökning.";
             }
 
-            return View("ProfilePage", sökResultat); // Visa sökresultaten på samma vyn som ProfilePage
+            return View("ProfilePage", searchResults); // Display search results on the same view as ProfilePage
         }
-        //PS: använder Förnamn och Efternamn här istället för Fullname på kodrad 32
-        //slut på sökrutan
 
 
 
