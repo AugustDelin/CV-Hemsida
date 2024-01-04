@@ -1,0 +1,26 @@
+﻿@model CVModels.ViewModels.MeddelandeViewModel
+@{
+    Layout = "_Layout";
+}
+
+
+
+<h2>Meddelande</h2>
+<ul>
+    @foreach (var meddelande in Model.Meddelanden)
+    {
+        <li>
+            @if (!meddelande.Läst)
+            {
+                <span class="badge text-secondary">OLÄST</span>
+            }
+            <p>Meddelande från @meddelande.Avsändare</p>
+            <p>Meddelande:</p>
+            <p>@meddelande.Innehåll</p>
+            @if (!meddelande.Läst)
+            {
+                @Html.ActionLink("Läst", "Read", new { id = meddelande.Id })
+            }
+        </li>
+    }
+</ul>

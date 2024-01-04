@@ -103,7 +103,7 @@ namespace CV_Hemsida.Controllers
         }
 
 
-      
+
 
 
         [HttpPost]
@@ -146,7 +146,7 @@ namespace CV_Hemsida.Controllers
 
         public IActionResult VisaAnvändaresProfil(string id)
         {
-            // Här antar vi att `id` är användarens unika identifierare (som användarens e-post eller användarnamn)
+            // Här antar vi att id är användarens unika identifierare (som användarens e-post eller användarnamn)
             var user = _dbContext.Users
                         .Include(u => u.Cv)
                         .FirstOrDefault(u => u.Email == id);
@@ -160,7 +160,7 @@ namespace CV_Hemsida.Controllers
             {
                 var cvViewModel = new AnvändareCVViewModel
                 {
-                    // Fyll i all information från `user` och `user.Cv` här
+                    // Fyll i all information från user och user.Cv här
                     Namn = user.UserName,
                     Kompetenser = user.Cv.Kompetenser,
                     Utbildningar = user.Cv.Utbildningar,
@@ -195,35 +195,47 @@ namespace CV_Hemsida.Controllers
             return View(viewModel);
         }
 
-        [HttpPost]
-        public IActionResult PrivatProfil(SetPrivatViewModel model)
+        [HttpGet]
+        public IActionResult PersonalProfilePage(string userId)
         {
-            if (ModelState.IsValid)
+            var user = _dbContext.Users
+                            .Include(u => u.Person)
+                            .FirstOrDefault(u => u.Id == userId);
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var currentUser = _dbContext.Users.FirstOrDefault(u => u.Id == currentUserId);
+            if (user == null)
             {
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var user = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
-
-                if (user == null)
-                {
-                    return RedirectToAction("ChangeInformation");
-                }
-
-                user.Privat = model.Privat;
-                _dbContext.SaveChanges();
-
-                return RedirectToAction("Index"); // Redirect to the desired action after saving the settings
+                return NotFound();
             }
 
-            // If ModelState is not valid, return the view with validation errors
-            return View(model);
+            var viewModel = new ProfileViewModel
+            {
+                FullName = user.Person!.FullName(),
+                UserName = user.UserName!,
+                Address = user.Person.Adress,
+                IsSelf = user.Id == currentUserId,
+                CurrentUserFullName = User.Identity.IsAuthenticated ? currentUser.Person.FullName() : string.Empty
+            };
+
+            return View("PersonalProfilePage", viewModel);
         }
 
+        [HttpPost]
+        public IActionResult SendMessage(ProfileViewModel model)
+        {
+            var user = _dbContext.Users.FirstOrDefault(x => x.UserName == model.UserName);
+            _dbContext.Meddelande.Add(new Meddelande
+            {
+                Användare = user,
+                Avsändare = model.CurrentUserFullName,
+                Innehåll = model.Message,
+                Läst = false,
+            });
 
-     
+            _dbContext.SaveChanges();
 
+            return RedirectToAction("Index");
 
-
-
-
+        }
     }
 }

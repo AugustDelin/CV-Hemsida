@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using CVModels.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Security.Claims;
 
 namespace CV_Hemsida.Controllers
 {
@@ -18,6 +19,15 @@ namespace CV_Hemsida.Controllers
 
         public IActionResult Index()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var user = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
+
+                var messages = _dbContext.Meddelande.Where(x => x.Mottagare == user.Id && !x.Läst).ToList();
+
+                ViewBag.Meddelanden = messages.Count;
+            }
             var cvViewModels = _dbContext.CVs
                 .Where(cv => !cv.User.Privat)
                 .Select(cv => new CVViewModel

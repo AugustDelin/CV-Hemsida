@@ -1,5 +1,26 @@
-﻿@model CVModels.ViewModels.AnvändareCVViewModel
+﻿@model CVModels.ViewModels.ProfileViewModel
+
 @{
     Layout = "_Layout";
 }
+
 <h2>Personlig Sida</h2>
+
+<p><strong>Användarnamn:</strong> @Model.UserName</p>
+<p><strong>Namn:</strong> @Model.FullName</p>
+<p><strong>Adress</strong> @Model.Address</p>
+
+@if (!Model.IsSelf)
+{
+    @using (Html.BeginForm("SendMessage", "Profile", FormMethod.Post))
+    {
+        @Html.HiddenFor(model => model.UserName)
+        <label>Namn:</label>
+        @Html.TextBoxFor(model => model.CurrentUserFullName)
+        ;
+        <label>Meddelande:</label>
+        @Html.TextBoxFor(model => model.Message)
+        ;
+        <input type="submit" value="Skicka meddelande" />
+    }
+}
