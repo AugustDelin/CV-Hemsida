@@ -231,6 +231,7 @@ namespace CV_Hemsida.Controllers
             return View("PersonalProfilePage", viewModel);
         }
 
+
         [HttpPost]
         public IActionResult SendMessage(ProfileViewModel model)
         {
@@ -238,15 +239,12 @@ namespace CV_Hemsida.Controllers
 
             if (user == null)
             {
-                // Optionally handle the case where the user is not found
-                // You can return an error message or redirect to an error page
                 return RedirectToAction("Index");
             }
 
             if (model.Message == null)
             {
-                // Redirect to Meddelande controller if message is null
-                return RedirectToAction("Index", "Meddelande");
+                return RedirectToAction("MeddelandeFailed", "Meddelande");
             }
 
             _dbContext.Meddelande.Add(new Meddelande
@@ -259,7 +257,7 @@ namespace CV_Hemsida.Controllers
 
             _dbContext.SaveChanges();
 
-            return RedirectToAction("Index");
+            return RedirectToAction("MeddelandeConfirm", "Meddelande");
         }
 
 

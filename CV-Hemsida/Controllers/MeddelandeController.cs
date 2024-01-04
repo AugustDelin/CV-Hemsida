@@ -56,4 +56,11 @@ public class MeddelandeController : Controller
     {
         return View();
     }
+
+    public IActionResult MeddelandeFailed()
+    {
+        return View();
+    }
+
+    
 }
