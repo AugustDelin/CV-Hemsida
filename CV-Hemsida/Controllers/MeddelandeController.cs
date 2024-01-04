@@ -51,4 +51,9 @@ public class MeddelandeController : Controller
 
         return View("Meddelande", vm);
     }
+
+    public IActionResult MeddelandeConfirm()
+    {
+        return View();
+    }
 }

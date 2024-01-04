@@ -234,8 +234,8 @@ namespace CV_Hemsida.Controllers
         [HttpPost]
         public IActionResult SendMessage(ProfileViewModel model)
         {
-            // Ensure user is not null
             var user = _dbContext.Users.FirstOrDefault(x => x.UserName == model.UserName);
+
             if (user == null)
             {
                 // Optionally handle the case where the user is not found
@@ -243,22 +243,25 @@ namespace CV_Hemsida.Controllers
                 return RedirectToAction("Index");
             }
 
-            // Ensure message is not null
-            if (model.Message != null)
+            if (model.Message == null)
             {
-                _dbContext.Meddelande.Add(new Meddelande
-                {
-                    Användare = user,
-                    Avsändare = model.CurrentUserFullName,
-                    Innehåll = model.Message,
-                    Läst = false,
-                });
-
-                _dbContext.SaveChanges();
+                // Redirect to Meddelande controller if message is null
+                return RedirectToAction("Index", "Meddelande");
             }
+
+            _dbContext.Meddelande.Add(new Meddelande
+            {
+                Användare = user,
+                Avsändare = model.CurrentUserFullName,
+                Innehåll = model.Message,
+                Läst = false,
+            });
+
+            _dbContext.SaveChanges();
 
             return RedirectToAction("Index");
         }
+
 
     }
 }
