@@ -4,24 +4,29 @@
     ViewBag.Title = "Change Project";
 }
 
-<h2>Change Project</h2>
+<main role="main" class="container">
+    <div class="row justify-content-md-center mt-5">
+        <div class="col-md-6">
+            <h2>Ändra projekt</h2> <!-- Update the heading to match "Change Project" view -->
+            @using (Html.BeginForm("SaveChanges", "Projekt", FormMethod.Post))
+            {
+                @Html.HiddenFor(model => model.Id)
 
-@using (Html.BeginForm("SaveChanges", "Projekt", FormMethod.Post))
-{
-    @Html.HiddenFor(model => model.Id)
+                <div class="mb-3">
+                    <label asp-for="Titel" class="form-label">Projekttitel</label> <!-- Change labels and placeholders -->
+                    <input asp-for="Titel" class="form-control" placeholder="Ange projekttitel">
+                    <span asp-validation-for="Titel"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Beskrivning" class="form-label">Beskrivning</label> <!-- Change labels and placeholders -->
+                    <textarea asp-for="Beskrivning" class="form-control" placeholder="Ange projektbeskrivning"></textarea>
+                    <span asp-validation-for="Beskrivning"></span>
+                </div>
 
-    <div>
-        <label asp-for="Titel"></label>
-        <input asp-for="Titel" />
-        <span asp-validation-for="Titel"></span>
+                <!-- Additional fields for editing the project can be added here with similar styling -->
+
+                <button type="submit" class="btn btn-primary">Spara ändringar</button> <!-- Change button text and style -->
+            }
+        </div>
     </div>
-    <div>
-        <label asp-for="Beskrivning"></label>
-        <textarea asp-for="Beskrivning"></textarea>
-        <span asp-validation-for="Beskrivning"></span>
-    </div>
-
-    <!-- Andra fält för redigering av projektet kan läggas till här -->
-
-    <input type="submit" value="Save Changes" />
-}
+</main>
