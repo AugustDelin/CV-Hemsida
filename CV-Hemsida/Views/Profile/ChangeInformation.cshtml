@@ -1,38 +1,32 @@
-﻿@model ChangeInformationViewModel
+﻿@model CVModels.ViewModels.ChangeInformationViewModel
 
 @{
-    ViewBag.Title = "Change Information";
+    ViewBag.Title = "Ändra information";
 }
 
-<h2>Ändra Information</h2>
-
-@using (Html.BeginForm("SaveInfo", "Profile", FormMethod.Post))
-{
-    <br>
-    <div>
-        <label asp-for="Förnamn"></label>
-        <input asp-for="Förnamn" value="@Model.Förnamn" />
-        <span asp-validation-for="Förnamn"></span>
+<main role="main" class="container">
+    <div class="row justify-content-md-center mt-5">
+        <div class="col-md-6">
+            <h2>Ändra Information</h2>
+            <form asp-controller="Profile" asp-action="SaveInfo" method="post">
+                <div class="mb-3">
+                    <label asp-for="Förnamn" class="form-label">Förnamn</label>
+                    <input asp-for="Förnamn" class="form-control" value="@Model.Förnamn">
+                    <span asp-validation-for="Förnamn"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Efternamn" class="form-label">Efternamn</label>
+                    <input asp-for="Efternamn" class="form-control" value="@Model.Efternamn">
+                    <span asp-validation-for="Efternamn"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Adress" class="form-label">Adress</label>
+                    <input asp-for="Adress" class="form-control" value="@Model.Adress">
+                    <span asp-validation-for="Adress"></span>
+                </div>
+                <button type="submit" class="btn btn-primary">Spara</button>
+                <a asp-action="PrivatProfil" asp-controller="Profile">Integritet</a>
+            </form>
+        </div>
     </div>
-    <br>
-    <div>
-        <label asp-for="Efternamn"></label>
-        <input asp-for="Efternamn" value="@Model.Efternamn" />
-        <span asp-validation-for="Efternamn"></span>
-    </div>
-    <br>
-    <div>
-        <label asp-for="Adress"></label>
-        <input asp-for="Adress" value="@Model.Adress" />
-        <span asp-validation-for="Adress"></span>
-    </div>
-    <br>
-    
-
-    
-    <br>
-
-    <input type="submit" value="Spara" />
-
-    <a asp-action="PrivatProfil" asp-controller="Profile">Integritet</a>
-}
+</main>
