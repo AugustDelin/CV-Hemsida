@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CVModels.ViewModels.CVViewModel>
+﻿@model CVModels.ViewModels.CombinedViewModel
 
 <!DOCTYPE html>
 <html lang="en">
@@ -29,7 +29,7 @@
         </div>
 
         <<div class="row">
-            @foreach (var cv in Model)
+            @foreach (var cv in Model.CVs)
             {
                 <div class="col-md-4">
                     <div class="card">
@@ -44,22 +44,27 @@
             }
 
             @* Kontrollera om det finns några CV att visa *@
-            @if (!Model.Any())
+            @if (!Model.CVs.Any())
             {
                 <div class="col-12">
                     <p>Inga CV att visa.</p>
                 </div>
             }
         </div>
-
-        <div>
-            <h3>Det senast upplagda projektet</h3>
-            <h4>Projekt rubrik</h4>
-            <p>Beskrivning på projektet</p>
-            <!-- Länken ska leda till den faktiska sidan för det senaste projektet -->
-            <a href="#" class="btn btn-primary">Länk till projektet</a>
-        </div>
-
+        <br>
+        <h3>Det senast upplagda projektet</h3>
+    
+        @if (Model.StartPage.LatestProject != null)
+        {
+            <h4>@Model.StartPage.LatestProject.Titel</h4>
+            <p>@Model.StartPage.LatestProject.Beskrivning</p>
+            <!-- Länk till projektets detaljsida, om sådan finns -->
+        }
+        else
+        {
+            <p>Inga projekt att visa.</p>
+        }
+    </div>
     </div>
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

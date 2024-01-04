@@ -28,6 +28,7 @@ namespace CV_Hemsida.Controllers
 
                 ViewBag.Meddelanden = messages.Count;
             }
+
             var cvViewModels = _dbContext.CVs
                 .Where(cv => !cv.User.Privat)
                 .Select(cv => new CVViewModel
@@ -41,7 +42,31 @@ namespace CV_Hemsida.Controllers
                 })
                 .ToList();
 
-            return View(cvViewModels);
+            // Hämta det senaste projektet
+            var latestProject = _dbContext.Projekts
+                .OrderByDescending(p => p.Id)
+                .Select(p => new ProjektViewModel
+                {
+                    Id = p.Id,
+                    Titel = p.Titel,
+                    Beskrivning = p.Beskrivning
+                })
+                .FirstOrDefault();
+
+            // Skapa en CombinedViewModel instans
+            var viewModel = new CombinedViewModel
+            {
+                CVs = cvViewModels,
+                StartPage = new StartPageViewModel
+                {
+                    LatestProject = latestProject
+                }
+            };
+
+            // Skicka CombinedViewModel till vyn
+            return View(viewModel);
         }
+
+
     }
 }
