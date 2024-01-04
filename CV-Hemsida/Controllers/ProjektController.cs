@@ -136,7 +136,7 @@ namespace CV_Hemsida.Controllers
             if (project.AnvändarId != userId)
             {
                 // Användaren har inte rättighet att ändra projektet
-                return RedirectToAction("AccessDenied", "Authorization"); // Skapa en passande åtkomstnekat-vy
+                return RedirectToAction("ResourceNotFoundProject", "Projekt"); // Skapa en passande åtkomstnekat-vy
             }
 
             var viewModel = new ChangeProjectViewModel
@@ -164,8 +164,9 @@ namespace CV_Hemsida.Controllers
             return View();
         } 
 
-
-
-
+        public IActionResult ResourceNotFoundProject() 
+        {
+            return View();
+        }
     }
 }
