@@ -60,9 +60,19 @@ namespace CV_Hemsida.Controllers
         [HttpGet]
         public IActionResult Search(string searchTerm)
         {
-            // Implement search logic for profiles based on searchTerm
-            List<Person> searchResults = _dbContext.Personer
-                .Where(p => !p.User.Privat && (p.Förnamn.Contains(searchTerm) || p.Efternamn.Contains(searchTerm)))
+            searchTerm = searchTerm?.ToLower(); // Convert the search term to lowercase (or use .ToUpper() for case-insensitive search)
+
+            // Fetch all the data from the database first
+            var allPersons = _dbContext.Personer
+                .Include(p => p.User) // Ensure User is included in the query
+                .ToList();
+
+            // Implement search logic for profiles based on searchTerm in-memory
+            List<Person> searchResults = allPersons
+                .Where(p => !p.User.Privat &&
+                    (p.FullName().ToLower().Contains(searchTerm) ||
+                     p.Förnamn.ToLower().Contains(searchTerm) ||
+                     p.Efternamn.ToLower().Contains(searchTerm)))
                 .ToList();
 
             if (searchResults.Count == 0)
@@ -72,6 +82,8 @@ namespace CV_Hemsida.Controllers
 
             return View("ProfilePage", searchResults); // Display search results on the same view as ProfilePage
         }
+
+
 
 
 
