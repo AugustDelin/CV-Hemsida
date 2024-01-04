@@ -18,7 +18,6 @@ namespace CV_Hemsida.Controllers
 
         public IActionResult Index()
         {
-            // Hämta CVs
             var cvViewModels = _dbContext.CVs
                 .Where(cv => !cv.User.Privat)
                 .Select(cv => new CVViewModel
@@ -32,31 +31,7 @@ namespace CV_Hemsida.Controllers
                 })
                 .ToList();
 
-            // Hämta det senaste projektet
-            var latestProject = _dbContext.Projekts
-                .OrderByDescending(p => p.Id)
-                .Select(p => new ProjektViewModel
-                {
-                    Id = p.Id,
-                    Titel = p.Titel,
-                    Beskrivning = p.Beskrivning
-                })
-                .FirstOrDefault();
-
-            // Skapa en CombinedViewModel instans
-            var viewModel = new CombinedViewModel
-            {
-                CVs = cvViewModels,
-                StartPage = new StartPageViewModel
-                {
-                    LatestProject = latestProject
-                }
-            };
-
-            // Skicka CombinedViewModel till vyn
-            return View(viewModel);
+            return View(cvViewModels);
         }
-
     }
-
 }
