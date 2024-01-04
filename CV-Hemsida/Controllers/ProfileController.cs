@@ -234,19 +234,31 @@ namespace CV_Hemsida.Controllers
         [HttpPost]
         public IActionResult SendMessage(ProfileViewModel model)
         {
+            // Ensure user is not null
             var user = _dbContext.Users.FirstOrDefault(x => x.UserName == model.UserName);
-            _dbContext.Meddelande.Add(new Meddelande
+            if (user == null)
             {
-                Användare = user,
-                Avsändare = model.CurrentUserFullName,
-                Innehåll = model.Message,
-                Läst = false,
-            });
+                // Optionally handle the case where the user is not found
+                // You can return an error message or redirect to an error page
+                return RedirectToAction("Index");
+            }
 
-            _dbContext.SaveChanges();
+            // Ensure message is not null
+            if (model.Message != null)
+            {
+                _dbContext.Meddelande.Add(new Meddelande
+                {
+                    Användare = user,
+                    Avsändare = model.CurrentUserFullName,
+                    Innehåll = model.Message,
+                    Läst = false,
+                });
+
+                _dbContext.SaveChanges();
+            }
 
             return RedirectToAction("Index");
-
         }
+
     }
 }
