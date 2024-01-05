@@ -62,6 +62,10 @@ namespace CV_Hemsida.Controllers
         {
             searchTerm = searchTerm?.ToLower(); // Convert the search term to lowercase (or use .ToUpper() for case-insensitive search)
 
+            if (string.IsNullOrWhiteSpace(searchTerm))
+            {
+                return View("ProfilePage");
+            }
             // Fetch all the data from the database first
             var allPersons = _dbContext.Personer
                 .Include(p => p.User) // Ensure User is included in the query

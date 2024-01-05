@@ -13,7 +13,7 @@ namespace CVModels.ViewModels
         [StringLength(100)]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Skriv in etet lösenord mellan 3 och 20 tecken")]
+        [Required(ErrorMessage = "Skriv in ett lösenord mellan 3 och 20 tecken")]
         [StringLength(20, MinimumLength = 3)]
         [DataType(DataType.Password)]
         public string Password { get; set; }

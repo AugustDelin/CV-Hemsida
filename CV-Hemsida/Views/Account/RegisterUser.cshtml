@@ -4,6 +4,8 @@
     ViewBag.Titel = "Register new user";
 }
 
+<div asp-validation-summary="All" class="text-danger"></div>
+
 <h1>Registrera en ny användare</h1>
 
 <form asp-controller="Account" asp-action="RegisterUser" method="post">
