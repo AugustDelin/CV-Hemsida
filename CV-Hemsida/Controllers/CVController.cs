@@ -49,6 +49,7 @@ namespace CV_Hemsida.Controllers
 
         public IActionResult RegisterCV()
         {
+            SetMessageCount();
             return View();
         }
 
@@ -158,6 +159,7 @@ namespace CV_Hemsida.Controllers
 
         public IActionResult VisaAnvändaresCV(string användarId)
         {
+            SetMessageCount();
             var användare = _dbContext.Users
                   .FirstOrDefault(u => u.Id == användarId);
 
@@ -174,6 +176,7 @@ namespace CV_Hemsida.Controllers
 
         public IActionResult PersonalProfilePage()
         {
+            SetMessageCount();
             return View();
         }
 
@@ -244,6 +247,7 @@ namespace CV_Hemsida.Controllers
         [HttpGet]
         public IActionResult ChangeCV(int id)
         {
+            SetMessageCount();
             var cvToChange = _dbContext.CVs.Find(id);
 
             if (cvToChange == null)

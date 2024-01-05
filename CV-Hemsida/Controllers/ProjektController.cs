@@ -38,6 +38,7 @@ namespace CV_Hemsida.Controllers
 
         public IActionResult Details(int id)
         {
+            SetMessageCount();
             var projekt = _dbContext.Projekts
                                     .Include(p => p.User) // Include the project creator
                                     .FirstOrDefault(p => p.Id == id);
@@ -79,6 +80,7 @@ namespace CV_Hemsida.Controllers
         [HttpPost]
         public IActionResult CreateProject(CreateProjectViewModel model)
         {
+            
             if (ModelState.IsValid)
             {
                 // Get the user ID of the currently logged-in user
@@ -135,6 +137,7 @@ namespace CV_Hemsida.Controllers
         [HttpGet]
         public IActionResult ChangeProject(int id)
         {
+            SetMessageCount();
             var project = _dbContext.Projekts.FirstOrDefault(p => p.Id == id);
 
             if (project == null)
@@ -161,22 +164,26 @@ namespace CV_Hemsida.Controllers
         }
 
         public IActionResult ChangeProject()
-        { 
+        {
+            SetMessageCount();
             return View();
         }
 
         public IActionResult CreateProject()
         {
+            SetMessageCount();
             return View();
         }
 
         public IActionResult Save()
         {
+            SetMessageCount();
             return View();
         } 
 
         public IActionResult ResourceNotFoundProject() 
         {
+            SetMessageCount();
             return View();
         }
     }

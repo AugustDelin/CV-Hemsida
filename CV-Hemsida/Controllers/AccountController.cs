@@ -161,7 +161,7 @@ namespace CV_Hemsida.Controllers
         [HttpPost]
         public async Task<IActionResult> EditPassword(EditPasswordViewModel model)
         {
-            SetMessageCount();
+            
             try
             {
                 if (ModelState.IsValid)
@@ -206,6 +206,7 @@ namespace CV_Hemsida.Controllers
 
         public IActionResult EditPassword()
         {
+            SetMessageCount();
             return View();
         }
     }

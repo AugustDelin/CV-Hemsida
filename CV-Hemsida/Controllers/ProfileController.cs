@@ -99,6 +99,7 @@ namespace CV_Hemsida.Controllers
         [HttpGet]
         public IActionResult ChangeInformation()
         {
+            SetMessageCount();
             // Retrieve the current user's ID
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 

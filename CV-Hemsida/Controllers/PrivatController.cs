@@ -20,9 +20,10 @@ namespace CV_Hemsida.Controllers
        
 
         [HttpGet]
-        public IActionResult PrivatProfil1()
+        public IActionResult PrivatProfil()
         {
-            SetMessageCount();
+            
+
             if (User.Identity.IsAuthenticated && _dbContext != null)
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -44,6 +45,7 @@ namespace CV_Hemsida.Controllers
         [HttpPost]
         public IActionResult PrivatProfil(SetPrivatViewModel model)
         {
+            SetMessageCount();
             if (ModelState.IsValid && User.Identity.IsAuthenticated && _dbContext != null)
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -60,26 +62,7 @@ namespace CV_Hemsida.Controllers
             return View(model); // Återgå till vyn med felmeddelanden
         }
 
-        //public IActionResult PrivatProfil2()
-        //{
-        //    if (User.Identity.IsAuthenticated && _dbContext != null)
-        //    {
-        //        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        //        var user = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
-
-        //        if (user != null)
-        //        {
-        //            var viewModel = new SetPrivatViewModel
-        //            {
-        //                Privat = user.Privat
-        //            };
-        //            TempData["IsProfilePrivate"] = viewModel.Privat; // Spara flaggan i TempData
-        //            return View(viewModel);
-        //        }
-        //        return RedirectToAction("ChangeInformation");
-        //    }
-        //    return RedirectToAction("Login"); // Eller hantera autentiseringsfel
-        //}
+       
 
      
 
