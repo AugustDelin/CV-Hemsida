@@ -1,13 +1,24 @@
 ﻿@using CVModels.ViewModels
 @model AnvändareCVViewModel
 
+<!-- Rubrik som visar namnet på användaren vars CV visas -->
+
 <h2>@Model.Namn's CV</h2>
 
 <div>
+
+    <!-- Visar profilbild om den finns för användaren -->
+
     <img src="@Model.ProfilbildPath" alt="Profilbild">
+
+
+    <!-- Information om användarens kompetenser, utbildningar och tidigare erfarenheter -->
+
     <p>Kompetenser: @Model.Kompetenser</p>
     <p>Utbildningar: @Model.Utbildningar</p>
     <p>Tidigare Erfarenhet: @Model.TidigareErfarenhet</p>
+
+    <!-- Lista av projekt där användaren har deltagit -->
 
     <h3>Projekt:</h3>
     @if (Model.DeltarIProjekt != null && Model.DeltarIProjekt.Any())
@@ -15,12 +26,18 @@
         <ul>
             @foreach (var projekt in Model.DeltarIProjekt)
             {
+
+                <!-- För varje projekt, visa titeln och beskrivning -->
+
                 <li>@projekt.Titel - @projekt.Beskrivning</li>
             }
         </ul>
     }
     else
     {
+
+        <!-- Visas om användaren inte har deltagit i några projekt -->
+
         <p>Inga projekt registrerade.</p>
     }
 </div>
