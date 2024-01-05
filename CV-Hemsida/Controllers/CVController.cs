@@ -1,22 +1,22 @@
-﻿using CVDataLayer;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using CVModels;
-using System.Security.Claims;
-using CVModels.ViewModels;
+﻿using CVDataLayer; // Importera dataåtkomstlagret
+using Microsoft.AspNetCore.Mvc; // Importera ASP.NET Core MVC-funktionalitet
+using Microsoft.EntityFrameworkCore; // Importera Entity Framework Core för databasåtkomst
+using CVModels; // Importera CV-relaterade modeller
+using System.Security.Claims; // Importera Claims för användarinformation
+using CVModels.ViewModels; // Importera CV-relaterade view-modeller
 
 namespace CV_Hemsida.Controllers
 {
-    public class CVController : BaseController
+    public class CVController : BaseController // CVController ärver från BaseController
     {
-        private CVContext _dbContext;
+        private CVContext _dbContext; // Databaskontexten för CV
 
-        public CVController(CVContext dbContext) : base(dbContext)
+        public CVController(CVContext dbContext) : base(dbContext) // Konstruktor som tar emot databaskontexten
         {
-            _dbContext = dbContext;
+            _dbContext = dbContext; // Tilldelar den inkommande databaskontexten till det privata fältet
         }
 
-        public IActionResult CVPage()
+        public IActionResult CVPage() // Hanterar vyn för CV-sidan
         {
             SetMessageCount();
             // Hämta den inloggade användarens ID
@@ -47,12 +47,17 @@ namespace CV_Hemsida.Controllers
         }
 
 
+        // Visa vyn för att registrera ett nytt CV
         public IActionResult RegisterCV()
         {
             SetMessageCount();
             return View();
         }
 
+
+        // Logik för att registrera ett nytt CV baserat på formulärdata och uppladdning av profilbild
+        // Lägger till CV i databasen och om allt går bra, omdirigerar till CV-sidan
+        // Annars visas vyn för att registrera ett nytt CV med felmeddelanden
         [HttpPost]
         public IActionResult RegisterCV(RegisterCVViewModel model, IFormFile ProfilbildPath)
         {
@@ -115,6 +120,10 @@ namespace CV_Hemsida.Controllers
         }
 
 
+
+        // Metod för att ta bort ett CV baserat på angivet ID
+        // Tar bort tillhörande persondeltarprojekt och associerad profilbild
+        // Omdirigerar till CV-sidan efter borttagning
         [HttpGet]
         public IActionResult DeleteCV(int id)
         {
@@ -156,7 +165,8 @@ namespace CV_Hemsida.Controllers
         }
 
 
-
+        // Metod för att visa en specifik användares CV
+        // Omdirigerar antingen till användarens personliga profil eller en sida för resursen som inte hittades
         public IActionResult VisaAnvändaresCV(string användarId)
         {
             SetMessageCount();
@@ -174,12 +184,18 @@ namespace CV_Hemsida.Controllers
             }
         }
 
+
+        // Visar vyn för den personliga profilsidan
         public IActionResult PersonalProfilePage()
         {
             SetMessageCount();
             return View();
         }
 
+
+        // Logik för att spara ändringar i ett CV
+        // Uppdaterar CV-information och profilbild i databasen
+        // Omdirigerar till CV-sidan efter sparade ändringar eller visar vyn för att ändra CV med valideringsfel
         [HttpPost]
         public IActionResult SaveChanges(int id, ChangeCVViewModel model, IFormFile ProfilbildPath)
         {
@@ -243,7 +259,8 @@ namespace CV_Hemsida.Controllers
         }
 
 
-
+        // Metod för att visa vyn för att ändra ett specifikt CV baserat på ID
+        // Kontrollerar om användaren har rättigheter att ändra CV:t, annars omdirigeras till "ResourceNotFound"-vyn
         [HttpGet]
         public IActionResult ChangeCV(int id)
         {
@@ -275,6 +292,11 @@ namespace CV_Hemsida.Controllers
             return View(viewModel);
         }
 
+
+
+        // Logik för att ansluta ett projekt till ett CV
+        // Skapar en ny "DeltarProjekt"-post för att koppla CV:t till projektet
+        // Omdirigerar till CV-sidan
         [HttpPost]
         public IActionResult ConnectProjectToCV(int cvId, int projectId)
         {
@@ -311,14 +333,14 @@ namespace CV_Hemsida.Controllers
 
 
 
-
+        // Visa vyn för att ändra CV
         public IActionResult ChangeCV()
         {
             return View();
         }
 
 
-
+        // Visa vyn när en resurs inte hittas
         public ActionResult ResourceNotFound()
         {
             return View();

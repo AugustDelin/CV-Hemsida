@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Denna klass implementerar IRepository för entitetstypen Användare.
+// Den tillhandahåller metoder för att hantera användardata i databasen.
+
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,12 +14,16 @@ namespace CV_Hemsida.Repositories
 {
     public class UserRepository : IRepository<Användare>
     {
-        private readonly CVContext _dbContext;
+        private readonly CVContext _dbContext;    // En instans av databaskontexten.
+
+        // Konstruktorn initierar databaskontexten.
 
         public UserRepository(CVContext cvcontext)
         {
             _dbContext = cvcontext ?? throw new ArgumentNullException(nameof(cvcontext));
         }
+
+        // Implementering av IRepository-metoder:
 
         public void Delete(Användare entity)
         {

@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace CVModels.ViewModels;
 
+// ProfileViewModel: Innehåller data för visning och hantering av en
+// användarprofil.
+
 public class ProfileViewModel
 {
     public string FullName { get; set; }

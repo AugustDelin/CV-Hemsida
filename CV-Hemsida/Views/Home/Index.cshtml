@@ -3,6 +3,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+    <!-- Grundläggande HTML-huvudtaggar för att definiera teckenuppsättning, vyport och inkludera Bootstrap CSS för stil -->
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Välkommen till startsidan!</title>
@@ -23,10 +26,15 @@
 <body>
 
     <div class="container">
+
+        <!-- Jumbotron för att presentera sidan med en välkomsthälsning och beskrivning -->
+
         <div class="jumbotron">
-            <h1>Välkommen till startsidan!</h1>
-            <p>Här kommer ett urval av CV.</p>
+            <h1>Välkommen till CVMästarna!</h1>
+            <p>Här kommer ett urval av CV</p>
         </div>
+
+        <!-- Loopar genom CV-listan i modellen och visar varje CV i ett kortformat -->
 
         <div class="row">
             @foreach (var cv in Model.CVs)
@@ -37,13 +45,16 @@
                         <p><strong>Kompetenser:</strong> @cv.Kompetenser</p>
                         <p><strong>Utbildning:</strong> @cv.Utbildningar</p>
                         <p><strong>Tidigare erfarenhet:</strong> @cv.TidigareErfarenhet</p>
+
+                        <!-- Länk till användarens profilsida baserat på deras ID -->
+                        
                         <a href="@Url.Action("PersonalProfilePage", "Profile", new { userId = cv.AnvändarId })" class="btn btn-primary">Visa Profilsida</a>
 
                     </div>
                 </div>
             }
 
-            @* Kontrollera om det finns några CV att visa *@
+            <!-- Visar ett meddelande om inga CV:n finns att visa -->
             @if (!Model.CVs.Any())
             {
                 <div class="col-12">
@@ -53,6 +64,9 @@
         </div>
 
         <br>
+
+        <!-- Visar information om det senaste upplagda projektet -->
+
         <h3>Det senast upplagda projektet</h3>
     
         @if (Model.StartPage.LatestProject != null)
@@ -67,6 +81,8 @@
         }
     </div>
     </div>
+
+    <!-- Inkluderar Bootstrap JavaScript för interaktivitet -->
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>

@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace CVModels.ViewModels
 {
+
+    // ChangeCVViewModel: Används för att hantera data vid uppdatering
+    // av en användares CV-information.
+
     public class ChangeCVViewModel
     {
         public int Id { get; set; }

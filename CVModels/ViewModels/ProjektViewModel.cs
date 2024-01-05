@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace CVModels.ViewModels
 {
+
+    // ProjektViewModel: Innehåller detaljerad information om ett specifikt
+    // projekt och dess deltagare.
+
     public class ProjektViewModel
     {
         public int Id { get; set; }

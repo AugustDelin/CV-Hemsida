@@ -5,18 +5,32 @@
 
 <h2>Meddelande</h2>
 <ul>
+
+    <!-- Kontrollerar om det finns meddelanden att visa -->
+
     @if (Model?.Meddelanden != null)
     {
+        <!-- Loopar igenom varje meddelande i listan -->
+
         @foreach (var meddelande in Model.Meddelanden)
         {
             <li>
+
+                <!-- Visar en markering om meddelandet inte har lästs -->
+
                 @if (!meddelande.Läst)
                 {
                     <span class="badge text-secondary">OLÄST</span>
                 }
+
+                <!-- Visar information om avsändaren och meddelandetexten -->
+
                 <p>Meddelande från @meddelande.Avsändare</p>
                 <p>Meddelande:</p>
                 <p>@meddelande.Innehåll</p>
+
+                <!-- Om meddelandet inte har lästs, visa en länk för att markera det som läst -->
+                
                 @if (!meddelande.Läst)
                 {
                     @Html.ActionLink("Läst", "Read", new { id = meddelande.Id })

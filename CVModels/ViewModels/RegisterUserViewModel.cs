@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace CVModels.ViewModels
 {
+
+    // RegisterUserViewModel: Tillhandahåller de fält och regler som krävs för
+    // att registrera en ny användare.
+
     public class RegisterUserViewModel
     {
         [Required(ErrorMessage = "Skriv in ett användarnamn")]

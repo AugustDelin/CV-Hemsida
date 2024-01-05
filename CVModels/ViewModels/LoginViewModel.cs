@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace CVModels.ViewModel
 {
+
+    // LoginViewModel: Innehåller inloggningsdata och valideringsregler för
+    // användarautentisering.
     public class LoginViewModel
     {
         [Required(ErrorMessage = "Skriv in ett användarnamn")]
