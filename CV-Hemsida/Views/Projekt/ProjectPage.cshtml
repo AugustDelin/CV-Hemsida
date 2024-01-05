@@ -5,7 +5,11 @@
 
 <div class="container">
     @if (Model != null && Model.Any())
+
     {
+
+        // Loopar igenom alla projekt och visar dem
+
         foreach (var projekt in Model)
         {
             <div class="card mb-3">
@@ -13,6 +17,9 @@
                     <h5 class="card-title">@projekt.Titel</h5>
                     <p class="card-text">@projekt.Beskrivning</p>
                     <p class="card-text">@projekt.Skapare</p>
+
+                    <!-- Länkar för att se mer detaljer om projektet och för att redigera projektet -->
+                    
                     <a href="@Url.Action("Details", "Projekt", new { id = projekt.Id })" class="btn btn-primary">Mer detaljer</a>
                     <a href="@Url.Action("ChangeProject", "Projekt", new { id = projekt.Id })" class="btn btn-secondary">Redigera projekt</a>
                 </div>
@@ -21,6 +28,6 @@
     }
     else
     {
-        <p>Inga projekt att visa.</p>
+        <p>Inga projekt att visa.</p> <!-- Visar ett meddelande om det inte finns några projekt att visa -->
     }
 </div>

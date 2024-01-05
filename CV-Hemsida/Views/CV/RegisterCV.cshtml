@@ -2,27 +2,44 @@
 @{
     Layout = "_Layout";
 }
+
+<!-- Visa sammanfattning av valideringsfel -->
+
 <div asp-validation-summary="All" class="text-danger"></div>
+
+<!-- Formulär för att registrera ett nytt CV -->
+
 <form asp-action="RegisterCV" method="post" enctype="multipart/form-data">
+
+    <!-- Formulärfält för användarens kompetenser -->
+
     <div class="form-group mb-3">
         <label for="Kompetenser" class="form-label">Kompetenser:</label>
         <input type="text" class="form-control" id="Kompetenser" name="Kompetenser" required>
     </div>
+
+    <!-- Formulärfält för användarens utbildningar -->
 
     <div class="form-group mb-3">
         <label for="Utbildningar" class="form-label">Utbildningar:</label>
         <input type="text" class="form-control" id="Utbildningar" name="Utbildningar" required>
     </div>
 
+    <!-- Formulärfält för användarens tidigare erfarenheter -->
+
     <div class="form-group mb-3">
         <label for="TidigareErfarenhet" class="form-label">Tidigare Erfarenhet:</label>
         <input type="text" class="form-control" id="TidigareErfarenhet" name="TidigareErfarenhet" required>
     </div>
 
+    <!-- Formulärfält för att ladda upp en profilbild -->
+
     <div class="form-group mb-3">
         <label for="ProfilbildPath" class="form-label">Profilbild:</label>
         <input type="file" class="form-control-file" id="ProfilbildPath" name="ProfilbildPath">
     </div>
+
+    <!-- Knapp för att skicka formuläret och registrera CV:t -->
 
     <button type="submit" class="btn btn-primary mt-3">Lägg till CV</button>
 </form>

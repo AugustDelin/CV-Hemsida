@@ -6,21 +6,27 @@
 
 <h2>Personlig Sida</h2>
 
+<!-- Visar användarens användarnamn -->
 <p><strong>Användarnamn:</strong> @Model.UserName</p>
+<!-- Visar användarens fullständiga namn -->
 <p><strong>Namn:</strong> @Model.FullName</p>
+<!-- Visar användarens adress -->
 <p><strong>Adress</strong> @Model.Address</p>
 
+<!-- Kollar om det är inte användarens egen sida -->
 @if (!Model.IsSelf)
 {
+    <!-- Skapar ett formulär för att skicka meddelande -->
     @using (Html.BeginForm("SendMessage", "Profile", FormMethod.Post))
     {
-        @Html.HiddenFor(model => model.UserName)
+        @Html.HiddenFor(model => model.UserName) <!-- Dolt fält för att lagra användarnamnet -->
         <label>Namn:</label>
-        @Html.TextBoxFor(model => model.CurrentUserFullName)
+        @Html.TextBoxFor(model => model.CurrentUserFullName) <!-- Textfält för aktuellt användarens fullständiga namn -->
         ;
         <label>Meddelande:</label>
-        @Html.TextBoxFor(model => model.Message)
+        @Html.TextBoxFor(model => model.Message) <!-- Textfält för meddelandet som ska skickas -->
         ;
+        <!-- Knapp för att skicka meddelandet -->
         <input type="submit" value="Skicka meddelande" />
     }
 }

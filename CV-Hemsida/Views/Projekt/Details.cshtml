@@ -14,15 +14,15 @@
         <ul>
             @foreach (var användare in Model.DeltagandeAnvändare)
             {
-                <li>@användare.Namn</li>
+                <li>@användare.Namn</li>  <!-- Listar namn på alla deltagande användare i projektet -->
             }
         </ul>
     }
     else
     {
-        <p>Inga deltagande användare att visa.</p>
+        <p>Inga deltagande användare att visa.</p>     <!-- Meddelande om inga användare deltar i projektet -->
     }
 
-    <a href="@Url.Action("ProjectPage", "Projekt")" class="btn btn-primary">Tillbaka till Projektlistan</a>
+    <a href="@Url.Action("ProjectPage", "Projekt")" class="btn btn-primary">Tillbaka till Projektlistan</a>    <!-- Länk för att återgå till projektlistan -->
 </div>
 

@@ -15,15 +15,21 @@
                 <div class="mb-3">
                     <label asp-for="Titel" class="form-label">Projekttitel</label> <!-- Change labels and placeholders -->
                     <input asp-for="Titel" class="form-control" placeholder="Ange projekttitel">
+
+                    <!-- Valideringsmeddelande för titeln -->
+
                     <span asp-validation-for="Titel"></span>
                 </div>
                 <div class="mb-3">
                     <label asp-for="Beskrivning" class="form-label">Beskrivning</label> <!-- Change labels and placeholders -->
                     <textarea asp-for="Beskrivning" class="form-control" placeholder="Ange projektbeskrivning"></textarea>
-                    <span asp-validation-for="Beskrivning"></span>
-                </div> 
 
-                <!-- Additional fields for editing the project can be added here with similar styling -->
+                    <!-- Valideringsmeddelande för beskrivningen -->
+                    
+                    <span asp-validation-for="Beskrivning"></span>
+                </div>
+
+                <!-- Ytterligare fält för att redigera projektet kan läggas till här -->
 
                 <button type="submit" class="btn btn-primary">Spara ändringar</button> <!-- Change button text and style -->
             }
