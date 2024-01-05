@@ -1,69 +1,68 @@
-﻿using System.Security.Claims;
-using CVDataLayer;
-using CVModels.ViewModels;
-using Microsoft.AspNetCore.Mvc;
+﻿using System.Security.Claims; // Importera Claims för användarinformation
+using CVDataLayer; // Importera CVDataLayer för databasåtkomst
+using CVModels.ViewModels; // Importera ViewModel för meddelanden
+using Microsoft.AspNetCore.Mvc; // Importera ASP.NET Core MVC-funktionalitet
 
-namespace CV_Hemsida.Controllers;
-
-public class MeddelandeController : BaseController
+namespace CV_Hemsida.Controllers // Namnet på din Controller
 {
-    private CVContext _dbContext;
-
-    public MeddelandeController(CVContext dbContext) : base(dbContext)
+    public class MeddelandeController : BaseController // MeddelandeController ärver från BaseController
     {
-        _dbContext = dbContext;
-    }
+        private CVContext _dbContext; // Databaskontexten för meddelanden
 
-    public IActionResult VisaMeddelanden()
-    {
-        SetMessageCount();
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var user = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
-
-        var messages = _dbContext.Meddelande.Where(x => x.Mottagare == user.Id).ToList();
-
-        var vm = new MeddelandeViewModel
+        public MeddelandeController(CVContext dbContext) : base(dbContext) // Konstruktor som tar emot databaskontexten
         {
-            Meddelanden = messages
-        };
-
-        return View("Meddelande", vm);
-    }
-
-    public IActionResult Read(int id)
-    {
-        var message = _dbContext.Meddelande.FirstOrDefault(x => x.Id == id);
-        if (message is not null)
-        {
-            message.Läst = true;
+            _dbContext = dbContext; // Tilldela den inkommande databaskontexten till det privata fältet
         }
 
-        _dbContext.SaveChanges();
-
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var user = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
-
-        var messages = _dbContext.Meddelande.Where(x => x.Mottagare == user.Id).ToList();
-
-        var vm = new MeddelandeViewModel
+        public IActionResult VisaMeddelanden() // Hanterar vyn för att visa meddelanden
         {
-            Meddelanden = messages
-        };
+            SetMessageCount(); // Uppdatera antalet meddelanden för inloggad användare
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Hämta inloggad användares ID
+            var user = _dbContext.Users.FirstOrDefault(u => u.Id == userId); // Hämta användarobjektet från databasen baserat på användar-ID
 
-        return View("Meddelande", vm);
+            var messages = _dbContext.Meddelande.Where(x => x.Mottagare == user.Id).ToList(); // Hämta meddelanden för användaren från databasen
+
+            var vm = new MeddelandeViewModel // Skapa en ViewModel för meddelanden
+            {
+                Meddelanden = messages // Lagra meddelandena i ViewModel-objektet
+            };
+
+            return View("Meddelande", vm); // Skicka ViewModel till vyn för meddelandevisning
+        }
+
+        public IActionResult Read(int id) // Hanterar läsning av ett specifikt meddelande
+        {
+            var message = _dbContext.Meddelande.FirstOrDefault(x => x.Id == id); // Hämta meddelandet från databasen baserat på meddelande-ID
+            if (message is not null) // Om meddelandet finns
+            {
+                message.Läst = true; // Markera meddelandet som läst
+            }
+
+            _dbContext.SaveChanges(); // Spara ändringar i databasen
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Hämta inloggad användares ID
+            var user = _dbContext.Users.FirstOrDefault(u => u.Id == userId); // Hämta användarobjektet från databasen baserat på användar-ID
+
+            var messages = _dbContext.Meddelande.Where(x => x.Mottagare == user.Id).ToList(); // Hämta meddelanden för användaren från databasen
+
+            var vm = new MeddelandeViewModel // Skapa en ViewModel för meddelanden
+            {
+                Meddelanden = messages // Lagra meddelandena i ViewModel-objektet
+            };
+
+            return View("Meddelande", vm); // Skicka ViewModel till vyn för meddelandevisning
+        }
+
+        public IActionResult MeddelandeConfirm() // Hanterar bekräftelse av meddelande
+        {
+            SetMessageCount(); // Uppdatera antalet meddelanden för inloggad användare
+            return View(); // Visa bekräftelsesidan för meddelande
+        }
+
+        public IActionResult MeddelandeFailed() // Hanterar misslyckande för meddelande
+        {
+            SetMessageCount(); // Uppdatera antalet meddelanden för inloggad användare
+            return View(); // Visa sidan för misslyckande med meddelande
+        }
     }
-
-    public IActionResult MeddelandeConfirm()
-    {
-        SetMessageCount();
-        return View();
-    }
-
-    public IActionResult MeddelandeFailed()
-    {
-        SetMessageCount();
-        return View();
-    }
-
-    
 }
