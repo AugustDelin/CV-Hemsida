@@ -9,22 +9,27 @@
         <div class="col-md-6">
             <h2>Ändra Information</h2>
             <form asp-controller="Profile" asp-action="SaveInfo" method="post">
+                <!-- Input-fält för Förnamn -->
                 <div class="mb-3">
                     <label asp-for="Förnamn" class="form-label">Förnamn</label>
-                    <input asp-for="Förnamn" class="form-control" value="@Model.Förnamn">
-                    <span asp-validation-for="Förnamn"></span>
+                    <input asp-for="Förnamn" class="form-control" value="@Model.Förnamn"> <!-- Visar fördefinierad data för förnamnet -->
+                    <span asp-validation-for="Förnamn"></span> <!-- Visar valideringsmeddelanden för förnamn -->
                 </div>
+                <!-- Input-fält för Efternamn -->
                 <div class="mb-3">
                     <label asp-for="Efternamn" class="form-label">Efternamn</label>
-                    <input asp-for="Efternamn" class="form-control" value="@Model.Efternamn">
-                    <span asp-validation-for="Efternamn"></span>
+                    <input asp-for="Efternamn" class="form-control" value="@Model.Efternamn"> <!-- Visar fördefinierad data för efternamnet -->
+                    <span asp-validation-for="Efternamn"></span> <!-- Visar valideringsmeddelanden för efternamn -->
                 </div>
+                <!-- Input-fält för Adress -->
                 <div class="mb-3">
                     <label asp-for="Adress" class="form-label">Adress</label>
-                    <input asp-for="Adress" class="form-control" value="@Model.Adress">
-                    <span asp-validation-for="Adress"></span>
+                    <input asp-for="Adress" class="form-control" value="@Model.Adress"> <!-- Visar fördefinierad data för adressen -->
+                    <span asp-validation-for="Adress"></span> <!-- Visar valideringsmeddelanden för adress -->
                 </div>
+                <!-- Knapp för att skicka formuläret för att spara ändringar -->
                 <button type="submit" class="btn btn-primary">Spara</button>
+                <!-- Länk för att gå till integritetsinställningar -->
                 <a asp-action="PrivatProfil" asp-controller="Profile">Integritet</a>
             </form>
         </div>
