@@ -6,37 +6,63 @@
 
 <h2>Ändra CV</h2>
 
+<!-- Starta ett formulär för att skicka CV-data till 'SaveChanges'-action i 'CV'-controllern -->
+
 @using (Html.BeginForm("SaveChanges", "CV", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
+    <!-- Dolt fält för CV-identifikator -->
+
     @Html.HiddenFor(model => model.Id)
+
+    <!-- Kompetenser - Textfält -->
 
     <div class="form-group mb-3">
         <label asp-for="Kompetenser" class="form-label"></label>
         <input asp-for="Kompetenser" class="form-control" required />
+
+        <!-- Valideringsmeddelande för 'Kompetenser' -->
+
         <span asp-validation-for="Kompetenser" class="text-danger"></span>
     </div>
+
+    <!-- Utbildningar - Textfält -->
 
     <div class="form-group mb-3">
         <label asp-for="Utbildningar" class="form-label"></label>
         <input asp-for="Utbildningar" class="form-control" />
+
+        <!-- Valideringsmeddelande för 'Utbildningar' -->
+
         <span asp-validation-for="Utbildningar" class="text-danger"></span>
     </div>
+
+    <!-- Tidigare Erfarenhet - Textfält -->
 
     <div class="form-group mb-3">
         <label asp-for="TidigareErfarenhet" class="form-label"></label>
         <input asp-for="TidigareErfarenhet" class="form-control" />
+
+        <!-- Valideringsmeddelande för 'TidigareErfarenhet' -->
+
         <span asp-validation-for="TidigareErfarenhet" class="text-danger"></span>
     </div>
+
+    <!-- Profilbild - Filuppladdning -->
 
     <div class="form-group mb-3">
         <label asp-for="ProfilbildPath" class="form-label"></label>
         <input type="file" asp-for="ProfilbildPath" class="form-control-file" />
+
+        <!-- Visa befintlig profilbild om den finns -->
+
         @if (!string.IsNullOrEmpty(Model.ProfilbildPath))
         {
             <img src="/Bilder/@Model.ProfilbildPath" alt="Profilbild" class="img-thumbnail mt-2" style="max-width: 200px;" />
         }
         <span asp-validation-for="ProfilbildPath" class="text-danger"></span>
     </div>
+
+    <!-- Knapp för att skicka formuläret -->
 
     <button type="submit" class="btn btn-primary mt-3">Spara ändringar</button>
 }
