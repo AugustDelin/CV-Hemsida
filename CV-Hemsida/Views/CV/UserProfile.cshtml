@@ -9,13 +9,19 @@
             Profilsida
         </div>
         <div class="card-body">
+
+            <!-- Användarens namn och profilbild -->
+
             <h5 class="card-title">@Model.Namn</h5>
             <img src="@Model.ProfilbildPath" alt="Profilbild" class="card-img-top mb-3" />
+            
+            <!-- Information om användarens kompetenser, utbildningar och erfarenheter -->
+
             <p class="card-text"><strong>Kompetenser:</strong> @Model.Kompetenser</p>
             <p class="card-text"><strong>Utbildningar:</strong> @Model.Utbildningar</p>
             <p class="card-text"><strong>Tidigare Erfarenhet:</strong> @Model.TidigareErfarenhet</p>
 
-            <!-- Lägg till logik för att lista projekt här -->
+            <!-- Lista över projekt där användaren deltar -->
             <h5 class="card-title">Projekt</h5>
             @if (Model.DeltarIProjekt != null && Model.DeltarIProjekt.Any())
             {
@@ -31,7 +37,6 @@
                 <p>Inga registrerade projekt.</p>
             }
 
-            <!-- Här kan du lägga till ytterligare information som kontaktuppgifter eller meddelanden -->
         </div>
     </div>
 </div>
