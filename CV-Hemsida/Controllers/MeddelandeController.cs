@@ -5,17 +5,18 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CV_Hemsida.Controllers;
 
-public class MeddelandeController : Controller
+public class MeddelandeController : BaseController
 {
     private CVContext _dbContext;
 
-    public MeddelandeController(CVContext dbContext)
+    public MeddelandeController(CVContext dbContext) : base(dbContext)
     {
         _dbContext = dbContext;
     }
 
     public IActionResult VisaMeddelanden()
     {
+        SetMessageCount();
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         var user = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
 
@@ -54,11 +55,13 @@ public class MeddelandeController : Controller
 
     public IActionResult MeddelandeConfirm()
     {
+        SetMessageCount();
         return View();
     }
 
     public IActionResult MeddelandeFailed()
     {
+        SetMessageCount();
         return View();
     }
 

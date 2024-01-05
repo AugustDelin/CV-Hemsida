@@ -7,18 +7,23 @@ using System.Security.Claims;
 
 namespace CV_Hemsida.Controllers
 {
-    public class ProfileController : Controller
+    public class ProfileController : BaseController
     {
         private CVContext _dbContext;
 
-        public ProfileController(CVContext dbContext)
+        public ProfileController(CVContext dbContext) : base(dbContext)
         {
             _dbContext = dbContext;
         }
+
+
+
+
         public IActionResult ProfilePage()
         {
+            SetMessageCount(); // Anropa SetMessageCount innan du returnerar vyn
             var nonPrivateProfiles = _dbContext.Personer
-                .Include(p => p.User) // Assuming Användare is the related user entity
+                .Include(p => p.User)
                 .Where(p => !p.User.Privat)
                 .ToList();
 

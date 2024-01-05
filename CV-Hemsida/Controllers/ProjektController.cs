@@ -9,17 +9,18 @@ using System.Security.Claims;
 
 namespace CV_Hemsida.Controllers
 {
-    public class ProjektController : Controller
+    public class ProjektController : BaseController
     {
         private readonly CVContext _dbContext;
 
-        public ProjektController(CVContext dbContext)
+        public ProjektController(CVContext dbContext) : base(dbContext)
         {
             _dbContext = dbContext;
         }
 
         public IActionResult ProjectPage()
         {
+            SetMessageCount();
             var projekten = _dbContext.Projekts
                .Include(p => p.User) // Include the project creator
                .Select(p => new ProjektViewModel

@@ -7,12 +7,12 @@ using System.Security.Claims;
 
 namespace CV_Hemsida.Controllers
 {
-    public class PrivatController : Controller
+    public class PrivatController : BaseController
     {
 
         private readonly CVContext _dbContext;
 
-        public PrivatController(CVContext dbContext)
+        public PrivatController(CVContext dbContext) : base(dbContext)
         {
             _dbContext = dbContext;
         }
@@ -22,6 +22,7 @@ namespace CV_Hemsida.Controllers
         [HttpGet]
         public IActionResult PrivatProfil1()
         {
+            SetMessageCount();
             if (User.Identity.IsAuthenticated && _dbContext != null)
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

@@ -7,17 +7,18 @@ using CVModels.ViewModels;
 
 namespace CV_Hemsida.Controllers
 {
-    public class CVController : Controller
+    public class CVController : BaseController
     {
         private CVContext _dbContext;
 
-        public CVController(CVContext dbContext)
+        public CVController(CVContext dbContext) : base(dbContext)
         {
             _dbContext = dbContext;
         }
 
         public IActionResult CVPage()
         {
+            SetMessageCount();
             // Hämta den inloggade användarens ID
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 

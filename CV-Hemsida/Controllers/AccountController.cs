@@ -11,13 +11,13 @@ using CV_SITE.Repositories;
 
 namespace CV_Hemsida.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         private readonly UserManager<Användare>? _userManager;
         private readonly SignInManager<Användare>? _signInManager;
         private readonly CVContext _dbContext;
 
-        public AccountController(UserManager<Användare> userManager, SignInManager<Användare> signInManager, CVContext dbContext)
+        public AccountController(UserManager<Användare> userManager, SignInManager<Användare> signInManager, CVContext dbContext) : base(dbContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -25,8 +25,11 @@ namespace CV_Hemsida.Controllers
             
         }
 
+        
+
         public IActionResult Login()
         {
+            SetMessageCount();
             return View();
         }
 
@@ -34,6 +37,7 @@ namespace CV_Hemsida.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
+            SetMessageCount();
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByNameAsync(model.UserName);
@@ -60,6 +64,7 @@ namespace CV_Hemsida.Controllers
         
         public async Task<IActionResult> Logout()
         {
+            SetMessageCount();
             await _signInManager.SignOutAsync();
             return RedirectToAction("Login");
         }
@@ -74,6 +79,7 @@ namespace CV_Hemsida.Controllers
 
         public IActionResult RegisterUser()
         {
+            SetMessageCount();
             return View();
         }
 
@@ -109,6 +115,7 @@ namespace CV_Hemsida.Controllers
 
         public IActionResult RegisterPerson()
         {
+            SetMessageCount();
             return View();
         }
 
@@ -154,6 +161,7 @@ namespace CV_Hemsida.Controllers
         [HttpPost]
         public async Task<IActionResult> EditPassword(EditPasswordViewModel model)
         {
+            SetMessageCount();
             try
             {
                 if (ModelState.IsValid)
