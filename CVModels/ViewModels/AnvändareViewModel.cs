@@ -7,6 +7,11 @@ using System.Threading.Tasks;
 
 namespace CVModels.ViewModels
 {
+
+    // AnvändareViewModel: Används för att representera och hantera
+    // data relaterad till användarprofiler i applikationen.
+
+
     public class AnvändareViewModel
     {
 

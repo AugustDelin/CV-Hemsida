@@ -2,6 +2,9 @@
 
 namespace CVModels.ViewModels
 {
+
+    // ChangeInformationViewModel: Används när en användare behöver
+    // uppdatera sina personliga uppgifter.
     public class ChangeInformationViewModel
     {
         [Required(ErrorMessage = "Förnamn är obligatoriskt")]

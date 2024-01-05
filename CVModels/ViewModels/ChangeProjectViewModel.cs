@@ -2,6 +2,10 @@
 
 namespace CVModels.ViewModels
 {
+
+    // ChangeProjectViewModel: Tillhandahåller nödvändig datastruktur för att
+    // tillåta användare att ändra information om ett projekt.
+
     public class ChangeProjectViewModel
     {
         public int Id { get; set; }

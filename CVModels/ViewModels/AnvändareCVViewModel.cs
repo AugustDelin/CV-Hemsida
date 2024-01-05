@@ -2,6 +2,10 @@
 
 namespace CVModels.ViewModels
 {
+
+    // AnvändareCVViewModel används för att representera data på en
+    // användares CV-sida, inklusive personlig information och projekt.
+
     public class AnvändareCVViewModel
     {
 

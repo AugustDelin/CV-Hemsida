@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace CVModels.ViewModels
 {
+
+    // CombinedViewModel: Kombinerar flera `ViewModels` för att
+    // presentera sammanställd information på en och samma vy.
+
     public class CombinedViewModel
     {
         public IEnumerable<CVViewModel> CVs { get; set; }

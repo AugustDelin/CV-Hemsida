@@ -2,6 +2,9 @@
 
 namespace CVModels.ViewModels
 {
+
+    // EditPasswordViewModel: Tillhandahåller ett gränssnitt för användare att
+    // ändra sitt lösenord.
     public class EditPasswordViewModel
     {
      

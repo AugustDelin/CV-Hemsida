@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace CVModels.ViewModels
 {
+    // RegisterCVViewModel: Tillhandahåller data och valideringsregler för att
+    // registrera ett nytt CV.
+
     public class RegisterCVViewModel
     {
         [Required(ErrorMessage = "Fyll i kompetenser")]

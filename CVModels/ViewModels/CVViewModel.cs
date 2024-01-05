@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace CVModels.ViewModels
 {
+
+    // CVViewModel: Används för att visa information om en användares CV,
+    // såsom utbildning, erfarenhet och kompetenser.
     public class CVViewModel
     {
         public int Id { get; set; }

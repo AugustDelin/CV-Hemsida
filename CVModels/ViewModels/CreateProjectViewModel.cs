@@ -2,6 +2,9 @@
 
 namespace CVModels.ViewModels
 {
+
+    // CreateProjectViewModel: Används vid skapandet av ett nytt projekt,
+    // inkluderar valideringsregler och projektdata.
     public class CreateProjectViewModel
     {
         [Required(ErrorMessage = "Titel är obligatorisk")]

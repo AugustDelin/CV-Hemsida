@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace CVModels.ViewModels
 {
+
+    // RegisterPersonViewModel: Används för att samla in och validera
+    // personlig information vid registrering av en ny person i systemet.
+
     public class RegisterPersonViewModel
     {
         [Required(ErrorMessage = "Skriv in personnummer")]
