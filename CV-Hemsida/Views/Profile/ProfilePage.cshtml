@@ -6,7 +6,7 @@
 
 <div class="container">
 
-    <!--Hugos sökruta-->
+    <!--Sökruta-->
     <form method="get" action="@Url.Action("Search", "Profile")">
         <div class="input-group mb-3">
             <input type="text" class="form-control" name="searchTerm" placeholder="Sök efter profiler">
@@ -17,7 +17,7 @@
     </form>
     <!--slut på sökrutan-->
 
-    <!--Hugos felmeddelande-->
+    <!--Felmeddelande-->
     @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
     {
         <div class="alert alert-warning" role="alert">
@@ -30,20 +30,21 @@
     {
         @foreach (var person in Model)
         {
+            <!-- Visar en person i form av en kort layout -->
             <div class="card mb-3">
                 <div class="card-body">
-                    <h5 class="card-title">@person.FullName()</h5>
+                    <h5 class="card-title">@person.FullName()</h5> <!-- Visar personens fullständiga namn -->
                     <p class="card-text">
-                        <strong>Address:</strong> @person.Adress <br />
-                        <strong>Personal Number:</strong> @person.Personnummer
+                        <strong>Address:</strong> @person.Adress <br /> <!-- Visar personens adress -->
+                        <strong>Personal Number:</strong> @person.Personnummer <!-- Visar personens personnummer -->
                     </p>
-                    <!-- Add more information about the person here -->
                 </div>
             </div>
         }
     }
     else
     {
+        <!-- Visar ett meddelande om det inte finns några profiler att visa -->
         <p>No profiles to display.</p>
     }
 </div>
