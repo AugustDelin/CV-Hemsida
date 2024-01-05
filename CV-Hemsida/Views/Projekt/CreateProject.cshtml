@@ -7,23 +7,30 @@
 <main role="main" class="container">
     <div class="row justify-content-md-center mt-5">
         <div class="col-md-6">
-            <h2>Skapa projekt</h2> <!-- Change the heading to match "Create Project" view -->
+            <h2>Skapa projekt</h2> 
             @using (Html.BeginForm("CreateProject", "Projekt", FormMethod.Post))
             {
                 <div class="mb-3">
                     <label asp-for="Titel" class="form-label">Projekttitel</label> <!-- Change labels and placeholders -->
                     <input asp-for="Titel" class="form-control" placeholder="Ange projekttitel">
+
+                    <!-- Valideringsmeddelande för titeln -->
+                    
                     <span asp-validation-for="Titel"></span>
                 </div>
                 <div class="mb-3">
                     <label asp-for="Beskrivning" class="form-label">Beskrivning</label> <!-- Change labels and placeholders -->
                     <textarea asp-for="Beskrivning" class="form-control" placeholder="Ange projektbeskrivning"></textarea>
+
+                    <!-- Valideringsmeddelande för beskrivningen -->
+                    
                     <span asp-validation-for="Beskrivning"></span>
                 </div>
 
-                <!-- Additional project fields can be added here with similar styling -->
+                <!-- Ytterligare fält för att redigera projektet kan läggas till här -->
 
-                <button type="submit" class="btn btn-primary">Skapa</button> <!-- Change button text and style -->
+
+                <button type="submit" class="btn btn-primary">Skapa</button> <!-- Knapp för att spara ändringarna -->
             }
         </div>
     </div>
