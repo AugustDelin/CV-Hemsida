@@ -21,49 +21,59 @@ namespace CV_Hemsida.Controllers
         public IActionResult ProjectPage()
         {
             var projekten = _dbContext.Projekts
+               .Include(p => p.User) // Include the project creator
                .Select(p => new ProjektViewModel
                {
                    Id = p.Id,
                    Titel = p.Titel,
-                   Beskrivning = p.Beskrivning
+                   Beskrivning = p.Beskrivning,
+                   Skapare = "Skapare: " + (p.User.UserName)
                })
                .ToList();
 
             return View(projekten);
         }
 
+
         public IActionResult Details(int id)
         {
             var projekt = _dbContext.Projekts
-                                    .Include(p => p.User) // Inkludera projektets skapare
+                                    .Include(p => p.User) // Include the project creator
                                     .FirstOrDefault(p => p.Id == id);
+
             if (projekt == null)
             {
                 return NotFound();
             }
 
-            // Hämta en lista av användare som är kopplade till detta projekt på något sätt.
+            // Fetch the list of participating users
             var deltagandeAnvändare = _dbContext.Users
-                                               .Where(u => u.SkapadeProjekt.Any(p => p.Id == id))
-                                               .ToList();
-
-            // Konvertera till AnvändareViewModel
-            var deltagandeAnvändareViewModels = deltagandeAnvändare.Select(u => new AnvändareViewModel
-            {
-                Namn = u.UserName ?? "Okänd Användare" // Hantera nullvärden
-            }).ToList();
+                .Join(
+                    _dbContext.PersonDeltarProjekt,
+                    u => u.Id,
+                    pdp => pdp.Deltagare,
+                    (u, pdp) => new { User = u, PersonDeltarProjekt = pdp }
+                )
+                .Where(j => j.PersonDeltarProjekt.Projekt == id)
+                .Select(j => new AnvändareViewModel
+                {
+                    Namn = j.User.UserName ?? "Okänd Användare"
+                })
+                .ToList();
 
             var projektViewModel = new ProjektViewModel
             {
                 Id = projekt.Id,
                 Titel = projekt.Titel,
                 Beskrivning = projekt.Beskrivning,
-                Skapare = projekt.User?.UserName ?? "Okänd Skapare", // Hantera nullvärden
-                DeltagandeAnvändare = deltagandeAnvändareViewModels // Använd den konverterade listan här
+                Skapare = projekt.User?.UserName ?? "Okänd Skapare",
+                DeltagandeAnvändare = deltagandeAnvändare
             };
 
             return View(projektViewModel);
         }
+
+
 
         [HttpPost]
         public IActionResult CreateProject(CreateProjectViewModel model)

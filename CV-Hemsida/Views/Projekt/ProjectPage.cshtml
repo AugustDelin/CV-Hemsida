@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<ProjektViewModel>
 @using CVModels.ViewModels
 
-<!-- ... din nuvarande kod för att visa projekt ... -->
+
 
 <div class="container">
     @if (Model != null && Model.Any())
@@ -12,8 +12,8 @@
                 <div class="card-body">
                     <h5 class="card-title">@projekt.Titel</h5>
                     <p class="card-text">@projekt.Beskrivning</p>
+                    <p class="card-text">@projekt.Skapare</p>
                     <a href="@Url.Action("Details", "Projekt", new { id = projekt.Id })" class="btn btn-primary">Mer detaljer</a>
-                    <!-- Lägg till en knapp för att ändra projekt -->
                     <a href="@Url.Action("ChangeProject", "Projekt", new { id = projekt.Id })" class="btn btn-secondary">Redigera projekt</a>
                 </div>
             </div>
