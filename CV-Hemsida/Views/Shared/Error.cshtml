@@ -3,8 +3,13 @@
     ViewData["Title"] = "Error";
 }
 
+<!-- Rubriker för att visa att ett fel har inträffat -->
+
 <h1 class="text-danger">Error.</h1>
 <h2 class="text-danger">An error occurred while processing your request.</h2>
+
+
+<!-- Visar begäran ID om det är tillgängligt. Detta kan hjälpa vid felsökning. -->
 
 @if (Model.ShowRequestId)
 {
@@ -12,6 +17,8 @@
         <strong>Request ID:</strong> <code>@Model.RequestId</code>
     </p>
 }
+
+<!-- Information om att växla till utvecklingsläge för mer detaljerad felinformation -->
 
 <h3>Development Mode</h3>
 <p>
