@@ -3,16 +3,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width" /> <!-- Metataggar för att anpassa vyn till enhetens bredd -->
     <title>Privat Profil</title>
 </head>
 <body>
     <form asp-action="PrivatProfil" asp-controller="Privat" method="post">
         <div>
             <label asp-for="Privat">Gör min profil privat</label>
-            <input asp-for="Privat" type="checkbox" />
+            <input asp-for="Privat" type="checkbox" /> <!-- Checkbox för att göra användarens profil privat -->
         </div>
-        <button type="submit">Spara</button>
+        <button type="submit">Spara</button> <!-- Knapp för att spara ändringar -->
     </form>
 </body>
 </html>
