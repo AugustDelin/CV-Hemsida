@@ -147,7 +147,7 @@ namespace CV_Hemsida.Controllers
                 _dbContext.Personer.Add(person);
 
                 // Save changes directly to the database
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
 
                 return RedirectToAction("Index", "Home"); // Redirect to a success page
             }
