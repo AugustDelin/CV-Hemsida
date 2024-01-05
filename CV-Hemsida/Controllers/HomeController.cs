@@ -1,34 +1,40 @@
-﻿using CVDataLayer;
-using CVModels;
-using Microsoft.AspNetCore.Mvc;
-using CVModels.ViewModels;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Security.Claims;
+﻿using CVDataLayer; // Importera dataåtkomstlagret
+using CVModels; // Importera CV-relaterade modeller
+using Microsoft.AspNetCore.Mvc; // Importera ASP.NET Core MVC-funktionalitet
+using CVModels.ViewModels; // Importera CV-relaterade view-modeller
+using Microsoft.EntityFrameworkCore; // Importera Entity Framework Core för databasåtkomst
+using System.Linq; // Importera LINQ-uttryck för databashantering
+using System.Security.Claims; // Importera Claims för användarinformation
 
-namespace CV_Hemsida.Controllers
+namespace CV_Hemsida.Controllers // Namnet på din Controller
 {
-    public class HomeController : Controller
+    public class HomeController : Controller // HomeController ärver från Controller-basen
     {
-        private CVContext _dbContext;
+        private CVContext _dbContext; // Databaskontexten för CV
 
-        public HomeController(CVContext dbContext)
+        public HomeController(CVContext dbContext) // Konstruktor som tar emot databaskontexten
         {
-            _dbContext = dbContext;
+            _dbContext = dbContext; // Tilldela den inkommande databaskontexten till det privata fältet
         }
 
-        public IActionResult Index()
+        public IActionResult Index() // Hanterar vyn för startsidan
         {
-            if (User.Identity.IsAuthenticated)
+            if (User.Identity.IsAuthenticated) // Kontrollera om användaren är inloggad
             {
+                // Hämta användar-ID för inloggad användare
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                // Hämta användarobjektet från databasen baserat på användar-ID
                 var user = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
 
+                // Hämta meddelanden för användaren som inte har lästs och räkna antalet
                 var messages = _dbContext.Meddelande.Where(x => x.Mottagare == user.Id && !x.Läst).ToList();
 
+                // Skicka antalet olästa meddelanden till vyn
                 ViewBag.Meddelanden = messages.Count;
             }
 
+            // Hämta CVs som inte är markerade som privata och skapa CVViewModel-objekt för varje CV
             var cvViewModels = _dbContext.CVs
                 .Where(cv => !cv.User.Privat)
                 .Select(cv => new CVViewModel
