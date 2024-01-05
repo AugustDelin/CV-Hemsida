@@ -242,6 +242,11 @@ namespace CV_Hemsida.Controllers
                 return RedirectToAction("Index");
             }
 
+            if (model.CurrentUserFullName == null)
+                {
+                    return RedirectToAction("MeddelandeFailed", "Meddelande");
+                }
+
             if (model.Message == null)
             {
                 return RedirectToAction("MeddelandeFailed", "Meddelande");
