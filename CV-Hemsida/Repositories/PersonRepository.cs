@@ -1,4 +1,7 @@
-﻿using CV_Hemsida.Repositories;
+﻿// Denna klass implementerar IRepository för entitetstypen Person.
+// Den tillhandahåller metoder för att hantera persondata i databasen.
+
+using CV_Hemsida.Repositories;
 using CVDataLayer;
 using CVModels;
 
@@ -6,12 +9,17 @@ namespace CV_SITE.Repositories
 {
     public class PersonRepository : IRepository<Person>
     {
-        private readonly CVContext _dbContext;
+        private readonly CVContext _dbContext; // En instans av databaskontexten.
 
+
+        // Konstruktören initierar databaskontexten.
         public PersonRepository(CVContext dataBaseContext)
         {
             _dbContext = dataBaseContext;
         }
+
+        // Implementering av IRepository-metoder:
+
         public void Delete(Person entity)
         {
             _dbContext.Remove(entity);
