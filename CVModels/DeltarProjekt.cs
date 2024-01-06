@@ -1,4 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿//Den här koden definierar en klass, DeltarProjekt,
+//som representerar en kopplingstabell i databasen mellan användare och projekt.
+//Den använder Entity Framework Core-attribut för att definiera primärnyckeln och
+//utländska nycklar som pekar på Användare och Projekt för att skapa relationer mellan tabellerna.
+
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CVModels
