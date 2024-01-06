@@ -1,3 +1,8 @@
+//Denna kontrollerklass(HomeController) innehåller metoder för att
+//hantera begäranden för att visa startsidan, sekretessinformationen och hantering av fel.
+//Den använder ILogger för att hantera loggning och
+//returnerar motsvarande vyer baserat på begärandena.
+
 using CVWebbAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
