@@ -1,27 +1,25 @@
-﻿using CVDataLayer;
-using CVModels;
-using CVModels.ViewModels;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
+﻿using CVDataLayer; // Importera CVDataLayer för att få tillgång till databasen
+using CVModels; // Importera CVModels för att använda modellklasser
+using CVModels.ViewModels; // Importera ViewModel för att hantera vyn för profilsidan
+using Microsoft.AspNetCore.Mvc; // Importera ASP.NET Core MVC-funktionalitet
+using Microsoft.EntityFrameworkCore; // Importera Entity Framework Core för databasoperationer
+using System.Security.Claims; // Importera Claims för att hantera användarinformation
 
-namespace CV_Hemsida.Controllers
+namespace CV_Hemsida.Controllers // Namnet på din Controller
 {
-    public class ProfileController : BaseController
+    public class ProfileController : BaseController // ProfileController ärver från BaseController för återanvändning av funktionalitet
     {
-        private CVContext _dbContext;
+        private CVContext _dbContext; // Databaskontexten för profilhantering
 
-        public ProfileController(CVContext dbContext) : base(dbContext)
+        public ProfileController(CVContext dbContext) : base(dbContext) // Konstruktor som tar emot databaskontexten
         {
-            _dbContext = dbContext;
+            _dbContext = dbContext; // Tilldela den inkommande databaskontexten till det privata fältet
         }
 
-
-
-
+        // Visar en lista med profiler som inte är privata
         public IActionResult ProfilePage()
         {
-            SetMessageCount(); // Anropa SetMessageCount innan du returnerar vyn
+            SetMessageCount(); // Uppdatera antalet meddelanden innan vyn returneras
             var nonPrivateProfiles = _dbContext.Personer
                 .Include(p => p.User)
                 .Where(p => !p.User.Privat)
@@ -29,54 +27,56 @@ namespace CV_Hemsida.Controllers
 
             ViewBag.Meddelande = "Listan med profiler";
 
-            return View(nonPrivateProfiles);
+            return View(nonPrivateProfiles); // Visa vyn för profiler
         }
 
-
+        // Visar en användares profil baserat på användar-ID
         [HttpGet]
         public IActionResult ViewProfile(string userId)
         {
+            // Hämta användarprofilen från databasen baserat på användar-ID
             var profileUser = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
 
             if (profileUser == null)
             {
-                return NotFound(); // Om profilen inte finns, returnera 404
+                return NotFound(); // Returnera 404 om profilen inte finns
             }
 
+            // Om profilen är privat och användaren inte är inloggad, omdirigera till inloggningssidan
             if (profileUser.Privat && !User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("Login", "Account"); // Användaren är inte inloggad, omdirigera till inloggningssidan
+                return RedirectToAction("Login", "Account");
             }
 
-            // Om profilen är privat men användaren är inloggad eller om profilen inte är privat, visa profilen
+            // Om profilen är privat och användaren är inloggad eller om profilen inte är privat, visa profilen
             var profile = profileUser.Person;
 
             if (profile == null)
             {
-                return NotFound(); // Om profilen inte finns, returnera 404
+                return NotFound(); // Returnera 404 om profilen inte finns
             }
 
-            return View(profile);
+            return View(profile); // Visa vyn för den specifika profilen
         }
 
-
-
-        //Hugos sökruta
+        // Söker efter profiler baserat på en sökterm
         [HttpGet]
         public IActionResult Search(string searchTerm)
         {
-            searchTerm = searchTerm?.ToLower(); // Convert the search term to lowercase (or use .ToUpper() for case-insensitive search)
+            // Konvertera söktermen till gemener för att utföra en icke-skiftlägeskänslig sökning
+            searchTerm = searchTerm?.ToLower();
 
             if (string.IsNullOrWhiteSpace(searchTerm))
             {
-                return View("ProfilePage");
+                return View("ProfilePage"); // Visa profilsidan om söktermen är tom
             }
-            // Fetch all the data from the database first
+
+            // Hämta alla personer från databasen
             var allPersons = _dbContext.Personer
-                .Include(p => p.User) // Ensure User is included in the query
+                .Include(p => p.User)
                 .ToList();
 
-            // Implement search logic for profiles based on searchTerm in-memory
+            // Implementera söklogik för profiler baserat på söktermen i minnet
             List<Person> searchResults = allPersons
                 .Where(p => !p.User.Privat &&
                     (p.FullName().ToLower().Contains(searchTerm) ||
@@ -86,33 +86,26 @@ namespace CV_Hemsida.Controllers
 
             if (searchResults.Count == 0)
             {
-                ViewBag.ErrorMessage = "Inga matchningar hittades för din sökning.";
+                ViewBag.ErrorMessage = "Inga matchningar hittades för din sökning."; // Visa felmeddelande om ingen matchning hittades
             }
 
-            return View("ProfilePage", searchResults); // Display search results on the same view as ProfilePage
+            return View("ProfilePage", searchResults); // Visa sökresultaten på samma vy som profilsidan
         }
 
-
-
-
-
+        // Visar användarens information för att göra ändringar
         [HttpGet]
         public IActionResult ChangeInformation()
         {
-            SetMessageCount();
-            // Retrieve the current user's ID
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            // Use the user ID to retrieve the corresponding Person from the database
-            Person userPerson = _dbContext.Personer.FirstOrDefault(p => p.AnvändarID == userId);
+            SetMessageCount(); // Uppdatera antalet meddelanden innan vyn returneras
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Hämta ID för inloggad användare
+            var userPerson = _dbContext.Personer.FirstOrDefault(p => p.AnvändarID == userId); // Hämta användarobjektet från databasen baserat på användar-ID
 
             if (userPerson == null)
             {
-                // Handle the case where the user's information is not found
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home"); // Omdirigera om användarens information inte finns
             }
 
-            // Map the user's information to the ChangeInformationViewModel
+            // Kartlägg användarens information till ChangeInformationViewModel
             var viewModel = new ChangeInformationViewModel
             {
                 Förnamn = userPerson.Förnamn,
@@ -120,62 +113,48 @@ namespace CV_Hemsida.Controllers
                 Adress = userPerson.Adress
             };
 
-            return View(viewModel);
+            return View(viewModel); // Visa vyn för att ändra information
         }
 
-
-
-
-
+        // Sparar användarens ändrade information till databasen
         [HttpPost]
         public IActionResult SaveInfo(ChangeInformationViewModel model)
         {
             if (ModelState.IsValid)
             {
-                // Retrieve the current user's ID
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-                // Use the user ID to retrieve the corresponding Person from the database
-                Person userPerson = _dbContext.Personer.FirstOrDefault(p => p.AnvändarID == userId);
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Hämta ID för inloggad användare
+                var userPerson = _dbContext.Personer.FirstOrDefault(p => p.AnvändarID == userId); // Hämta användarobjektet från databasen baserat på användar-ID
 
                 if (userPerson == null)
                 {
-                    // Handle the case where the user's information is not found
-                    return RedirectToAction("ChangeInformation", model);
+                    return RedirectToAction("ChangeInformation", model); // Omdirigera om användarens information inte finns
                 }
 
-                // Update the user's information with the values from the form
+                // Uppdatera användarens information med värdena från formuläret
                 userPerson.Förnamn = model.Förnamn;
                 userPerson.Efternamn = model.Efternamn;
                 userPerson.Adress = model.Adress;
 
-                // Save changes directly to the database
-                _dbContext.SaveChanges();
+                _dbContext.SaveChanges(); // Spara ändringar direkt till databasen
 
-                return RedirectToAction("ChangeInformation", model); // Redirect to the user's profile page
+                return RedirectToAction("ChangeInformation", model); // Omdirigera till användarens profilsida
             }
 
-
-
-            // If ModelState is not valid, return to the ChangeInformation view with validation errors
+            // Returnera till vyn för att ändra information med valideringsfel om ModelState inte är giltig
             return View("ChangeInformation", model);
         }
 
-
-
-
-
+        // Visar en användares profil baserat på en identifierare (t.ex. användarens e-post eller användarnamn)
         public IActionResult VisaAnvändaresProfil(string id)
         {
-            // Här antar vi att id är användarens unika identifierare (som användarens e-post eller användarnamn)
+            // Antag att id är användarens unika identifierare (t.ex. e-post eller användarnamn)
             var user = _dbContext.Users
                         .Include(u => u.Cv)
                         .FirstOrDefault(u => u.Email == id);
 
             if (user == null || user.Cv == null)
             {
-                // Om användaren inte hittas, visa en lämplig sida
-                return RedirectToAction("ResourceNotFound");
+                return RedirectToAction("ResourceNotFound"); // Visa en lämplig sida om användaren eller användarens CV inte hittas
             }
             else
             {
@@ -190,32 +169,32 @@ namespace CV_Hemsida.Controllers
                     // Lägg till andra relevanta egenskaper här
                 };
 
-                // Skicka denna information till vyn som ska visa användarens profilsida
+                // Skicka denna information till vyn för att visa användarens profilsida
                 return View("VisaAnvändaresProfil", cvViewModel); // Se till att du har en vy som heter "VisaAnvändaresProfil"
             }
         }
 
-
-
+        // Visar en privat profil
         [HttpGet]
         public IActionResult PrivatProfil()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Hämta ID för inloggad användare
+            var user = _dbContext.Users.FirstOrDefault(u => u.Id == userId); // Hämta användarobjektet från databasen baserat på användar-ID
 
             if (user == null)
             {
-                return RedirectToAction("ChangeInformation");
+                return RedirectToAction("ChangeInformation"); // Omdirigera om användarens information inte finns
             }
 
             var viewModel = new SetPrivatViewModel
             {
-                Privat = user.Privat
+                Privat = user.Privat // Hämta användarens privatprofilinställning
             };
 
-            return View(viewModel);
+            return View(viewModel); // Visa vyn för privat profil
         }
 
+        // Visar en personlig profilsida baserad på användar-ID
         [HttpGet]
         public IActionResult PersonalProfilePage(string userId)
         {
@@ -224,24 +203,26 @@ namespace CV_Hemsida.Controllers
                             .FirstOrDefault(u => u.Id == userId);
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var currentUser = _dbContext.Users.FirstOrDefault(u => u.Id == currentUserId);
+
             if (user == null)
             {
-                return NotFound();
+                return NotFound(); // Returnera 404 om användaren inte hittas
             }
 
             var viewModel = new ProfileViewModel
             {
-                FullName = user.Person!.FullName(),
-                UserName = user.UserName!,
-                Address = user.Person.Adress,
-                IsSelf = user.Id == currentUserId,
-                CurrentUserFullName = User.Identity.IsAuthenticated ? currentUser.Person.FullName() : string.Empty
+                FullName = user.Person!.FullName(), // Hämta användarens fullständiga namn
+                UserName = user.UserName!, // Hämta användarens användarnamn
+                Address = user.Person.Adress, // Hämta användarens adress
+                IsSelf = user.Id == currentUserId, // Kontrollera om användaren är inloggad och visar sin egen profil
+                CurrentUserFullName = User.Identity.IsAuthenticated ? currentUser.Person.FullName() : string.Empty // Hämta inloggad användares fullständiga namn om användaren är inloggad
             };
 
-            return View("PersonalProfilePage", viewModel);
+            return View("PersonalProfilePage", viewModel); // Visa den personliga profilsidan
         }
 
 
+        // Skickar ett meddelande till en användare
         [HttpPost]
         public IActionResult SendMessage(ProfileViewModel model)
         {
@@ -249,7 +230,7 @@ namespace CV_Hemsida.Controllers
 
             if (user == null)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Index"); // Omdirigera om användaren inte hittas
             }
 
             if (model.CurrentUserFullName == null)
@@ -264,15 +245,15 @@ namespace CV_Hemsida.Controllers
 
             _dbContext.Meddelande.Add(new Meddelande
             {
-                Användare = user,
-                Avsändare = model.CurrentUserFullName,
-                Innehåll = model.Message,
-                Läst = false,
+                Användare = user, // Användare som meddelandet skickas till
+                Avsändare = model.CurrentUserFullName, // Avsändarens namn
+                Innehåll = model.Message, // Meddelandets innehåll
+                Läst = false, // Sätt läststatus till falsk
             });
 
-            _dbContext.SaveChanges();
+            _dbContext.SaveChanges(); // Spara meddelandet till databasen
 
-            return RedirectToAction("MeddelandeConfirm", "Meddelande");
+            return RedirectToAction("MeddelandeConfirm", "Meddelande"); // Omdirigera till bekräftelsesidan efter att meddelandet skickats
         }
 
 
