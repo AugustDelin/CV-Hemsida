@@ -1,26 +1,26 @@
-﻿using CVDataLayer;
-using CVModels;
-using CVModels.ViewModels;
+﻿using CVDataLayer; // Importera CVDataLayer för att få tillgång till databasen
+using CVModels; // Importera CVModels för att använda modellklasser
+using CVModels.ViewModels; // Importera ViewModel för att hantera vyn för projekt
+using Microsoft.AspNetCore.Mvc; // Importera ASP.NET Core MVC-funktionalitet
+using Microsoft.EntityFrameworkCore; // Importera Entity Framework Core för databasoperationer
+using System.Linq; // Importera Linq för att hantera LINQ-frågor
+using System.Security.Claims; // Importera Claims för att hantera användarinformation
 
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Security.Claims;
-
-namespace CV_Hemsida.Controllers
+namespace CV_Hemsida.Controllers // Namnet på din Controller
 {
-    public class ProjektController : BaseController
+    public class ProjektController : BaseController // ProjektController ärver från BaseController för återanvändning av funktionalitet
     {
-        private readonly CVContext _dbContext;
+        private readonly CVContext _dbContext; // Databaskontexten för hantering av projekt
 
-        public ProjektController(CVContext dbContext) : base(dbContext)
+        public ProjektController(CVContext dbContext) : base(dbContext) // Konstruktor som tar emot databaskontexten
         {
-            _dbContext = dbContext;
+            _dbContext = dbContext; // Tilldela den inkommande databaskontexten till det privata fältet
         }
 
+        // Visar en sida med en lista över projekt
         public IActionResult ProjectPage()
         {
-            SetMessageCount();
+            SetMessageCount(); // Uppdatera antalet meddelanden innan vyn returneras
             var projekten = _dbContext.Projekts
                .Include(p => p.User) // Include the project creator
                .Select(p => new ProjektViewModel
@@ -32,23 +32,23 @@ namespace CV_Hemsida.Controllers
                })
                .ToList();
 
-            return View(projekten);
+            return View(projekten); // Visa vyn för projektsidan med projekten
         }
 
-
+        // Visar detaljer för ett specifikt projekt baserat på ID
         public IActionResult Details(int id)
         {
-            SetMessageCount();
+            SetMessageCount(); // Uppdatera antalet meddelanden innan vyn returneras
             var projekt = _dbContext.Projekts
                                     .Include(p => p.User) // Include the project creator
                                     .FirstOrDefault(p => p.Id == id);
 
             if (projekt == null)
             {
-                return NotFound();
+                return NotFound(); // Returnera 404 om projektet inte hittas
             }
 
-            // Fetch the list of participating users
+            // Hämta en lista över deltagande användare i projektet
             var deltagandeAnvändare = _dbContext.Users
                 .Join(
                     _dbContext.PersonDeltarProjekt,
@@ -72,85 +72,86 @@ namespace CV_Hemsida.Controllers
                 DeltagandeAnvändare = deltagandeAnvändare
             };
 
-            return View(projektViewModel);
+            return View(projektViewModel); // Visa vyn med projektets detaljer och deltagande användare
         }
 
-
-
+        // Skapar ett nytt projekt baserat på inmatad information
         [HttpPost]
         public IActionResult CreateProject(CreateProjectViewModel model)
         {
-            
+            // Kontrollera att modellen är giltig innan behandling
             if (ModelState.IsValid)
             {
-                // Get the user ID of the currently logged-in user
+                // Hämta ID för inloggad användare
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-                // Create a new Project instance
+                // Skapa ett nytt projektobjekt
                 var newProject = new Projekt
                 {
                     Titel = model.Titel,
                     Beskrivning = model.Beskrivning,
-                    AnvändarId = userId // Assign the logged-in user as the project creator
+                    AnvändarId = userId // Tilldela inloggad användare som projektets skapare
                 };
 
-                // Add the new project to the database
+                // Lägg till det nya projektet till databasen
                 _dbContext.Projekts.Add(newProject);
                 _dbContext.SaveChanges();
 
-                // Redirect to the ProjectPage
+                // Omdirigera till Projektsidan efter att projektet har skapats
                 return RedirectToAction("ProjectPage");
             }
 
-            // If the model is not valid,
-            // return to the CreateProject view with errors
+            // Om modellen inte är giltig, returnera till skapandevyn med felmeddelanden
             return View(model);
         }
 
+        // Sparar ändringar i ett befintligt projekt
         [HttpPost]
         public IActionResult SaveChanges(ChangeProjectViewModel model)
         {
+            // Kontrollera att modellen är giltig innan behandling
             if (ModelState.IsValid)
             {
                 var project = _dbContext.Projekts.FirstOrDefault(p => p.Id == model.Id);
 
                 if (project == null)
                 {
-                    // Handle the case where the project is not found
+                    // Hantera fallet där projektet inte hittas
                     return RedirectToAction("ChangeProject", new { id = model.Id });
                 }
 
-                // Update the project's information with the values from the form
+                // Uppdatera projektets information med värdena från formuläret
                 project.Titel = model.Titel;
                 project.Beskrivning = model.Beskrivning;
 
-                // Save changes directly to the database
+                // Spara ändringar direkt till databasen
                 _dbContext.SaveChanges();
 
-                return RedirectToAction("Index", "Home"); // Redirect to an appropriate page after saving changes
+                return RedirectToAction("Index", "Home"); // Omdirigera till en lämplig sida efter att ändringar har sparats
             }
 
-            // If ModelState is not valid, return to the ChangeProject view with validation errors
+            // Om modellen inte är giltig, returnera till ändringsvyn med valideringsfel
             return View("ChangeProject", model);
         }
 
+        // Visar vyn för att ändra ett befintligt projekt baserat på ID
         [HttpGet]
         public IActionResult ChangeProject(int id)
         {
-            SetMessageCount();
+            SetMessageCount(); // Uppdatera antalet meddelanden innan vyn returneras
             var project = _dbContext.Projekts.FirstOrDefault(p => p.Id == id);
 
             if (project == null)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home"); // Omdirigera om projektet inte hittas
             }
 
-            // Kontrollera om den inloggade användaren är den som skapade projektet
+            // Kontrollera om inloggad användare är skaparen av projektet
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (project.AnvändarId != userId)
             {
-                // Användaren har inte rättighet att ändra projektet
-                return RedirectToAction("ResourceNotFoundProject", "Projekt"); // Skapa en passande åtkomstnekat-vy
+                // Användaren har inte behörighet att ändra projektet
+                return RedirectToAction("ResourceNotFoundProject", "Projekt"); // Skapa en lämplig åtkomstnekat-vy
             }
 
             var viewModel = new ChangeProjectViewModel
@@ -160,30 +161,27 @@ namespace CV_Hemsida.Controllers
                 Beskrivning = project.Beskrivning
             };
 
-            return View(viewModel);
+            return View(viewModel); // Visa vyn för att ändra projekt
         }
 
-        public IActionResult ChangeProject()
-        {
-            SetMessageCount();
-            return View();
-        }
-
+        // Visa vyn för att skapa ett nytt projekt
         public IActionResult CreateProject()
         {
-            SetMessageCount();
+            SetMessageCount(); // Uppdatera antalet meddelanden innan vyn returneras
             return View();
         }
 
+        // Visa vyn för att spara ändringar
         public IActionResult Save()
         {
-            SetMessageCount();
+            SetMessageCount(); // Uppdatera antalet meddelanden innan vyn returneras
             return View();
-        } 
+        }
 
-        public IActionResult ResourceNotFoundProject() 
+        // Visa vyn för att hantera resurs som inte hittades för projekt
+        public IActionResult ResourceNotFoundProject()
         {
-            SetMessageCount();
+            SetMessageCount(); // Uppdatera antalet meddelanden innan vyn returneras
             return View();
         }
     }
