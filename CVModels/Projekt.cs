@@ -1,4 +1,9 @@
-﻿using System;
+﻿//Klassen Projekt representerar projekt och
+//inkluderar attribut som en unik identifierare, titel, beskrivning och
+//en referens till den användare som skapat projektet.
+//Dessutom innehåller den en samling av användare som deltar i projektet.
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
