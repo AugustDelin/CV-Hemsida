@@ -1,4 +1,9 @@
-﻿using System;
+﻿//Klassen Person representerar en individ med personnummer, för- och efternamn samt adress.
+//Den inkluderar en metod FullName() för att kombinera förnamn och efternamn.
+//Dessutom använder den en främmande nyckel för att koppla till en
+//användare via användar-ID i en databas.
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
