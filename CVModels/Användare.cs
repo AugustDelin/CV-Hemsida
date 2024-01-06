@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿//Koden definierar en Användare-klass som utökar funktionaliteten av
+//IdentityUser från Microsoft.AspNetCore.Identity.
+//Den innehåller attribut och relationer för användarrelaterade data och
+//tillåter hantering av användarinteraktioner och relaterade data i en applikation.
+
+using Microsoft.AspNetCore.Identity;
 using System.Collections;
 using System.ComponentModel.DataAnnotations.Schema;
 
