@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿//Klassen Utbildning ärver från en annan klass och
+//representerar en utbildning, med en egenskap för typen av utbildning den representerar.
+
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CVModels
 {
