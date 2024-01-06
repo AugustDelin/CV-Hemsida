@@ -1,4 +1,9 @@
-﻿using System;
+﻿//Den här koden definierar en CV-klass som representerar en användares CV-data.
+//Den innehåller egenskaper för kompetenser, utbildningar, tidigare erfarenheter och profilbildens sökväg.
+//Dessutom håller den en samling av projekt som användaren deltar i och
+//relaterar varje CV till en specifik användare genom en nyckel.
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
