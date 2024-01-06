@@ -1,4 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿//Klassen Meddelande definierar egenskaper för meddelanden såsom
+//innehåll, avsändare, mottagare och läst-status.
+//Den använder en främmande nyckel för att skapa en relation till en
+//användare (Användare) genom dess mottagar-ID i en databastabell.
+
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CVModels
 {
