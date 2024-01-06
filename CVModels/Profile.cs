@@ -1,4 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿//Klassen Profile innehåller egenskaper för en profil, inklusive
+//ett identifieringsnummer, en beskrivning och en indikator för privatinställningar.
+//Den är kopplad till en användare genom en främmande nyckel och
+//spårar antalet klick på profilen.
+
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CVModels
 {
