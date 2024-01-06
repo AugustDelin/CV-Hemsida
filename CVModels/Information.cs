@@ -1,4 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿//Koden definierar en abstrakt klass Info för att hantera information relaterad till ett CV.
+//Den inkluderar egenskaper som titel, beskrivning och
+//datum för denna information, samt en främmande nyckel för att koppla den till
+//ett specifikt CV i en databastabell med namnet "Information".
+
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CVModels
 {
