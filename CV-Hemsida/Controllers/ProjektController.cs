@@ -21,8 +21,10 @@ namespace CV_Hemsida.Controllers // Namnet på din Controller
         public IActionResult ProjectPage()
         {
             SetMessageCount(); // Uppdatera antalet meddelanden innan vyn returneras
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var projekten = _dbContext.Projekts
                .Include(p => p.User) // Include the project creator
+               .Where(p => !p.User.Privat || p.User.Id == userId)
                .Select(p => new ProjektViewModel
                {
                    Id = p.Id,
