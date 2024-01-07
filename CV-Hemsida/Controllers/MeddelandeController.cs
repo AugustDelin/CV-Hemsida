@@ -30,29 +30,30 @@ namespace CV_Hemsida.Controllers // Namnet på din Controller
             return View("Meddelande", vm); // Skicka ViewModel till vyn för meddelandevisning
         }
 
-        public IActionResult Read(int id) // Hanterar läsning av ett specifikt meddelande
+        public IActionResult Read(int id)
         {
-            var message = _dbContext.Meddelande.FirstOrDefault(x => x.Id == id); // Hämta meddelandet från databasen baserat på meddelande-ID
-            if (message is not null) // Om meddelandet finns
+            var message = _dbContext.Meddelande.FirstOrDefault(x => x.Id == id);
+            if (message is not null)
             {
-                message.Läst = true; // Markera meddelandet som läst
+                message.Läst = true;
+                _dbContext.SaveChanges();
+
+                // Update the count of unread messages after marking a message as read
+                SetMessageCount();
             }
 
-            _dbContext.SaveChanges(); // Spara ändringar i databasen
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
 
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Hämta inloggad användares ID
-            var user = _dbContext.Users.FirstOrDefault(u => u.Id == userId); // Hämta användarobjektet från databasen baserat på användar-ID
+            var messages = _dbContext.Meddelande.Where(x => x.Mottagare == user.Id).ToList();
 
-            var messages = _dbContext.Meddelande.Where(x => x.Mottagare == user.Id).ToList(); // Hämta meddelanden för användaren från databasen
-
-            var vm = new MeddelandeViewModel // Skapa en ViewModel för meddelanden
+            var vm = new MeddelandeViewModel
             {
-                Meddelanden = messages // Lagra meddelandena i ViewModel-objektet
+                Meddelanden = messages
             };
 
-            return View("Meddelande", vm); // Skicka ViewModel till vyn för meddelandevisning
+            return View("Meddelande", vm);
         }
-
         public IActionResult MeddelandeConfirm() // Hanterar bekräftelse av meddelande
         {
             SetMessageCount(); // Uppdatera antalet meddelanden för inloggad användare
