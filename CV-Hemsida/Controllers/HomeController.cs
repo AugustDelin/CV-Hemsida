@@ -19,10 +19,11 @@ namespace CV_Hemsida.Controllers // Namnet på din Controller
 
         public IActionResult Index() // Hanterar vyn för startsidan
         {
+            string userId = null;
             if (User.Identity.IsAuthenticated) // Kontrollera om användaren är inloggad
             {
                 // Hämta användar-ID för inloggad användare
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
                 // Hämta användarobjektet från databasen baserat på användar-ID
                 var user = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
@@ -36,7 +37,7 @@ namespace CV_Hemsida.Controllers // Namnet på din Controller
 
             // Hämta CVs som inte är markerade som privata och skapa CVViewModel-objekt för varje CV
             var cvViewModels = _dbContext.CVs
-                .Where(cv => !cv.User.Privat)
+                .Where(cv => !cv.User.Privat || cv.User.Id == userId)
                 .Select(cv => new CVViewModel
                 {
                     Id = cv.Id,
