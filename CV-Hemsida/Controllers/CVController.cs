@@ -301,6 +301,7 @@ namespace CV_Hemsida.Controllers
         public IActionResult ConnectProjectToCV(int cvId, int projectId)
         {
             var cv = _dbContext.CVs.Include(c => c.User).FirstOrDefault(c => c.Id == cvId);
+
             var project = _dbContext.Projekts.FirstOrDefault(p => p.Id == projectId);
 
             if (cv != null && project != null)
