@@ -135,12 +135,12 @@ namespace CV_Hemsida.Controllers
             {
                 try
                 {
-                    // Retrieve the user ID from TempData
+                    // Få användarens ID
                     string userId = TempData["UserId"]?.ToString();
 
                     if (string.IsNullOrEmpty(userId))
                     {
-                        // Handle the case where UserId is missing or null
+                        // Hanterar om UserID är null
                         return RedirectToAction("RegisterUser");
                     }
 
@@ -153,16 +153,16 @@ namespace CV_Hemsida.Controllers
                         AnvändarID = userId
                     };
 
-                    // Add the new person to the DbContext
+                    // Lägger till nya personen till DbContext
                     _dbContext.Personer.Add(person);
 
-                    // Save changes directly to the database
+                    // Sparar ändringar direkt i databasen
                     await _dbContext.SaveChangesAsync();
 
                     return RedirectToAction("Index", "Home"); // Redirect to a success page
 
                 }
-                catch (DbUpdateException ex)
+                catch (DbUpdateException ex) //Kollar om personnummret redan finns, finns det visas felmeddelande "Personnummret finns redan."
                 {
                     if (ex.InnerException is SqlException sqlException && sqlException.Number == 2627)
                     {
@@ -170,7 +170,6 @@ namespace CV_Hemsida.Controllers
                         return View(model);
                     }
                    
-                    // Handle other exceptions or rethrow
                     throw;
                 }
             }
