@@ -35,6 +35,7 @@ namespace CV_Hemsida.Controllers // Namnet på din Controller
         [HttpGet]
         public IActionResult ViewProfile(string userId)
         {
+            SetMessageCount();
             // Hämta användarprofilen från databasen baserat på användar-ID
             var profileUser = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
 
@@ -148,6 +149,7 @@ namespace CV_Hemsida.Controllers // Namnet på din Controller
         // Visar en användares profil baserat på en identifierare (t.ex. användarens e-post eller användarnamn)
         public IActionResult VisaAnvändaresProfil(string id)
         {
+            SetMessageCount();
             // Antag att id är användarens unika identifierare (t.ex. e-post eller användarnamn)
             var user = _dbContext.Users
                         .Include(u => u.Cv)
@@ -179,6 +181,7 @@ namespace CV_Hemsida.Controllers // Namnet på din Controller
         [HttpGet]
         public IActionResult PrivatProfil()
         {
+            SetMessageCount();
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Hämta ID för inloggad användare
             var user = _dbContext.Users.FirstOrDefault(u => u.Id == userId); // Hämta användarobjektet från databasen baserat på användar-ID
 
@@ -199,6 +202,7 @@ namespace CV_Hemsida.Controllers // Namnet på din Controller
         [HttpGet]
         public IActionResult PersonalProfilePage(string userId)
         {
+            SetMessageCount();
             var user = _dbContext.Users
                             .Include(u => u.Person)
                             .FirstOrDefault(u => u.Id == userId);
