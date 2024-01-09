@@ -20,9 +20,10 @@ namespace CV_Hemsida.Controllers // Namnet på din Controller
         public IActionResult ProfilePage()
         {
             SetMessageCount(); // Uppdatera antalet meddelanden innan vyn returneras
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var nonPrivateProfiles = _dbContext.Personer
                 .Include(p => p.User)
-                .Where(p => !p.User.Privat)
+                .Where(p => !p.User.Privat || p.User.Id == userId)
                 .ToList();
 
             ViewBag.Meddelande = "Listan med profiler";
