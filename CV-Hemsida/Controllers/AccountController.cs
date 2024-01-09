@@ -7,7 +7,8 @@ using Microsoft.AspNetCore.Authorization; // Importerar autorisationsattribut
 using CVModels.ViewModels; // Importerar vymodeller för användare och person
 using Microsoft.EntityFrameworkCore; // Importerar Entity Framework Core för databashantering
 using System; // Importerar systembiblioteket för allmänna funktioner
-using CV_SITE.Repositories; // Importerar specifika repositories
+using CV_SITE.Repositories;
+using Microsoft.Data.SqlClient; // Importerar specifika repositories
 
 namespace CV_Hemsida.Controllers
 {
@@ -132,31 +133,46 @@ namespace CV_Hemsida.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Retrieve the user ID from TempData
-                string userId = TempData["UserId"]?.ToString();
-
-                if (string.IsNullOrEmpty(userId))
+                try
                 {
-                    // Handle the case where UserId is missing or null
-                    return RedirectToAction("RegisterUser");
+                    // Retrieve the user ID from TempData
+                    string userId = TempData["UserId"]?.ToString();
+
+                    if (string.IsNullOrEmpty(userId))
+                    {
+                        // Handle the case where UserId is missing or null
+                        return RedirectToAction("RegisterUser");
+                    }
+
+                    var person = new Person
+                    {
+                        Personnummer = model.Personnummer,
+                        Förnamn = model.Förnamn,
+                        Efternamn = model.Efternamn,
+                        Adress = model.Adress,
+                        AnvändarID = userId
+                    };
+
+                    // Add the new person to the DbContext
+                    _dbContext.Personer.Add(person);
+
+                    // Save changes directly to the database
+                    await _dbContext.SaveChangesAsync();
+
+                    return RedirectToAction("Index", "Home"); // Redirect to a success page
+
                 }
-
-                var person = new Person
+                catch (DbUpdateException ex)
                 {
-                    Personnummer = model.Personnummer,
-                    Förnamn = model.Förnamn,
-                    Efternamn = model.Efternamn,
-                    Adress = model.Adress,
-                    AnvändarID = userId
-                };
-
-                // Add the new person to the DbContext
-                _dbContext.Personer.Add(person);
-
-                // Save changes directly to the database
-                await _dbContext.SaveChangesAsync();
-
-                return RedirectToAction("Index", "Home"); // Redirect to a success page
+                    if (ex.InnerException is SqlException sqlException && sqlException.Number == 2627)
+                    {
+                        ModelState.AddModelError(nameof(RegisterPersonViewModel.Personnummer), "Personnummret finns redan.");
+                        return View(model);
+                    }
+                   
+                    // Handle other exceptions or rethrow
+                    throw;
+                }
             }
 
             return View(model);
