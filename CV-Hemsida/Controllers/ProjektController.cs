@@ -41,6 +41,7 @@ namespace CV_Hemsida.Controllers // Namnet på din Controller
         public IActionResult Details(int id)
         {
             SetMessageCount(); // Uppdatera antalet meddelanden innan vyn returneras
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var projekt = _dbContext.Projekts
                                     .Include(p => p.User) // Include the project creator
                                     .FirstOrDefault(p => p.Id == id);
@@ -58,7 +59,8 @@ namespace CV_Hemsida.Controllers // Namnet på din Controller
                     pdp => pdp.Deltagare,
                     (u, pdp) => new { User = u, PersonDeltarProjekt = pdp }
                 )
-                .Where(j => j.PersonDeltarProjekt.Projekt == id)
+                .Where(j => j.PersonDeltarProjekt.Projekt == id &&
+                (!j.User.Privat || j.User.Id == userId))
                 .Select(j => new AnvändareViewModel
                 {
                     Namn = j.User.UserName ?? "Okänd Användare"
