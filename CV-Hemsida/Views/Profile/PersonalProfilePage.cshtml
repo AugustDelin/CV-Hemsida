@@ -20,21 +20,8 @@
     @using (Html.BeginForm("SendMessage", "Profile", FormMethod.Post))
     {
         @Html.HiddenFor(model => model.UserName) <!-- Dolt fält för att lagra användarnamnet -->
-        @Html.HiddenFor(model => model.CurrentUserFullName)
-        <!-- Kolla om användaren är inloggad -->
-        @if (User.Identity.IsAuthenticated)
-        {
-            <!-- Visa label istället för textbox -->
-            <label>Namn:</label>
-            <label>@Model.CurrentUserFullName</label>
-        }
-        else
-        {
-            <!-- Visa textfält för aktuellt användarens fullständiga namn -->
-            <label>Namn:</label>
-            @Html.TextBoxFor(model => model.CurrentUserFullName)
-        }
-
+        <label>Namn:</label>
+        @Html.TextBoxFor(model => model.CurrentUserFullName) <!-- Textfält för aktuellt användarens fullständiga namn -->
         ;
         <label>Meddelande:</label>
         @Html.TextBoxFor(model => model.Message) <!-- Textfält för meddelandet som ska skickas -->
