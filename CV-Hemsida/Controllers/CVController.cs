@@ -32,7 +32,10 @@ namespace CV_Hemsida.Controllers
 
             // Set the ViewBag for the dropdown in the view
             ViewBag.AllProjects = allProjects;
-
+            if (TempData.ContainsKey("ErrorMessage"))
+            {
+                ViewBag.ErrorMessage = TempData["ErrorMessage"].ToString();
+            }
             if (userCVs != null && userCVs.Any())
             {
                 // Om det finns CVs, skicka dem till vyn
@@ -306,11 +309,10 @@ namespace CV_Hemsida.Controllers
 
             if (cv != null && project != null)
             {
-                // Check if the connection already exists
+                // Kollar om projektet redan är kopplat till annat CV
                 if (_dbContext.PersonDeltarProjekt.Any(dp => dp.Anv.Id == cv.User.Id && dp.Proj.Id == projectId))
                 {
-                    // Connection already exists, handle accordingly
-                    // For example, you can redirect with a message or show an error
+                    TempData["ErrorMessage"] = "Du kan inte registrera samma projekt till flera CVn";
                     return RedirectToAction("CVPage");
                 }
 
@@ -330,6 +332,36 @@ namespace CV_Hemsida.Controllers
 
             return RedirectToAction("CVPage"); // Handle the case where either the CV or project is not found
         }
+
+        [HttpPost]
+        public IActionResult ForeignCVPage(string användarId)
+        {
+            SetMessageCount(); 
+
+            // Hämta alla CVs för den användaren
+            var userCVs = _dbContext.CVs
+                .Include(cv => cv.User)
+                .Where(cv => cv.AnvändarId == användarId)
+                .ToList();
+
+            // Hämta alla projekt för dropdown (if needed)
+            var allProjects = _dbContext.Projekts.ToList();
+            ViewBag.AllProjects = allProjects;
+            ViewBag.ProfileName = userCVs.First().User.UserName;
+
+            if (userCVs != null && userCVs.Any())
+            {
+                // Om det finns CVs, skicka dem till vyn
+                return View(userCVs);
+            }
+            else
+            {
+                // Om det inte finns CVs, visa ett meddelande i vyn
+                ViewBag.Meddelande = "Inga CVs hittades för användaren.";
+                return View();
+            }
+        }
+
 
 
 

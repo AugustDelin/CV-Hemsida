@@ -1,0 +1,77 @@
+﻿@model List<CVModels.CV>
+@{
+    Layout = "_Layout";
+}
+
+<!-- Anpassad CSS för att styla profilbilder -->
+
+<style>
+    .custom-img {
+        max-width: 200px;
+    }
+</style>
+
+<h2>CV Sida</h2>
+
+<div>
+
+    <!-- Visa användarens namn -->
+
+    <h3>Användare: @ViewBag.ProfileName</h3>
+
+    <!-- Kontrollera om det finns CV:n att visa -->
+    @if (Model != null && Model.Any())
+    {
+        <!-- Loopa igenom varje CV och visa dess detaljer -->
+        foreach (var userCV in Model)
+        {
+            <div class="card mb-3 border-2 rounded">
+                <!-- Render CV information for each userCV here -->
+                <div class="card-body">
+
+                    <!-- Visa användarens profilbild -->
+
+                    <p class="card-text"><img src="/Bilder/@userCV.ProfilbildPath" alt="Profilbild" class="custom-img" /></p>
+
+                    <!-- Visa användarens kompetenser, utbildningar och erfarenheter -->
+
+                    <p class="card-text">Färdigheter: @userCV.Kompetenser</p>
+                    <p class="card-text">Utbildning: @userCV.Utbildningar</p>
+                    <p class="card-text">Tidigare Erfarenhet: @userCV.TidigareErfarenhet</p>
+
+                    <!-- Visa de projekt användaren deltar i -->
+
+                    <h3 class="card-title">Projekt:</h3>
+                    @if (userCV.DeltarIProjekt != null && userCV.DeltarIProjekt.Any())
+                    {
+                        <ul class="list-group">
+                            @foreach (var dp in userCV.DeltarIProjekt)
+                            {
+                                <li class="list-group-item">@dp.Proj.Titel - @dp.Proj.Beskrivning</li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="card-text">Inga projekt registrerade.</p>
+                    }
+
+                   
+
+                    
+
+                   
+
+                </div>
+            </div>
+        }
+    }
+
+    
+
+    <!-- Visa meddelande om användaren inte har några CV:n -->
+    @if (Model == null || !Model.Any())
+    {
+        <p>Du har inga CVn registrerade.</p>
+    }
+</div>

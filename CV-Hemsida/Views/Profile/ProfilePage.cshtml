@@ -38,6 +38,10 @@
                         <strong>Address:</strong> @person.Adress <br /> <!-- Visar personens adress -->
                         <strong>Personal Number:</strong> @person.Personnummer <!-- Visar personens personnummer -->
                     </p>
+                    @if (User.Identity.Name != person.User.UserName)
+                    {
+                        <a href="@Url.Action("ForeignCVPage", "CV", new { användarId = person.User.Id })" class="btn btn-primary">CV Sida</a>
+                    }
                 </div>
             </div>
         }
