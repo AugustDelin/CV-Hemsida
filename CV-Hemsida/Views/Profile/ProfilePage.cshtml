@@ -41,6 +41,7 @@
                     @if (User.Identity.Name != person.User.UserName)
                     {
                         <a href="@Url.Action("ForeignCVPage", "CV", new { användarId = person.User.Id })" class="btn btn-primary">CV Sida</a>
+                        <a href="@Url.Action("PersonalProfilePage", "Profile", new { userId = person.User.Id })" class="btn btn-success">Skicka Meddelande</a>
                     }
                 </div>
             </div>

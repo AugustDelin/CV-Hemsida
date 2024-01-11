@@ -333,6 +333,7 @@ namespace CV_Hemsida.Controllers
             return RedirectToAction("CVPage"); // Handle the case where either the CV or project is not found
         }
 
+        [HttpGet]
         public IActionResult ForeignCVPage(string användarId)
         {
             SetMessageCount(); 
