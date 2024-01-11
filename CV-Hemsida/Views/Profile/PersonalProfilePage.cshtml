@@ -21,7 +21,14 @@
     {
         @Html.HiddenFor(model => model.UserName) <!-- Dolt fält för att lagra användarnamnet -->
         <label>Namn:</label>
-        @Html.TextBoxFor(model => model.CurrentUserFullName) <!-- Textfält för aktuellt användarens fullständiga namn -->
+        @if (User.Identity.IsAuthenticated)
+        {
+            @Html.TextBoxFor(model => model.CurrentUserFullName, new { @readonly = "readonly" })
+        }
+        else
+        {
+            @Html.TextBoxFor(model => model.CurrentUserFullName)
+        }
         ;
         <label>Meddelande:</label>
         @Html.TextBoxFor(model => model.Message) <!-- Textfält för meddelandet som ska skickas -->
