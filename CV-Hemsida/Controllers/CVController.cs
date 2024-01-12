@@ -344,10 +344,15 @@ namespace CV_Hemsida.Controllers
                 .Where(cv => cv.AnvändarId == användarId)
                 .ToList();
 
+            // Hämta användaren baserat på användarId
+            var user = _dbContext.Users
+                .Where(u => u.Id == användarId)
+                .FirstOrDefault();
+
             // Hämta alla projekt för dropdown (if needed)
             var allProjects = _dbContext.Projekts.ToList();
             ViewBag.AllProjects = allProjects;
-            ViewBag.ProfileName = userCVs.First().User.UserName;
+            ViewBag.ProfileName = user.UserName;
 
             if (userCVs != null && userCVs.Any())
             {
